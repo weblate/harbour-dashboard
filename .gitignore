@@ -1,0 +1,10 @@
+build
+*.pro.user
+reverse
+rpm/*.spec
+rpm/*.spec.*
+dist
+*.bak
+raw/strings/*.clean
+raw/strings/strings
+liverunner*

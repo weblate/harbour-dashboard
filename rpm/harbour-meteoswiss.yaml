@@ -1,0 +1,55 @@
+#
+# This file is part of harbour-meteoswiss.
+# Copyright (C) 2018-2020  Mirian Margiani
+#
+# harbour-meteoswiss is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# harbour-meteoswiss is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with harbour-meteoswiss.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+Name: harbour-meteoswiss
+Summary: Unofficial client to the Swiss Meteorological Service (MeteoSwiss)
+Version: 1.3.1
+Release: 2
+# The contents of the Group field should be one of the groups listed here:
+# https://github.com/mer-tools/spectacle/blob/master/data/GROUPS
+Group: Qt/Qt
+URL: https://github.com/ichthyosaurus/harbour-meteoswiss
+BuildArch: noarch
+License: GPLv3+
+Sources:
+- '%{name}-%{version}.tar.bz2'
+Description: |
+  MeteoSwiss is an unofficial client to weather forecast services provided by
+  the Federal Office of Meteorology and Climatology (MeteoSwiss). Forecasts are
+  available offline and updated every hour.
+Configure: none
+Builder: qtc5
+
+PkgConfigBR:
+  - sailfishapp >= 1.0.3
+  - Qt5Core
+  - Qt5Qml
+  - Qt5Quick
+
+Macros:
+  - __provides_exclude_from;^%{_datadir}/.*$
+
+Requires:
+  - sailfishsilica-qt5 >= 0.10.9
+  - libsailfishapp-launcher
+
+Files:
+  - '%defattr(0644,root,root,-)'
+  - '%{_datadir}/%{name}'
+  - '%{_datadir}/applications/%{name}.desktop'
+  - '%{_datadir}/icons/hicolor/*/apps/%{name}.png'

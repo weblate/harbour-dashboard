@@ -1,0 +1,20 @@
+[Desktop Entry]
+Type=Application
+X-Nemo-Application-Type=silica-qt5
+Icon=harbour-meteoswiss
+Exec=sailfish-qml harbour-meteoswiss
+Name=harbour-meteoswiss
+
+Name[de]=MeteoSchweiz
+Name[fr]=MétéoSuisse
+Name[it]=MeteoSvizzera
+Name[en]=MeteoSwiss
+
+[X-Sailjail]
+Permissions=Internet
+OrganizationName=harbour-meteoswiss
+ApplicationName=harbour-meteoswiss
+
+[X-HarbourBackup]
+BackupPathList=.local/share/harbour-meteoswiss/:.cache/harbour-meteoswiss:.config/harbour-meteoswiss
+BackupConfigList=/apps/harbour-meteoswiss/
