@@ -18,7 +18,7 @@ TARGET = harbour-swissmeteo
 
 CONFIG += sailfishapp
 
-SOURCES += src/harbour-captains-log.cpp
+SOURCES += src/harbour-swissmeteo.cpp
 
 DISTFILES += \
     qml/qchart/LICENSE.md \
