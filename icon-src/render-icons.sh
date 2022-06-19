@@ -1,26 +1,39 @@
 #!/bin/bash
 #
-# This file is part of harbour-swissmeteo.
-# Copyright (C) 2018-2020  Mirian Margiani
+# This file is part of Opal and has been released into the public domain.
+# SPDX-License-Identifier: CC0-1.0
+# SPDX-FileCopyrightText: 2021 Mirian Margiani
 #
-# harbour-swissmeteo is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+# See https://github.com/Pretty-SFOS/opal/blob/main/snippets/opal-render-icons.md
+# for documentation.
 #
-# harbour-swissmeteo is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# @@@ keep this line: based on template v0.3.0
 #
-# You should have received a copy of the GNU General Public License
-# along with harbour-swissmeteo.  If not, see <http://www.gnu.org/licenses/>.
-#
+c__FOR_RENDER_LIB__="0.3.0"
 
-for i in 86 108 128 172; do
-    mkdir -p "icons/${i}x$i"
-    inkscape -z -e "icons/${i}x$i/harbour-swissmeteo.png" -w "$i" -h "$i" harbour-swissmeteo.svg
+# Run this script from the same directory where your icon sources are located,
+# e.g. <app>/icon-src.
+source ../libs/opal-render-icons.sh
+cFORCE=false
+
+for i in raw/*.svg; do
+    scour "$i" > "${i#raw/}"
 done
 
-mkdir -p "qml/weather-icons"
-inkscape -z -l "qml/weather-icons/harbour-swissmeteo.svg" harbour-swissmeteo.svg
+cNAME="app icon"
+cITEMS=(harbour-swissmeteo)
+cRESOLUTIONS=(86 108 128 172)
+cTARGETS=(../icons/RESXxRESY)
+render_batch
+
+cNAME="app details icon"
+cITEMS=(harbour-swissmeteo)
+cRESOLUTIONS=(256)
+cTARGETS=(../qml/images)
+render_batch
+
+cNAME="cover background"
+cITEMS=(cover-bg)
+cRESOLUTIONS=(460x736)
+cTARGETS=(../qml/images)
+render_batch

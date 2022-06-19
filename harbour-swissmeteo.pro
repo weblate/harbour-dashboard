@@ -16,7 +16,9 @@
 # The name of your application
 TARGET = harbour-swissmeteo
 
-CONFIG += sailfishapp_qml
+CONFIG += sailfishapp
+
+SOURCES += src/harbour-captains-log.cpp
 
 DISTFILES += \
     qml/qchart/LICENSE.md \

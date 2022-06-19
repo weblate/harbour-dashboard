@@ -24,16 +24,21 @@ Release: 2
 # https://github.com/mer-tools/spectacle/blob/master/data/GROUPS
 Group: Qt/Qt
 URL: https://github.com/ichthyosaurus/harbour-swissmeteo
-BuildArch: noarch
-License: GPLv3+
+License: GPL-3.0-or-later
 Sources:
 - '%{name}-%{version}.tar.bz2'
 Description: |
   Swiss Meteo is an unofficial client to weather forecast services provided by
-  the Federal Office of Meteorology and Climatology (Swiss Meteo). Forecasts are
+  the Federal Office of Meteorology and Climatology (MeteoSwiss). Forecasts are
   available offline and updated every hour.
 Configure: none
-Builder: qtc5
+Builder: qmake5
+QMakeOptions:
+    - VERSION=%{version}
+    - RELEASE=%{release}
+
+Macros:
+    - __provides_exclude_from;^%{_datadir}/.*$
 
 PkgConfigBR:
   - sailfishapp >= 1.0.3
@@ -41,15 +46,12 @@ PkgConfigBR:
   - Qt5Qml
   - Qt5Quick
 
-Macros:
-  - __provides_exclude_from;^%{_datadir}/.*$
-
 Requires:
+  - pyotherside-qml-plugin-python3-qt5 >= 1.5.0
   - sailfishsilica-qt5 >= 0.10.9
-  - libsailfishapp-launcher
 
 Files:
-  - '%defattr(0644,root,root,-)'
+  - '%{_bindir}'
   - '%{_datadir}/%{name}'
   - '%{_datadir}/applications/%{name}.desktop'
   - '%{_datadir}/icons/hicolor/*/apps/%{name}.png'
