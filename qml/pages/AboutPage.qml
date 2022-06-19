@@ -50,6 +50,11 @@ AboutPageBase {
             homepage: "https://zeix.com/referenzen/meteoschweiz-redesign-wetterportal/"
         },
         Attribution {
+            name: "QChart"
+            entries: ["2014 Julien Wintz", qsTr("adapted by Mirian Margiani")]
+            homepage: "https://web.archive.org/web/20180611014447/https://github.com/jwintz/qchart.js"
+        },
+        Attribution {
             name: "PyOtherSide"
             entries: ["2011, 2013-2020 Thomas Perl"]
             licenses: License { spdxId: "ISC" }
