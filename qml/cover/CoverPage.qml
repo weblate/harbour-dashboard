@@ -15,7 +15,7 @@ CoverBackground {
         id: label
         visible: !locationId
         anchors.centerIn: parent
-        text: qsTr("MeteoSwiss")
+        text: qsTr("Swiss Meteo")
     }
 
     Item {

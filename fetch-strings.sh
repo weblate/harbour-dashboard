@@ -1,22 +1,8 @@
 #!/bin/bash
 #
-# This file is part of harbour-meteoswiss.
-#
-# fetch-strings 0.0.1 (2019-09-05)
-# Copyright (C) 2019  Mirian Margiani
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This file is part of Swiss Meteo.
+# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-FileCopyrightText: 2019-2022 Mirian Margiani
 #
 
 DEPENDENCIES=(curl awk lupdate-qt5)
@@ -68,7 +54,7 @@ script="$(basename "$0")"
     echo "\
 ** fetch-strings **
 
-Fetch weather description strings for harbour-meteoswiss.
+Fetch weather description strings for harbour-swissmeteo.
 
 Note: this is backported from the current development branch.
 
@@ -185,7 +171,7 @@ add_description() { # 1: id, 2: string, 3..: default translations (see add_trans
     add_translation "Weather Descriptions" "$id|$s" "" "$@"
 }
 
-assemble_meteoswiss() {
+assemble_swissmeteo() {
     # Descriptions
     echo "assembling descriptions..."
     local dir="raw/strings"
@@ -247,7 +233,7 @@ assemble_meteoswiss() {
 }
 
 # load data
-assemble_meteoswiss
+assemble_swissmeteo
 
 # finish default translation files
 echo "finishing phrase books..."
@@ -261,4 +247,4 @@ shopt -u nullglob
 echo "finishing translation base..."
 echo "}" >> "$translations"
 
-lupdate-qt5 harbour-meteoswiss.pro
+lupdate-qt5 harbour-swissmeteo.pro

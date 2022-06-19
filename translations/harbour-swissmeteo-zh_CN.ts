@@ -58,8 +58,8 @@
 <context>
     <name>CoverPage</name>
     <message>
-        <source>MeteoSwiss</source>
-        <translation>MeteoSwiss</translation>
+        <source>Swiss Meteo</source>
+        <translation>Swiss Meteo</translation>
     </message>
 </context>
 <context>
@@ -191,8 +191,8 @@
 <context>
     <name>ForecastPage</name>
     <message>
-        <source>MeteoSwiss</source>
-        <translation>MeteoSwiss</translation>
+        <source>Swiss Meteo</source>
+        <translation>Swiss Meteo</translation>
     </message>
     <message>
         <source>Failed to load data!</source>
@@ -251,8 +251,8 @@
         <translation>刷新</translation>
     </message>
     <message>
-        <source>MeteoSwiss</source>
-        <translation>MeteoSwiss</translation>
+        <source>Swiss Meteo</source>
+        <translation>Swiss Meteo</translation>
     </message>
     <message>
         <source>Add location</source>
@@ -325,12 +325,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>MeteoSwiss</source>
-        <translation>MeteoSwiss</translation>
+        <source>Swiss Meteo</source>
+        <translation>Swiss Meteo</translation>
     </message>
     <message>
-        <source>Copyright, Federal Office of Meteorology and Climatology MeteoSwiss.</source>
-        <translation>版权所有，联邦气象与气候办公室，MeteoSwiss.</translation>
+        <source>Copyright, Federal Office of Meteorology and Climatology Swiss Meteo.</source>
+        <translation>版权所有，联邦气象与气候办公室，Swiss Meteo.</translation>
     </message>
     <message>
         <source>Weather icons by Zeix.</source>
@@ -345,7 +345,7 @@
         <translation>数据</translation>
     </message>
     <message>
-        <source>This is an unofficial client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (MeteoSwiss).</source>
+        <source>This is an unofficial client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (Swiss Meteo).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -354,7 +354,7 @@
     </message>
 </context>
 <context>
-    <name>harbour-meteoswiss</name>
+    <name>harbour-swissmeteo</name>
     <message>
         <source>d MMM yyyy &apos;(&apos;hh&apos;:&apos;mm&apos;)&apos;</source>
         <translation>d MMM yyyy &apos;(&apos;hh&apos;:&apos;mm&apos;)&apos;</translation>

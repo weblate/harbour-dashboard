@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de_CH">
+<TS version="2.1" language="en_US">
 <context>
     <name>AboutPage</name>
     <message>
         <source>Author</source>
-        <translation>Autor</translation>
+        <translation>Author</translation>
     </message>
     <message>
         <source>Website</source>
-        <translation>Webseite</translation>
+        <translation>Website</translation>
     </message>
     <message>
         <source>Version %1</source>
@@ -17,67 +17,67 @@
     </message>
     <message>
         <source>About %1</source>
-        <translation>Über %1</translation>
+        <translation>About %1</translation>
     </message>
     <message>
         <source>Development</source>
-        <translation>Entwicklung</translation>
+        <translation>Development</translation>
     </message>
     <message>
         <source>&lt;i&gt;show contributors &lt;/i&gt;</source>
-        <translation>&lt;i&gt;Mitwirkende zeigen &lt;/i&gt;</translation>
+        <translation>&lt;i&gt;show contributors &lt;/i&gt;</translation>
     </message>
     <message>
         <source>License</source>
-        <translation>Lizenz</translation>
+        <translation>License</translation>
     </message>
     <message>
         <source>&lt;i&gt;show license &lt;/i&gt;</source>
-        <translation>&lt;i&gt;Lizenz zeigen &lt;/i&gt;</translation>
+        <translation>&lt;i&gt;show license &lt;/i&gt;</translation>
     </message>
     <message>
         <source>Source Code</source>
-        <translation>Quellcode</translation>
+        <translation>Source Code</translation>
     </message>
 </context>
 <context>
     <name>ContributorsPage</name>
     <message>
         <source>Contributors</source>
-        <translation>Mitwirkende</translation>
+        <translation>Contributors</translation>
     </message>
     <message>
         <source>Development</source>
-        <translation>Entwicklung</translation>
+        <translation>Development</translation>
     </message>
     <message>
         <source>Translations</source>
-        <translation>Übersetzungen</translation>
+        <translation>Translations</translation>
     </message>
 </context>
 <context>
     <name>CoverPage</name>
     <message>
-        <source>MeteoSwiss</source>
-        <translation>MeteoSchweiz</translation>
+        <source>Swiss Meteo</source>
+        <translation>Swiss Meteo</translation>
     </message>
 </context>
 <context>
     <name>DaySummaryItem</name>
     <message>
         <source>Today</source>
-        <translation>Heute</translation>
+        <translation>Today</translation>
     </message>
 </context>
 <context>
     <name>ForecastGraphItem</name>
     <message>
         <source>Temperature</source>
-        <translation>Temperatur</translation>
+        <translation>Temperature</translation>
     </message>
     <message>
         <source>Precipitation</source>
-        <translation>Niederschlag</translation>
+        <translation>Precipitation</translation>
     </message>
     <message>
         <source>Wind</source>
@@ -88,183 +88,183 @@
     <name>ForecastItem</name>
     <message>
         <source>Loading...</source>
-        <translation>Laden ...</translation>
+        <translation>Loading...</translation>
     </message>
     <message>
         <source>Failed...</source>
-        <translation>Fehlgeschlagen ...</translation>
+        <translation>Failed...</translation>
     </message>
     <message>
         <source>status: </source>
-        <translation>Stand: </translation>
+        <translation>status: </translation>
     </message>
     <message>
         <source>now: </source>
-        <translation>jetzt: </translation>
+        <translation>now: </translation>
     </message>
     <message>
         <source>unknown</source>
-        <translation>unbekannt</translation>
+        <translation>unknown</translation>
     </message>
     <message>
         <source>%1: %2</source>
         <comment>time (1) with weather description (2)</comment>
-        <translation>%1 Uhr: %2</translation>
+        <translation>%1: %2</translation>
     </message>
     <message>
         <source>Sun Times</source>
-        <translation>Tageszeiten</translation>
+        <translation>Sun Times</translation>
     </message>
     <message>
         <source>top edge of the sun appears on the horizon</source>
-        <translation>die obere Kante der Sonne erscheint am Horizont</translation>
+        <translation>top edge of the sun appears on the horizon</translation>
     </message>
     <message>
         <source>morning golden hour (soft light, best time for photography) ends</source>
-        <translation>die morgendliche goldene Stunde (warmes Licht, beste Zeit zum Fotografieren) endet</translation>
+        <translation>morning golden hour (soft light, best time for photography) ends</translation>
     </message>
     <message>
         <source>sun is in the highest position</source>
-        <translation>die Sonne steht im höchsten Punkt</translation>
+        <translation>sun is in the highest position</translation>
     </message>
     <message>
         <source>evening golden hour (soft light, best time for photography) starts</source>
-        <translation>die abendliche goldene Stunde (warmes Licht, beste Zeit zum Fotografieren) beginnt</translation>
+        <translation>evening golden hour (soft light, best time for photography) starts</translation>
     </message>
     <message>
         <source>sun disappears below the horizon, evening civil twilight starts</source>
-        <translation>die Sonne verschwindet hinter dem Horizont; die Abenddämmerung beginnt</translation>
+        <translation>sun disappears below the horizon, evening civil twilight starts</translation>
     </message>
     <message>
         <source>dark enough for astronomical observations</source>
-        <translation>dunkel genug für astronomische Beobachtungen</translation>
+        <translation>dark enough for astronomical observations</translation>
     </message>
     <message>
         <source>darkest moment of the night, sun is in the lowest position</source>
-        <translation>dunkelster Zeitpunkt der Nacht; die Sonne ist im tiefsten Punkt angelangt</translation>
+        <translation>darkest moment of the night, sun is in the lowest position</translation>
     </message>
     <message>
         <source>morning civil twilight starts</source>
-        <translation>die Morgendämmerung beginnt</translation>
+        <translation>morning civil twilight starts</translation>
     </message>
     <message>
         <source>Dawn</source>
         <comment>use &apos;|&apos; to separate alternative strings of different length</comment>
-        <translation>Morgendämmerung|Morgen-dämmerung|Dämmerung|Morgendäm-merung</translation>
+        <translation>Dawn</translation>
     </message>
     <message>
         <source>Sunrise</source>
         <comment>use &apos;|&apos; to separate alternative strings of different length</comment>
-        <translation>Sonnenaufgang|Sonnen-aufgang</translation>
+        <translation>Sunrise</translation>
     </message>
     <message>
         <source>Golden Hour End</source>
         <comment>use &apos;|&apos; to separate alternative strings of different length</comment>
-        <translation>Goldene Stunde (Ende)|Goldene Stunde</translation>
+        <translation>Golden Hour End</translation>
     </message>
     <message>
         <source>Solar Noon</source>
         <comment>use &apos;|&apos; to separate alternative strings of different length</comment>
-        <translation>Mittag</translation>
+        <translation>Solar Noon</translation>
     </message>
     <message>
         <source>Golden Hour</source>
         <comment>use &apos;|&apos; to separate alternative strings of different length</comment>
-        <translation>Goldene Stunde (Anfang)|Goldene Stunde</translation>
+        <translation>Golden Hour</translation>
     </message>
     <message>
         <source>Sunset</source>
         <comment>use &apos;|&apos; to separate alternative strings of different length</comment>
-        <translation>Sonnenuntergang|Sonnen-untergang</translation>
+        <translation>Sunset</translation>
     </message>
     <message>
         <source>Night</source>
         <comment>use &apos;|&apos; to separate alternative strings of different length</comment>
-        <translation>Nacht</translation>
+        <translation>Night</translation>
     </message>
     <message>
         <source>Nadir</source>
         <comment>use &apos;|&apos; to separate alternative strings of different length</comment>
-        <translation>Mitternacht|Mitter-nacht</translation>
+        <translation>Nadir</translation>
     </message>
 </context>
 <context>
     <name>ForecastPage</name>
     <message>
-        <source>MeteoSwiss</source>
-        <translation>MeteoSchweiz</translation>
+        <source>Swiss Meteo</source>
+        <translation>Swiss Meteo</translation>
     </message>
     <message>
         <source>Failed to load data!</source>
-        <translation>Fehler beim Laden!</translation>
+        <translation>Failed to load data!</translation>
     </message>
     <message>
         <source>Reload Data</source>
-        <translation>Daten neu laden</translation>
+        <translation>Reload Data</translation>
     </message>
 </context>
 <context>
     <name>LicensePage</name>
     <message>
         <source>License</source>
-        <translation>Lizenz</translation>
+        <translation>License</translation>
     </message>
 </context>
 <context>
     <name>LocationSearchPage</name>
     <message>
         <source>Add Location</source>
-        <translation>Ort hinzufügen</translation>
+        <translation>Add Location</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation>Suchen</translation>
+        <translation>Search</translation>
     </message>
     <message>
         <source>Bootstrap debug locations</source>
-        <translation>Debug-Ortschaften hinzufügen</translation>
+        <translation>Bootstrap debug locations</translation>
     </message>
 </context>
 <context>
     <name>OverviewListDelegate</name>
     <message>
         <source>Remove</source>
-        <translation>Entfernen</translation>
+        <translation>Remove</translation>
     </message>
     <message>
         <source>Move to top</source>
-        <translation>Nach oben verschieben</translation>
+        <translation>Move to top</translation>
     </message>
     <message>
         <source>Deleting</source>
-        <translation>Wird gelöscht</translation>
+        <translation>Deleting</translation>
     </message>
 </context>
 <context>
     <name>OverviewPage</name>
     <message>
         <source>About</source>
-        <translation>Über</translation>
+        <translation>About</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation>Aktualisieren</translation>
+        <translation>Refresh</translation>
     </message>
     <message>
-        <source>MeteoSwiss</source>
-        <translation>MeteoSchweiz</translation>
+        <source>Swiss Meteo</source>
+        <translation>Swiss Meteo</translation>
     </message>
     <message>
         <source>Add location</source>
-        <translation>Ort hinzufügen</translation>
+        <translation>Add Location</translation>
     </message>
     <message>
         <source>Add a location first</source>
-        <translation>Fügen Sie zuerst einen Ort hinzu</translation>
+        <translation>Add a location first</translation>
     </message>
     <message>
         <source>Pull down to add items</source>
-        <translation>Herunterziehen, um neue Orte hinzuzufügen</translation>
+        <translation>Pull down to add items</translation>
     </message>
 </context>
 <context>
@@ -279,11 +279,11 @@
     <name>TablePage</name>
     <message>
         <source>Detailed Forecast</source>
-        <translation>Detailvorhersage</translation>
+        <translation>Detailed Forecast</translation>
     </message>
     <message>
         <source>Hour</source>
-        <translation>Stunde</translation>
+        <translation>Hour</translation>
     </message>
     <message>
         <source>Temp.</source>
@@ -291,11 +291,11 @@
     </message>
     <message>
         <source>Precip.</source>
-        <translation>Niederschl.</translation>
+        <translation>Precip.</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation>Beschreibung</translation>
+        <translation>Description</translation>
     </message>
     <message>
         <source>Wind</source>
@@ -306,325 +306,325 @@
     <name>about</name>
     <message>
         <source>Programming</source>
-        <translation>Programmierung</translation>
+        <translation>Programming</translation>
     </message>
     <message>
         <source>Weather Icons</source>
-        <translation>Wetter-Icons</translation>
+        <translation>Weather Icons</translation>
     </message>
     <message>
         <source>Weather Descriptions</source>
-        <translation>Wetter-Beschreibungen</translation>
+        <translation>Weather Descriptions</translation>
     </message>
     <message>
         <source>English, German</source>
-        <translation>Englisch, Deutsch</translation>
+        <translation>English, German</translation>
     </message>
     <message>
         <source>Chinese</source>
-        <translation>Chinesisch</translation>
+        <translation>Chinese</translation>
     </message>
     <message>
-        <source>MeteoSwiss</source>
-        <translation>MeteoSchweiz</translation>
+        <source>Swiss Meteo</source>
+        <translation>Swiss Meteo</translation>
     </message>
     <message>
-        <source>Copyright, Federal Office of Meteorology and Climatology MeteoSwiss.</source>
-        <translation>Copyright, Bundesamt für Meteorologie und Klimatologie MeteoSchweiz.</translation>
+        <source>Copyright, Federal Office of Meteorology and Climatology Swiss Meteo.</source>
+        <translation>Copyright, Federal Office of Meteorology and Climatology Swiss Meteo.</translation>
     </message>
     <message>
         <source>Weather icons by Zeix.</source>
-        <translation>Mit Wetter-Icons von Zeix.</translation>
+        <translation>Weather icons by Zeix.</translation>
     </message>
     <message>
         <source>Sources on GitHub</source>
-        <translation>Quellcode auf GitHub</translation>
+        <translation>Sources on GitHub</translation>
     </message>
     <message>
         <source>Data</source>
-        <translation>Daten</translation>
+        <translation>Data</translation>
     </message>
     <message>
-        <source>This is an unofficial client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (MeteoSwiss).</source>
-        <translation>Dies ist ein inoffizieller Klient für die Wettervorhersagen des Bundesamts für Meteorologie und Klimatologie (MeteoSchweiz).</translation>
+        <source>This is an unofficial client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (Swiss Meteo).</source>
+        <translation>This is an unofficial client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (Swiss Meteo).</translation>
     </message>
     <message>
         <source>https://www.meteoswiss.admin.ch/</source>
-        <translation>https://www.meteoschweiz.admin.ch/</translation>
+        <translation>https://www.meteoswiss.admin.ch/</translation>
     </message>
 </context>
 <context>
-    <name>harbour-meteoswiss</name>
+    <name>harbour-swissmeteo</name>
     <message>
         <source>d MMM yyyy &apos;(&apos;hh&apos;:&apos;mm&apos;)&apos;</source>
-        <translation>d&apos;.&apos; M&apos;.&apos; yyyy &apos;(&apos;hh&apos;:&apos;mm&apos; Uhr)&apos;</translation>
+        <translation>d MMM yyyy &apos;(&apos;hh&apos;:&apos;mm&apos;)&apos;</translation>
     </message>
     <message>
         <source>ddd d MMM yyyy</source>
-        <translation>ddd&apos;,&apos; d&apos;.&apos; M&apos;.&apos; yyyy</translation>
+        <translation>ddd d MMM yyyy</translation>
     </message>
     <message>
         <source>hh&apos;:&apos;mm</source>
-        <translation>hh&apos;:&apos;mm &apos;Uhr&apos;</translation>
+        <translation>hh&apos;:&apos;mm</translation>
     </message>
     <message>
         <source>Database Maintenance</source>
-        <translation>Datenbank-Pflege</translation>
+        <translation>Database Maintenance</translation>
     </message>
     <message>
         <source>Please be patient and allow up to 30 seconds for this.</source>
-        <translation>Bitte warten Sie einen Moment und gewähren Sie rund 30 Sekunden für den Vorgang.</translation>
+        <translation>Please be patient and allow up to 30 seconds for this.</translation>
     </message>
     <message>
         <source>Currently unusable</source>
-        <translation>Derzeit nicht verwendbar</translation>
+        <translation>Currently unusable</translation>
     </message>
     <message>
         <source>This app is currently unusable, due to a change at the data provider&apos;s side.</source>
-        <translation>Die App kann derzeit wegen Änderungen aufseiten der Datenquelle nicht verwendet werden.</translation>
+        <translation>This app is currently unusable, due to a change at the data provider&apos;s side.</translation>
     </message>
 </context>
 <context>
     <name>strings</name>
     <message>
         <source>clear</source>
-        <translation>klar</translation>
+        <translation>clear</translation>
     </message>
     <message>
         <source>slightly overcast</source>
-        <translation>leicht bewölkt</translation>
+        <translation>slightly overcast</translation>
     </message>
     <message>
         <source>heavy cloud formations</source>
-        <translation>zum Teil bewölkt</translation>
+        <translation>heavy cloud formations</translation>
     </message>
     <message>
         <source>overcast</source>
-        <translation>wechselnd bewölkt</translation>
+        <translation>overcast</translation>
     </message>
     <message>
         <source>very cloudy</source>
-        <translation>bedeckt</translation>
+        <translation>very cloudy</translation>
     </message>
     <message>
         <source>overcast, scattered showers</source>
-        <translation>Aufhellungen, einzelne Regenschauer</translation>
+        <translation>overcast, scattered showers</translation>
     </message>
     <message>
         <source>overcast, scattered rain and snow showers</source>
-        <translation>Aufhellungen, einzelne Regen- oder Schneeschauer</translation>
+        <translation>overcast, scattered rain and snow showers</translation>
     </message>
     <message>
         <source>overcast, snow showers</source>
-        <translation>Aufhellungen, einzelne Schneeschauer</translation>
+        <translation>overcast, snow showers</translation>
     </message>
     <message>
         <source>overcast, some showers</source>
-        <translation>bewölkt, einige Regenschauer</translation>
+        <translation>overcast, some showers</translation>
     </message>
     <message>
         <source>overcast, some sleet</source>
-        <translation>bewölkt, einige Regen- oder Schneeschauer</translation>
+        <translation>overcast, some sleet</translation>
     </message>
     <message>
         <source>overcast, some rain and snow showers</source>
-        <translation>bewölkt, einige Regen- oder Schneeschauer</translation>
+        <translation>overcast, some rain and snow showers</translation>
     </message>
     <message>
         <source>overcast, some snow showers</source>
-        <translation>bewölkt, einige Schneeschauer</translation>
+        <translation>overcast, some snow showers</translation>
     </message>
     <message>
         <source>slightly stormy</source>
-        <translation>Aufhellungen, leicht gewitterhaft</translation>
+        <translation>slightly stormy</translation>
     </message>
     <message>
         <source>storms</source>
-        <translation>Aufhellungen und gewitterhaft</translation>
+        <translation>storms</translation>
     </message>
     <message>
         <source>very cloudy, light rain</source>
-        <translation>stark bewölkt, schwacher Regen</translation>
+        <translation>very cloudy, light rain</translation>
     </message>
     <message>
         <source>very cloudy, light rain and snow  showers</source>
-        <translation>stark bewölkt, schwacher Schnee oder Regen</translation>
+        <translation>very cloudy, light rain and snow  showers</translation>
     </message>
     <message>
         <source>very cloudy, light snowfall</source>
-        <translation>stark bewölkt, schwacher Schnee</translation>
+        <translation>very cloudy, light snowfall</translation>
     </message>
     <message>
         <source>very cloudy, intermittent rain</source>
-        <translation>stark bewölkt, zeitweise Regen</translation>
+        <translation>very cloudy, intermittent rain</translation>
     </message>
     <message>
         <source>very cloudy, intermittant mixed rain and snowfall</source>
-        <translation>stark bewölkt, zeitweise Schnee oder Regen</translation>
+        <translation>very cloudy, intermittant mixed rain and snowfall</translation>
     </message>
     <message>
         <source>very cloudy, intermittent snowfall</source>
-        <translation>stark bewölkt, zeitweise Schnee</translation>
+        <translation>very cloudy, intermittent snowfall</translation>
     </message>
     <message>
         <source>very cloudy,  constant rain</source>
-        <translation>stark bewölkt, anhaltender Regen</translation>
+        <translation>very cloudy,  constant rain</translation>
     </message>
     <message>
         <source>very cloudy, frequent rain and snowfall</source>
-        <translation>stark bewölkt, anhaltender Regen oder Schnee</translation>
+        <translation>very cloudy, frequent rain and snowfall</translation>
     </message>
     <message>
         <source>very cloudy, heavy snowfall</source>
-        <translation>stark bewölkt, anhaltender Schnee</translation>
+        <translation>very cloudy, heavy snowfall</translation>
     </message>
     <message>
         <source>very cloudy, slightly stormy</source>
-        <translation>stark bewölkt, leicht gewitterhaft</translation>
+        <translation>very cloudy, slightly stormy</translation>
     </message>
     <message>
         <source>very cloudy, stormy</source>
-        <translation>stark bewölkt, gewitterhaft</translation>
+        <translation>very cloudy, stormy</translation>
     </message>
     <message>
         <source>very cloudy, storms</source>
-        <translation>stark bewölkt, stark gewitterhaft</translation>
+        <translation>very cloudy, storms</translation>
     </message>
     <message>
         <source>high cloud</source>
-        <translation>Hohe Bewölkung</translation>
+        <translation>high cloud</translation>
     </message>
     <message>
         <source>stratus</source>
-        <translation>Hochnebel</translation>
+        <translation>stratus</translation>
     </message>
     <message>
         <source>fog</source>
-        <translation>Nebel</translation>
+        <translation>fog</translation>
     </message>
     <message>
         <source>slightly overcast, scattered showers</source>
-        <translation>leicht bewölkt, einzelne Regenschauer</translation>
+        <translation>slightly overcast, scattered showers</translation>
     </message>
     <message>
         <source>sunny intervals, chance of thunderstorms</source>
-        <translation>Aufhellungen, leicht gewitterhaft</translation>
+        <translation>sunny intervals, chance of thunderstorms</translation>
     </message>
     <message>
         <source>slightly overcast, scattered snowfall</source>
-        <translation>leicht bewölkt, leichter Schneefall</translation>
+        <translation>slightly overcast, scattered snowfall</translation>
     </message>
     <message>
         <source>slightly overcast, rain and snow showers</source>
-        <translation>teilweise sonnig, einige Schnee- oder Regenschauer</translation>
+        <translation>slightly overcast, rain and snow showers</translation>
     </message>
     <message>
         <source>slightly overcast, some showers</source>
-        <translation>teilweise sonnig, einige Regenschauer</translation>
+        <translation>slightly overcast, some showers</translation>
     </message>
     <message>
         <source>overcast, frequent snow showers</source>
-        <translation>bewölkt, häufige Regenschauer</translation>
+        <translation>overcast, frequent snow showers</translation>
     </message>
     <message>
         <source>overcast and dry</source>
-        <translation>bedeckt und trocken</translation>
+        <translation>overcast and dry</translation>
     </message>
     <message>
         <source>sunny intervals, possible thunderstorms</source>
-        <translation>Aufhellungen und gewitterhaft</translation>
+        <translation>sunny intervals, possible thunderstorms</translation>
     </message>
     <message>
         <source>very cloudy, light sleet</source>
-        <translation>stark bewölkt, schwacher Schnee oder Regen</translation>
+        <translation>very cloudy, light sleet</translation>
     </message>
     <message>
         <source>very cloudy, light snow showers</source>
-        <translation>stark bewölkt, schwacher Schnee</translation>
+        <translation>very cloudy, light snow showers</translation>
     </message>
     <message>
         <source>very cloudy, intermittent sleet</source>
-        <translation>stark bewölkt, zeitweise Schnee oder Regen</translation>
+        <translation>very cloudy, intermittent sleet</translation>
     </message>
     <message>
         <source>very cloudy, intermittent snow</source>
-        <translation>stark bewölkt, zeitweise Schnee</translation>
+        <translation>very cloudy, intermittent snow</translation>
     </message>
     <message>
         <source>sunny</source>
-        <translation>sonnig</translation>
+        <translation>sunny</translation>
     </message>
     <message>
         <source>very overcast with rain</source>
-        <translation>stark bewölkt, anhaltender Regen</translation>
+        <translation>very overcast with rain</translation>
     </message>
     <message>
         <source>very overcast with frequent sleet</source>
-        <translation>stark bewölkt, anhaltender Regen oder Schnee</translation>
+        <translation>very overcast with frequent sleet</translation>
     </message>
     <message>
         <source>very overcast with heavy snow</source>
-        <translation>stark bewölkt, anhaltender Schnee</translation>
+        <translation>very overcast with heavy snow</translation>
     </message>
     <message>
         <source>very overcast, slight chance of storms</source>
-        <translation>stark bewölkt, leicht gewitterhaft</translation>
+        <translation>very overcast, slight chance of storms</translation>
     </message>
     <message>
         <source>very overcast with storms</source>
-        <translation>stark bewölkt, gewitterhaft</translation>
+        <translation>very overcast with storms</translation>
     </message>
     <message>
         <source>very cloudy, very stormy</source>
-        <translation>stark bewölkt, stark gewitterhaft</translation>
+        <translation>very cloudy, very stormy</translation>
     </message>
     <message>
         <source>high clouds</source>
-        <translation>Hohe Bewölkung</translation>
+        <translation>high clouds</translation>
     </message>
     <message>
         <source>sunny intervals, scattered showers</source>
-        <translation>leicht bewölkt, einzelne Regenschauer</translation>
+        <translation>sunny intervals, scattered showers</translation>
     </message>
     <message>
         <source>mostly sunny, some clouds</source>
-        <translation>ziemlich sonnig</translation>
+        <translation>mostly sunny, some clouds</translation>
     </message>
     <message>
         <source>sunny intervals, scattered snow showers</source>
-        <translation>leicht bewölkt, leichter Schneefall</translation>
+        <translation>sunny intervals, scattered snow showers</translation>
     </message>
     <message>
         <source>sunny intervals, scattered sleet</source>
-        <translation>teilweise sonnig, einige Schnee- oder Regenschauer</translation>
+        <translation>sunny intervals, scattered sleet</translation>
     </message>
     <message>
         <source>sunny intervals, some showers</source>
-        <translation>teilweise sonnig, einige Regenschauer</translation>
+        <translation>sunny intervals, some showers</translation>
     </message>
     <message>
         <source>short sunny intervals, frequent rain</source>
-        <translation>bewölkt, häufige Regenschauer</translation>
+        <translation>short sunny intervals, frequent rain</translation>
     </message>
     <message>
         <source>short sunny intervals, frequent snowfalls</source>
-        <translation>bewölkt, häufige Regenschauer</translation>
+        <translation>short sunny intervals, frequent snowfalls</translation>
     </message>
     <message>
         <source>partly sunny, thick passing clouds</source>
-        <translation>teilweise sonnig</translation>
+        <translation>partly sunny, thick passing clouds</translation>
     </message>
     <message>
         <source>sunny intervals,  isolated showers</source>
-        <translation>Aufhellungen, einzelne Regenschauer</translation>
+        <translation>sunny intervals,  isolated showers</translation>
     </message>
     <message>
         <source>sunny intervals, isolated sleet</source>
-        <translation>Aufhellungen, einzelne Regen- oder Schneeschauer</translation>
+        <translation>sunny intervals, isolated sleet</translation>
     </message>
     <message>
         <source>sunny intervals, snow showers</source>
-        <translation>Aufhellungen, einzelne Schneeschauer</translation>
+        <translation>sunny intervals, snow showers</translation>
     </message>
 </context>
 </TS>

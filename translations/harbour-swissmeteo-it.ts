@@ -58,7 +58,7 @@
 <context>
     <name>CoverPage</name>
     <message>
-        <source>MeteoSwiss</source>
+        <source>Swiss Meteo</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -195,7 +195,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>MeteoSwiss</source>
+        <source>Swiss Meteo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -255,7 +255,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>MeteoSwiss</source>
+        <source>Swiss Meteo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -325,11 +325,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>MeteoSwiss</source>
+        <source>Swiss Meteo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Copyright, Federal Office of Meteorology and Climatology MeteoSwiss.</source>
+        <source>Copyright, Federal Office of Meteorology and Climatology Swiss Meteo.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -345,7 +345,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>This is an unofficial client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (MeteoSwiss).</source>
+        <source>This is an unofficial client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (Swiss Meteo).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -354,7 +354,7 @@
     </message>
 </context>
 <context>
-    <name>harbour-meteoswiss</name>
+    <name>harbour-swissmeteo</name>
     <message>
         <source>d MMM yyyy &apos;(&apos;hh&apos;:&apos;mm&apos;)&apos;</source>
         <translation type="unfinished"></translation>

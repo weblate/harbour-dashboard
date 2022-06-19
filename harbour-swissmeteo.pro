@@ -1,3 +1,7 @@
+# This file is part of Swiss Meteo.
+# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-FileCopyrightText: 2019-2022 Mirian Margiani
+
 # NOTICE:
 #
 # Application name defined in TARGET has a corresponding QML filename.
@@ -10,7 +14,7 @@
 #   - translation filenames have to be changed
 
 # The name of your application
-TARGET = harbour-meteoswiss
+TARGET = harbour-swissmeteo
 
 CONFIG += sailfishapp_qml
 
@@ -19,35 +23,31 @@ DISTFILES += \
     qml/qchart/QChart.js \
     qml/qchart/QChart.qml \
     qml/js/*.js \
-    qml/harbour-meteoswiss.qml \
+    qml/harbour-swissmeteo.qml \
     qml/cover/CoverPage.qml \
     qml/cover/cover.png \
     qml/pages/ForecastPage.qml \
     qml/pages/OverviewPage.qml \
     qml/pages/TablePage.qml \
     qml/pages/components/*.qml \
-    rpm/harbour-meteoswiss.changes.in \
-    rpm/harbour-meteoswiss.changes.run.in \
-    rpm/harbour-meteoswiss.spec \
-    rpm/harbour-meteoswiss.yaml \
+    rpm/harbour-swissmeteo.changes.in \
+    rpm/harbour-swissmeteo.changes.run.in \
+    rpm/harbour-swissmeteo.spec \
+    rpm/harbour-swissmeteo.yaml \
     translations/*.ts \
     weather-icons/*.svg \
-    harbour-meteoswiss.desktop
-
-DISTFILES += qml/sf-about-page/*.qml \
-    qml/sf-about-page/license.html \
-    qml/sf-about-page/about.js
+    harbour-swissmeteo.desktop
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
 
 CONFIG += sailfishapp_i18n
 
 TRANSLATIONS += \
-    translations/harbour-meteoswiss-en.ts \
-    translations/harbour-meteoswiss-de.ts \
-    translations/harbour-meteoswiss-fr.ts \
-    translations/harbour-meteoswiss-it.ts \
-    translations/harbour-meteoswiss-zh_CN.ts
+    translations/harbour-swissmeteo-en.ts \
+    translations/harbour-swissmeteo-de.ts \
+    translations/harbour-swissmeteo-fr.ts \
+    translations/harbour-swissmeteo-it.ts \
+    translations/harbour-swissmeteo-zh_CN.ts
 
 lupdate_only {
 SOURCES += \
@@ -57,3 +57,10 @@ SOURCES += \
     qml/pages/components/*.qml \
     qml/js/*.js
 }
+
+QML_IMPORT_PATH += qml/modules
+
+# Note: version number is configured in yaml
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+DEFINES += APP_RELEASE=\\\"$$RELEASE\\\"
+include(libs/opal-cached-defines.pri)

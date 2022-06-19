@@ -16,12 +16,12 @@ var TRANSLATIONS = [
 
 var VERSION_NUMBER // set in main.qml's Component.onCompleted
 var APPINFO = {
-    appName: qsTr("MeteoSwiss"),
-    iconPath: "../weather-icons/harbour-meteoswiss.svg",
+    appName: qsTr("Swiss Meteo"),
+    iconPath: "../weather-icons/harbour-swissmeteo.svg",
     versionNumber: VERSION_NUMBER,
     description: qsTr("This is an unofficial client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (MeteoSwiss)."),
     author: "Mirian Margiani",
-    sourcesLink: "https://github.com/ichthyosaurus/harbour-meteoswiss",
+    sourcesLink: "https://github.com/ichthyosaurus/harbour-swissmeteo",
     sourcesText: qsTr("Sources on GitHub"),
 
     extraInfoTitle: qsTr("Data"),
