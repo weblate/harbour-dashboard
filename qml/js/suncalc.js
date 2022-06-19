@@ -1,6 +1,13 @@
 .pragma library
 
 /*
+ * This file is part of SunCalc, adapted for Swiss Meteo.
+ * SPDX-License-Identifier: BSD-2-Clause
+ * SPDX-FileCopyrightText: 2011-2015  Vladimir Agafonkin
+ * SPDX-FileCopyrightText: 2019, 2022  Mirian Margiani
+ */
+
+/*
  (c) 2011-2015, Vladimir Agafonkin
  SunCalc is a JavaScript library for calculating sun/moon position and light phases.
  https://github.com/mourner/suncalc
