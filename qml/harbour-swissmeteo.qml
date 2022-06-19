@@ -23,7 +23,6 @@ import "pages"
 
 import "js/forecast.js" as Forecast
 import "js/storage.js" as Storage
-import "sf-about-page/about.js" as About
 
 
 ApplicationWindow {
@@ -39,12 +38,7 @@ ApplicationWindow {
     signal locationAdded(var locationData)
     signal weekSummaryUpdated()
 
-    // ===============================
-    // ATTENTION UPDATE BEFORE RELEASE
-    // -------------------------------
-    property string version: "1.3.1"
-    property bool debug:     false
-    // ===============================
+    readonly property bool debug: false
 
     property var forecastData: Forecast.fullData
     property var dataIsReady: ({})
@@ -211,7 +205,5 @@ ApplicationWindow {
 
         doRefreshData();
         refreshData.connect(doRefreshData);
-
-        About.VERSION_NUMBER = version;
     }
 }
