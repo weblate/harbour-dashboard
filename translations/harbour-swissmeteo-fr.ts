@@ -5,7 +5,7 @@
     <name>AboutPage</name>
     <message>
         <source>Version %1</source>
-        <translation>Version %1</translation>
+        <translation type="vanished">Version %1</translation>
     </message>
     <message>
         <source>Website</source>
@@ -13,45 +13,76 @@
     </message>
     <message>
         <source>Author</source>
-        <translation>Auteur</translation>
+        <translation type="vanished">Auteur</translation>
     </message>
     <message>
         <source>About %1</source>
-        <translation>Apropos %1</translation>
+        <translation type="vanished">Apropos %1</translation>
     </message>
     <message>
         <source>Development</source>
+        <translation>Développement</translation>
+    </message>
+    <message>
+        <source>Swiss Meteo</source>
+        <comment>the app&apos;s name</comment>
+        <translation>Météo Suisse</translation>
+    </message>
+    <message>
+        <source>A non-official client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (MeteoSwiss).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;i&gt;show contributors &lt;/i&gt;</source>
+        <source>Meteorological data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>License</source>
+        <source>MeteoSwiss</source>
+        <translation>MétéoSuisse</translation>
+    </message>
+    <message>
+        <source>https://www.meteoswiss.admin.ch/</source>
+        <translation>https://www.meteosuisse.admin.ch/</translation>
+    </message>
+    <message>
+        <source>Weather icons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;i&gt;show license &lt;/i&gt;</source>
+        <source>adapted by Mirian Margiani</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Source Code</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ContributorsPage</name>
-    <message>
-        <source>Contributors</source>
+        <source>Coordinates calculator</source>
+        <comment>MeteoSwiss uses the Swiss local coordinate system that must be converted to global coordinates</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Development</source>
-        <translation type="unfinished"></translation>
+        <source>Programming</source>
+        <translation>Programmation</translation>
     </message>
     <message>
         <source>Translations</source>
+        <translation>Traductions</translation>
+    </message>
+    <message>
+        <source>German</source>
+        <translation>allemand</translation>
+    </message>
+    <message>
+        <source>Chinese</source>
+        <translation>chinois</translation>
+    </message>
+    <message>
+        <source>Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copyright, Federal Office of Meteorology and Climatology MeteoSwiss.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weather icons by Zeix.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -59,7 +90,7 @@
     <name>CoverPage</name>
     <message>
         <source>Swiss Meteo</source>
-        <translation>MétéoSuisse</translation>
+        <translation>Météo Suisse</translation>
     </message>
 </context>
 <context>
@@ -196,17 +227,10 @@
     </message>
     <message>
         <source>Swiss Meteo</source>
-        <translation>MétéoSuisse</translation>
+        <translation>Météo Suisse</translation>
     </message>
     <message>
         <source>Failed to load data!</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>LicensePage</name>
-    <message>
-        <source>License</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -223,6 +247,221 @@
     <message>
         <source>Search</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Opal.About</name>
+    <message>
+        <source>About</source>
+        <translation>Apropos</translation>
+    </message>
+    <message>
+        <source>Version %1</source>
+        <translation>Version %1</translation>
+    </message>
+    <message>
+        <source>Version %1 (%2)</source>
+        <translation>Version %1 (%2)</translation>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation>Développement</translation>
+    </message>
+    <message>
+        <source>show contributors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Homepage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Translations</source>
+        <translation>Traductions</translation>
+    </message>
+    <message>
+        <source>Source Code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Donations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>License</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>show license(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>show details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contributors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Acknowledgements</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Thank you!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please refer to &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download license texts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>License(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Note: please check the source code for most accurate information.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>External Link</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open in browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copied to clipboard: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy to clipboard</source>
+        <translation>Copier dans le presse-papiers</translation>
+    </message>
+</context>
+<context>
+    <name>Opal.About.Common</name>
+    <message>
+        <source>If you want to support my work, you can buy me a cup of coffee.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can support this project by contributing, or by donating using any of these services.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your contributions to translations or code would be most welcome.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Author</source>
+        <translation type="vanished">Auteur</translation>
+    </message>
+    <message numerus="yes">
+        <source>Author(s)</source>
+        <translation type="vanished">
+            <numerusform>Auteur</numerusform>
+            <numerusform>Auteurs</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Programming</source>
+        <translation type="vanished">Programmation</translation>
+    </message>
+    <message>
+        <source>Translations</source>
+        <translation type="vanished">Traductions</translation>
+    </message>
+    <message>
+        <source>Swedish</source>
+        <translation type="vanished">suédois</translation>
+    </message>
+    <message>
+        <source>Polish</source>
+        <translation type="vanished">polonais</translation>
+    </message>
+    <message>
+        <source>German</source>
+        <translation type="vanished">allemand</translation>
+    </message>
+    <message>
+        <source>French</source>
+        <translation type="vanished">français</translation>
+    </message>
+    <message>
+        <source>Chinese</source>
+        <translation type="vanished">chinois</translation>
+    </message>
+    <message>
+        <source>English</source>
+        <translation type="vanished">anglais</translation>
+    </message>
+    <message>
+        <source>Italian</source>
+        <translation type="vanished">italien</translation>
+    </message>
+    <message>
+        <source>Finnish</source>
+        <translation type="vanished">finnois</translation>
+    </message>
+    <message>
+        <source>Norwegian</source>
+        <translation type="vanished">norvégien</translation>
+    </message>
+    <message>
+        <source>Estonian</source>
+        <translation type="vanished">estonien</translation>
+    </message>
+    <message>
+        <source>Czech</source>
+        <translation type="vanished">tchèque</translation>
+    </message>
+    <message>
+        <source>Greek</source>
+        <translation type="vanished">grec</translation>
+    </message>
+    <message>
+        <source>Spanish</source>
+        <translation type="vanished">espagnol</translation>
+    </message>
+    <message>
+        <source>Hungarian</source>
+        <translation type="vanished">hongrois</translation>
+    </message>
+    <message>
+        <source>Indonesian</source>
+        <translation type="vanished">indonésien</translation>
+    </message>
+    <message>
+        <source>Russian</source>
+        <translation type="vanished">russe</translation>
+    </message>
+    <message>
+        <source>Dutch</source>
+        <translation type="vanished">néerlandais</translation>
+    </message>
+    <message>
+        <source>Slovak</source>
+        <translation type="vanished">slovaque</translation>
+    </message>
+    <message>
+        <source>Turkish</source>
+        <translation type="vanished">turc</translation>
     </message>
 </context>
 <context>
@@ -256,7 +495,7 @@
     </message>
     <message>
         <source>Swiss Meteo</source>
-        <translation>MétéoSuisse</translation>
+        <translation>Météo Suisse</translation>
     </message>
     <message>
         <source>Add a location first</source>
@@ -305,52 +544,12 @@
 <context>
     <name>about</name>
     <message>
-        <source>Programming</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Weather Icons</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Weather Descriptions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>English, German</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Chinese</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Swiss Meteo</source>
-        <translation>MétéoSuisse</translation>
-    </message>
-    <message>
-        <source>Copyright, Federal Office of Meteorology and Climatology Swiss Meteo.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Weather icons by Zeix.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Sources on GitHub</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Data</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This is an unofficial client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (Swiss Meteo).</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Météo Suisse</translation>
     </message>
     <message>
         <source>https://www.meteoswiss.admin.ch/</source>
-        <translation>https://www.meteosuisse.admin.ch/</translation>
+        <translation type="vanished">https://www.meteosuisse.admin.ch/</translation>
     </message>
 </context>
 <context>
