@@ -13,7 +13,7 @@ SPDX-License-Identifier: GFDL-1.3-or-later
 <!-- [![Development status](https://img.shields.io/badge/development-active-blue)](https://github.com/ichthyosaurus/harbour-swissmeteo) -->
 <!-- [![Liberapay donations](https://img.shields.io/liberapay/receives/ichthyosaurus)](https://liberapay.com/ichthyosaurus) -->
 
-This is an non-official client to the weather forecast services provided by the
+This is a non-official client to the weather forecast services provided by the
 Federal Office of Meteorology and Climatology (MeteoSwiss).
 
 This app is in no way affiliated with / endorsed by MeteoSwiss.

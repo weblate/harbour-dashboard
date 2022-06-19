@@ -31,7 +31,7 @@ AboutPageBase {
     appIcon: Qt.resolvedUrl("../images/harbour-swissmeteo.png")
     appVersion: APP_VERSION
     appRelease: APP_RELEASE
-    description: qsTr("An non-official client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (MeteoSwiss).")
+    description: qsTr("A non-official client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (MeteoSwiss).")
     mainAttributions: ["2018-2022 Mirian Margiani"]
     sourcesUrl: "https://github.com/ichthyosaurus/harbour-swissmeteo"
     homepageUrl: "https://openrepos.net/content/ichthyosaurus/swiss-meteo"
