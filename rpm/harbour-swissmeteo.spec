@@ -9,7 +9,7 @@ Name:       harbour-swissmeteo
 # << macros
 %define __provides_exclude_from ^%{_datadir}/.*$
 
-Summary:    Unofficial client to the Swiss Meteorological Service (Swiss Meteo)
+Summary:    Unofficial client to the Swiss Meteorological Service (MeteoSwiss)
 Version:    1.3.1
 Release:    2
 Group:      Qt/Qt
@@ -26,7 +26,7 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  desktop-file-utils
 
 %description
-Swiss Meteo is an unofficial client to weather forecast services provided by
+Swiss Meteo is a non-official client to weather forecast services provided by
 the Federal Office of Meteorology and Climatology (MeteoSwiss). Forecasts are
 available offline and updated every hour.
 
