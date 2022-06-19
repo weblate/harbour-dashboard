@@ -52,7 +52,20 @@ AboutPageBase {
         Attribution {
             name: "QChart"
             entries: ["2014 Julien Wintz", qsTr("adapted by Mirian Margiani")]
+            licenses: License { spdxId: "MIT" }
+            // the original source code repository is no longer available
             homepage: "https://web.archive.org/web/20180611014447/https://github.com/jwintz/qchart.js"
+        },
+        Attribution {
+            name: "SunCalc"
+            entries: ["2011-2015  Vladimir Agafonkin", qsTr("adapted by Mirian Margiani")]
+            licenses: License { spdxId: "BSD-2-Clause" }
+            sources: "https://github.com/mourner/suncalc"
+        },
+        Attribution {
+            name: qsTr("Coordinates calculator", "MeteoSwiss uses the Swiss local coordinate system that must be converted to global coordinates")
+            entries: ["2013  Reto Hasler (ascii_ch)", qsTr("adapted by Mirian Margiani")]
+            homepage: "https://asciich.ch/wordpress/koordinatenumrechner-schweiz-international/"
         },
         Attribution {
             name: "PyOtherSide"
