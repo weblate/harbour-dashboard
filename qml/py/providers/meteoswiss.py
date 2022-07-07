@@ -6,6 +6,8 @@
 
 import sqlite3
 import urllib.request
+import requests
+import locale
 import shutil
 import gzip
 from pathlib import Path
@@ -19,15 +21,18 @@ class Provider(ProviderBase):
     handle = 'mch'
     capabilities = Capability.ALL
 
-    # FIXME Check if requests are allowed if we use our own user agent string.
-    #       Requests with an empty user agent string are always blocked.
-    # UA = 'something something meteo for SailfishOS (v2.0.0) - https://sources...'
-    UA = 'MeteoSwissApp-2.16-Android'
-
     URL_DB = 'https://s3-eu-central-1.amazonaws.com/app-prod-static-fra.meteoswiss-app.ch/v1/db.sqlite'
     URL_STRINGS = 'https://www.meteoschweiz.admin.ch/etc.clientlibs/internet/clientlibs/meteoswiss/clientlibs/lang/{lang}.min.js'
     URL_ICONS = 'https://www.meteoschweiz.admin.ch/etc.clientlibs/internet/clientlibs/meteoswiss/resources/assets/images/icons/meteo/weather-symbols/{num}.svg'
     URL_FORECAST = 'https://app-prod-ws.meteoswiss-app.ch/v1/plzDetail?plz={ident}'
+
+    HEADERS = {
+        # FIXME Check if requests are allowed if we use our own user agent string.
+        #       Requests with an empty user agent string are always blocked.
+        # or: 'something something meteo for SailfishOS (v2.0.0) - https://sources...'
+        'User-Agent': 'MeteoSwissApp-2.16-Android',
+        'Accept-Language': locale.getlocale()[0].split('_')[0] if locale.getlocale()[0] is not None else 'en'
+    }
 
     SUPPORTED_DATA_DB_VERSIONS = ['139']
 
@@ -39,27 +44,32 @@ class Provider(ProviderBase):
 
     def _setup(self):
         self._data_db = self.data_path / 'mch.db'
-        self._data_db_temp = self.data_path / 'mch.db.temp'
 
         if not self._data_db.exists():
             # download locations database if it does not exists
-
-            # FIXME use requests
-            # FIXME send user agent!
-            # FIXME send accept language!
-
             self._signal_send('warning.providers.local-data.database-download-started', self._data_db)
-            with urllib.request.urlopen(self.URL_DB) as response:
-                with open(str(self._data_db_temp), 'wb') as compressed_file:
-                    shutil.copyfileobj(response, compressed_file)
 
-                with open(str(self._data_db_temp), 'rb') as compressed_file:
-                    with gzip.GzipFile(fileobj=compressed_file, mode='rb') as uncompressed_data:
-                        with open(str(self._data_db), 'wb') as uncompressed_file:
-                            shutil.copyfileobj(uncompressed_data, uncompressed_file)
+            try:
+                r = requests.get(self.URL_DB, headers=self.HEADERS, timeout=1)
+                print(r.headers)
+                print(r.status_code)
 
-        # always remove temporary database used for decompression
-        Path(self._data_db_temp).unlink(missing_ok=True)
+
+                r.raise_for_status()
+
+                with open(self._data_db, 'wb') as fd:
+                    for chunk in r.iter_content(chunk_size=128):
+                        fd.write(chunk)
+
+            # except (requests.ConnectionError, requests.ConnectTimeout):
+            except requests.exceptions.RequestException as e:
+                self._signal_send('warning.providers.local-data.database-download-failed', self._data_db, r.status_code, r.headers, e)
+                return
+            except Exception as e:
+                self._signal_send('warning.providers.local-data.database-download-failed', self._data_db, e)
+                return
+
+            self._signal_send('warning.providers.local-data.database-download-finished', self._data_db)
 
         if self._data_db.exists() and not self._data_db.is_file():
             self._signal_send('warning.providers.local-data.database-broken', self._data_db)
