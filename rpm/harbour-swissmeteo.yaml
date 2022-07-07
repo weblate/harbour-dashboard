@@ -20,11 +20,11 @@ Description: |
 Configure: none
 Builder: qmake5
 QMakeOptions:
-    - VERSION=%{version}
-    - RELEASE=%{release}
+  - VERSION=%{version}
+  - RELEASE=%{release}
 
 Macros:
-    - __provides_exclude_from;^%{_datadir}/.*$
+  - __provides_exclude_from;^%{_datadir}/.*$
 
 PkgConfigBR:
   - sailfishapp >= 1.0.3
@@ -35,6 +35,8 @@ PkgConfigBR:
 Requires:
   - pyotherside-qml-plugin-python3-qt5 >= 1.5.0
   - sailfishsilica-qt5 >= 0.10.9
+  - python3-sqlite
+  - python3-requests
 
 Files:
   - '%{_bindir}'
