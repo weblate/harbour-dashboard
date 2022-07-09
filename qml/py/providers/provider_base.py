@@ -56,6 +56,17 @@ class Provider:
     def cache_path(self):
         return self.cache_dir / self.handle
 
+    def refresh(self, ident: str, force: bool) -> None:
+        """ Refresh forecast for a given location.
+            Implementations must call self._pre_refresh() before doing anything else.
+        """
+        raise NotImplementedError()
+
+    def _pre_refresh(self, ident: str, force: bool) -> None:
+        if not ident:
+            self._signal_send('error.refresh.empty-id', ident, force)
+            return
+
     def _setup(self):
         raise NotImplementedError()
 

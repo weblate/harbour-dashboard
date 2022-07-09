@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
+from typing import Dict
 import sqlite3
 from pathlib import Path
 
@@ -31,11 +32,12 @@ def signal_send(event, *args):
 
 
 class Meteo:
-    def __init__(self, data_path, cache_path):
+    def __init__(self, data_path: str, cache_path: str):
         self.ready = False
         self._data_path = Path(data_path)
         self._cache_path = Path(cache_path)
-        self._providers = {}
+        self._providers: Dict[str, provider_base.Provider] = {}
+        self._broken_providers: Dict[str, provider_base.Provider] = {}
 
         for k, v in {'data': self._data_path, 'cache': self._cache_path}.items():
             try:
@@ -71,6 +73,16 @@ class Meteo:
         self._init_providers()
         self.ready = True
 
+    def refresh(self, provider: str, ident: str, force: bool) -> None:
+        if provider in self._broken_providers:
+            signal_send('error.refresh.broken-provider', provider, ident, force)
+            return
+        elif provider not in self._providers:
+            signal_send('error.refresh.unknown-provider', provider, ident, force)
+            return
+
+        self._providers[provider].refresh(ident, force)
+
     def _init_databases(self):
         try:
             row = self._dcur.execute('SELECT version FROM metadata;').fetchone()
@@ -96,6 +108,7 @@ class Meteo:
                     raise Exception(f'Duplicate provider with handle {m.handle}')
 
                 if not m.ready:
+                    self._broken_providers[m.handle] = m
                     raise Exception(f'Provider {m.handle} failed to initialize')
 
                 self._providers[m.handle] = m
@@ -104,7 +117,8 @@ class Meteo:
 
     def _handle_provider_signal(self, event, *args):
         if event == 'meteo.store-cache':
-            log(f'storing cache from [{args[0]}]:', *args[1:], scope='meteo')
+            log(f'[not implemented] storing cache from [{args[0]}]:', *args[1:], scope='meteo')
+            # TODO implement
         else:
             signal_send(event, *args)
 
@@ -251,14 +265,35 @@ def move_location(ident, direction):
     pass  # should be stored in dconf from QML
 
 
-def refresh(location, force):
-    pass
+def refresh(location: str, force: bool) -> None:
+    if not location:
+        signal_send('bug.refresh.location.empty', location, force)
+        return
+    elif type(location) is not str:
+        signal_send('bug.refresh.location.invalid-type', location, force)
+        return
+    elif '|' not in location:
+        signal_send('bug.refresh.location.invalid-format', location, force)
+        return
+
+    provider = location.split('|')[0]
+    ident = '|'.join(location.split('|')[1:])
+    METEO.refresh(provider, ident, force)
 
 
 if __name__ == '__main__':
     log('running standalone')
+
+    # TODO remove test lines
     initialize('test-data/data', 'test-data/cache')
+    refresh('mch|400100', True)
+
 else:
     log('running as library')
     import pyotherside
-    signal_send = pyotherside.send
+
+    def _signal_send_proxy(event, *args):
+        log(f'[{event}]', *args, scope='signal')
+        pyotherside.send(event, *args)
+
+    signal_send = _signal_send_proxy

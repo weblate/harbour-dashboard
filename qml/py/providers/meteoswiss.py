@@ -5,12 +5,10 @@
 #
 
 import sqlite3
-import urllib.request
 import requests
 import locale
-import shutil
-import gzip
-from pathlib import Path
+import json
+# from pathlib import Path
 
 from .provider_base import Capability
 from .provider_base import Provider as ProviderBase
@@ -40,7 +38,33 @@ class Provider(ProviderBase):
         super().__init__(signal_callback, log_callback)
 
         self._setup()
-        self._signal_send('meteo.store-cache', 'data...')
+
+    def refresh(self, ident: str, force: bool) -> None:
+        self._pre_refresh(ident, force)
+        self._signal_send('info.refresh.started', ident, force)
+
+        # TODO verify ident in db
+        new_data = {}
+
+        try:
+            r = requests.get(self.URL_FORECAST.format(ident=ident), headers=self.HEADERS, timeout=1)
+            print(r.headers)
+            print(r.status_code)
+            r.raise_for_status()
+            new_data = r.json()
+
+            with open(self.data_path / 'forecast.json', 'w') as fd:
+                fd.write(json.dumps(new_data, indent=2))
+
+        except requests.exceptions.RequestException as e:
+            self._signal_send('warning.refresh.download-failed', self._data_db, r.status_code, r.headers, e)
+            return
+        except Exception as e:
+            self._signal_send('warning.refresh.download-failed', self._data_db, e)
+            return
+
+        self._signal_send('meteo.store-cache', ident, new_data)
+        self._signal_send('info.refresh.finished', ident, new_data)
 
     def _setup(self):
         self._data_db = self.data_path / 'mch.db'
