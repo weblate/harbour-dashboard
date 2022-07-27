@@ -4,11 +4,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-import sqlite3
 import requests
 import locale
 import json
-# from pathlib import Path
 
 from .provider_base import Capability
 from .provider_base import Provider as ProviderBase
@@ -67,7 +65,6 @@ class _MeteoDb(DatabaseBase):
 
     def _upgrade_schema(self, from_version):
         if from_version in self.SUPPORTED_DATA_DB_VERSIONS:
-            self._signal_send('TEST-SIGNAL', 'A', 'B', 'C')
             raise self.UpToDate
 
         raise self.InvalidVersion

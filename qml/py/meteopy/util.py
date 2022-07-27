@@ -128,6 +128,6 @@ class DatabaseBase:
     def _signal_send(self, event, *args):
         self._signal_callback(event, self.handle, *args)
 
-    def _log(self, *args):
-        self._log_callback(*args, scope=f'database:{self.handle}')
-
+    def _log(self, *args, scope=''):
+        subscope = f':{scope}' if scope else ''
+        self._log_callback(*args, scope=f'database:{self.handle}{subscope}')

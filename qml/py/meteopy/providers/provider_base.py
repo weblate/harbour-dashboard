@@ -73,5 +73,6 @@ class Provider:
     def _signal_send(self, event, *args):
         self._signal_callback(event, self.handle, *args)
 
-    def _log(self, *args):
-        self._log_callback(*args, scope=f'provider:{self.handle}')
+    def _log(self, *args, scope=''):
+        subscope = f':{scope}' if scope else ''
+        self._log_callback(*args, scope=f'provider:{self.handle}{subscope}')
