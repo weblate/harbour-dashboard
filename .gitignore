@@ -21,3 +21,5 @@ rpm/*.spec.*
 raw/strings/*.clean
 raw/strings/strings
 liverunner*
+
+__pycache__
