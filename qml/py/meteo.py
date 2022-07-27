@@ -5,11 +5,16 @@
 #
 
 from typing import Dict
-import sqlite3
 from pathlib import Path
 
-from providers import provider_base
+from meteopy.providers import provider_base
 import importlib
+
+from meteopy.util import log
+from meteopy.util import signal_send
+from meteopy.util import DatabaseBase
+
+
 
 
 _PROVIDERS_REGISTRY = [
@@ -22,16 +27,63 @@ METEO = None
 INITIALIZED = False
 
 
-def log(*args, scope=''):
-    scope = f'[py:{scope}]' if scope else '[py]'
-    print(scope, *args)
-
-
-def signal_send(event, *args):
-    log(f'[{event}]', *args, scope='signal')
-
-
 class Meteo:
+    class DataDb(DatabaseBase):
+        def _setup(self):
+            pass  # no special setup needed
+
+        def _upgrade_schema(self, from_version):
+            if from_version == '0':
+                # setup data tables
+                self.cur.execute("""
+                    CREATE TABLE IF NOT EXISTS active_locations(
+                        location_id TEXT NOT NULL PRIMARY KEY,
+                        name TEXT NOT NULL,
+                        zip INTEGER NOT NULL,
+                        regionId TEXT NOT NULL,
+                        region TEXT NOT NULL,
+                        latitude REAL NOT NULL,
+                        longitude REAL NOT NULL,
+                        altitude INTEGER NOT NULL
+                    );""")
+                return '1'
+            elif from_version == '1':
+                raise self.UpToDate
+
+            raise self.InvalidVersion
+
+    class CacheDb(DatabaseBase):
+        def _setup(self):
+            pass  # no special setup needed
+
+        def _upgrade_schema(self, from_version):
+            if from_version == '0':
+                self.cur.execute("""
+                    CREATE TABLE IF NOT EXISTS data(
+                        timestamp INTEGER NOT NULL,
+                        location_id INTEGER NOT NULL,
+                        data_json TEXT NOT NULL,
+                        day_count INTEGER NOT NULL,
+                        day_dates TEXT NOT NULL,
+                        PRIMARY KEY(timestamp, location_id)
+                    );""")
+                self.cur.execute("""
+                    CREATE TABLE IF NOT EXISTS overview(
+                        datestring STRING NOT NULL,
+                        location_id INTEGER NOT NULL,
+                        symbol INTEGER NOT NULL,
+                        precipitation INTEGER NOT NULL,
+                        temp_max INTEGER NOT NULL,
+                        temp_min INTEGER NOT NULL,
+                        age INTEGER NOT NULL,
+                        PRIMARY KEY(datestring, location_id)
+                    );""")
+                return "1"
+            elif from_version == '1':
+                raise self.UpToDate
+
+            raise self.InvalidVersion
+
     def __init__(self, data_path: str, cache_path: str):
         self.ready = False
         self._data_path = Path(data_path)
@@ -50,26 +102,9 @@ class Meteo:
         provider_base.Provider.data_dir = self._data_path
         provider_base.Provider.cache_dir = self._cache_path
 
-        self._data_db = self._data_path / 'meteo_data.db'
-        self._cache_db = self._cache_path / 'meteo_cache.db'
+        self._data_db = self.DataDb(self._data_path, 'meteo_data', signal_send, log)
+        self._cache_db = self.CacheDb(self._cache_path, 'meteo_cache', signal_send, log)
 
-        if self._data_db.exists() and not self._data_db.is_file():
-            signal_send('fatal.local-data.database-broken', self._data_db)
-            return
-
-        if self._data_db.exists() and not self._cache_db.is_file():
-            signal_send('fatal.local-cache.database-broken', self._cache_db)
-            return
-
-        self._dcon = sqlite3.connect(self._data_db)
-        self._dcon.row_factory = sqlite3.Row
-        self._dcur = self._dcon.cursor()
-
-        self._ccon = sqlite3.connect(self._cache_db)
-        self._ccon.row_factory = sqlite3.Row
-        self._ccur = self._ccon.cursor()
-
-        self._init_databases()
         self._init_providers()
         self.ready = True
 
@@ -83,25 +118,10 @@ class Meteo:
 
         self._providers[provider].refresh(ident, force)
 
-    def _init_databases(self):
-        try:
-            row = self._dcur.execute('SELECT version FROM metadata;').fetchone()
-            version = row['version'] if row and row['version'] else 'none'
-        except sqlite3.OperationalError:
-            version = 'none'
-        self._upgrade_data_schema(version)
-
-        try:
-            row = self._ccur.execute('SELECT version FROM metadata;').fetchone()
-            version = row['version'] if row and row['version'] else 'none'
-        except sqlite3.OperationalError:
-            version = 'none'
-        self._upgrade_cache_schema(version)
-
     def _init_providers(self):
         for i in _PROVIDERS_REGISTRY:
             try:
-                m = importlib.import_module('providers.' + i)
+                m = importlib.import_module('meteopy.providers.' + i)
                 m = m.Provider(self._handle_provider_signal, log)
 
                 if m.handle in self._providers:
@@ -137,95 +157,6 @@ class Meteo:
                 turn += 1
             except PermissionError as e:
                 signal_send('error.backup.failed', filepath, e)  # TODO handle this...?
-
-    def _upgrade_data_schema(self, from_version, start_version=None):
-        to_version = ""
-        start_version = start_version if start_version is not None else from_version
-
-        if from_version == "none":
-            to_version = "0"
-
-            # setup metadata table
-            self._dcur.execute('CREATE TABLE metadata(version TEXT);')
-            self._dcur.execute('INSERT INTO metadata VALUES (?);', (to_version, ))
-        elif from_version == "0":
-            to_version = "1"
-
-            # setup data tables
-            self._dcur.execute("""
-                CREATE TABLE IF NOT EXISTS active_locations(
-                    location_id TEXT NOT NULL PRIMARY KEY,
-                    name TEXT NOT NULL,
-                    zip INTEGER NOT NULL,
-                    regionId TEXT NOT NULL,
-                    region TEXT NOT NULL,
-                    latitude REAL NOT NULL,
-                    longitude REAL NOT NULL,
-                    altitude INTEGER NOT NULL
-                );""")
-        elif from_version == "1":
-            # we arrived at the most recent version; save it and return
-            if from_version != start_version:
-                self._dcur.execute('UPDATE metadata SET version=?;', (from_version, ))
-                self._dcon.commit()
-                self._dcur.execute('VACUUM;')
-            log("schema is up-to-date (version: {})".format(from_version), scope='data-db')
-            return
-        else:
-            log("error: cannot use invalid schema version '{}'".format(from_version), scope='data-db')
-            return
-
-        log("upgrading schema from {} to {}...".format(from_version, to_version), scope='data-db')
-        self._upgrade_data_schema(to_version, start_version)
-
-    def _upgrade_cache_schema(self, from_version, start_version=None):
-        to_version = ""
-        start_version = start_version if start_version is not None else from_version
-
-        if from_version == "none":
-            to_version = "0"
-
-            # setup metadata table
-            self._ccur.execute('CREATE TABLE metadata(version TEXT);')
-            self._ccur.execute('INSERT INTO metadata VALUES (?);', (to_version, ))
-        elif from_version == "0":
-            to_version = "1"
-
-            # setup data tables
-            self._ccur.execute("""
-                CREATE TABLE IF NOT EXISTS data(
-                    timestamp INTEGER NOT NULL,
-                    location_id INTEGER NOT NULL,
-                    data_json TEXT NOT NULL,
-                    day_count INTEGER NOT NULL,
-                    day_dates TEXT NOT NULL,
-                    PRIMARY KEY(timestamp, location_id)
-                );""")
-            self._ccur.execute("""
-                CREATE TABLE IF NOT EXISTS overview(
-                    datestring STRING NOT NULL,
-                    location_id INTEGER NOT NULL,
-                    symbol INTEGER NOT NULL,
-                    precipitation INTEGER NOT NULL,
-                    temp_max INTEGER NOT NULL,
-                    temp_min INTEGER NOT NULL,
-                    age INTEGER NOT NULL,
-                    PRIMARY KEY(datestring, location_id)
-                );""")
-        elif from_version == "1":
-            # we arrived at the most recent version; save it and return
-            if from_version != start_version:
-                self._ccur.execute('UPDATE metadata SET version=?;', (from_version, ))
-                self._ccon.commit()
-                self._ccur.execute('VACUUM;')
-            log("schema is up-to-date (version: {})".format(from_version), scope='cache-db')
-            return
-        else:
-            log("error: cannot use invalid schema version '{}'".format(from_version), scope='cache-db')
-            return
-
-        log("upgrading schema from {} to {}...".format(from_version, to_version), scope='cache-db')
-        self._upgrade_cache_schema(to_version, start_version)
 
 
 def initialize(data_path, cache_path):
@@ -286,7 +217,7 @@ if __name__ == '__main__':
 
     # TODO remove test lines
     initialize('test-data/data', 'test-data/cache')
-    refresh('mch|400100', True)
+    # refresh('mch|400100', True)
 
 else:
     log('running as library')
@@ -296,4 +227,5 @@ else:
         log(f'[{event}]', *args, scope='signal')
         pyotherside.send(event, *args)
 
+    # overwrite the global signal handler
     signal_send = _signal_send_proxy
