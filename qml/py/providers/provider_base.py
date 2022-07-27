@@ -70,9 +70,6 @@ class Provider:
     def _setup(self):
         raise NotImplementedError()
 
-    def _load(self):
-        pass
-
     def _signal_send(self, event, *args):
         self._signal_callback(event, self.handle, *args)
 
