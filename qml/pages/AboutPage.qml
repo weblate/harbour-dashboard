@@ -1,5 +1,5 @@
 /*
- * This file is part of Swiss Meteo.
+ * This file is part of Forecasts for SailfishOS.
  * SPDX-FileCopyrightText: 2022 Mirian Margiani
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -27,13 +27,13 @@ import Opal.About 1.0
 
 AboutPageBase {
     id: page
-    appName: qsTr("Swiss Meteo", "the app's name")
-    appIcon: Qt.resolvedUrl("../images/harbour-swissmeteo.png")
+    appName: qsTr("Forecasts", "the app's name")
+    appIcon: Qt.resolvedUrl("../images/harbour-forecasts.png")
     appVersion: APP_VERSION
     appRelease: APP_RELEASE
     description: qsTr("A non-official client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (MeteoSwiss).")
     mainAttributions: ["2018-2022 Mirian Margiani"]
-    sourcesUrl: "https://github.com/ichthyosaurus/harbour-swissmeteo"
+    sourcesUrl: "https://github.com/ichthyosaurus/harbour-forecasts"
     homepageUrl: "https://openrepos.net/content/ichthyosaurus/swiss-meteo"
     allowDownloadingLicenses: true
 

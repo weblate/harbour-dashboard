@@ -1,5 +1,5 @@
 /*
- * This file is part of Swiss Meteo.
+ * This file is part of Forecasts for SailfishOS.
  * SPDX-License-Identifier: GPL-3.0-or-later
  * SPDX-FileCopyrightText: 2018-2020, 2022  Mirian Margiani
  */
@@ -73,7 +73,7 @@ Page {
             visible: !column.visible
 
             PageHeader {
-                title: qsTr("Swiss Meteo")
+                title: qsTr("Forecasts")
             }
 
             Label {

@@ -1,14 +1,14 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: Swiss Meteo
+Upstream-Name: Forecasts
 Upstream-Contact: Mirian Margiani <mixosaurus+ichthyo@pm.me>
-Source: https://github.com/ichthyosaurus/harbour-swissmeteo
+Source: https://github.com/ichthyosaurus/harbour-forecasts
 
 Files: translations/*
-Copyright: 2018-2022 Swiss Meteo translations contributors
+Copyright: 2018-2022 Forecasts translations contributors
 License: GPL-3.0-or-later
 
-Files: rpm/harbour-swissmeteo.spec
-Copyright: Swiss Meteo contributors
+Files: rpm/harbour-forecasts.spec
+Copyright: Forecasts contributors
 License: GPL-3.0-or-later
 Comment: This file is generated from [this file's name].yaml and shares copyright with it.
 

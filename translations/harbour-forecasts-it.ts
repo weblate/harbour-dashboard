@@ -1,32 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr_CH">
+<TS version="2.1" language="it_CH">
 <context>
     <name>AboutPage</name>
-    <message>
-        <source>Version %1</source>
-        <translation type="vanished">Version %1</translation>
-    </message>
     <message>
         <source>Website</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Author</source>
-        <translation type="vanished">Auteur</translation>
-    </message>
-    <message>
-        <source>About %1</source>
-        <translation type="vanished">Apropos %1</translation>
-    </message>
-    <message>
         <source>Development</source>
-        <translation>Développement</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Swiss Meteo</source>
+        <source>Forecasts</source>
         <comment>the app&apos;s name</comment>
-        <translation>Météo Suisse</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>A non-official client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (MeteoSwiss).</source>
@@ -38,11 +26,11 @@
     </message>
     <message>
         <source>MeteoSwiss</source>
-        <translation>MétéoSuisse</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>https://www.meteoswiss.admin.ch/</source>
-        <translation>https://www.meteosuisse.admin.ch/</translation>
+        <translation>https://www.meteosvizzera.admin.ch/</translation>
     </message>
     <message>
         <source>Weather icons</source>
@@ -59,19 +47,19 @@
     </message>
     <message>
         <source>Programming</source>
-        <translation>Programmation</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Translations</source>
-        <translation>Traductions</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>German</source>
-        <translation>allemand</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Chinese</source>
-        <translation>chinois</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Data</source>
@@ -89,30 +77,30 @@
 <context>
     <name>CoverPage</name>
     <message>
-        <source>Swiss Meteo</source>
-        <translation>Météo Suisse</translation>
+        <source>Forecasts</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>DaySummaryItem</name>
     <message>
         <source>Today</source>
-        <translation>Aujourd&apos;hui</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ForecastGraphItem</name>
     <message>
         <source>Temperature</source>
-        <translation>Température</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Precipitation</source>
-        <translation>Précipitations</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Wind</source>
-        <translation>Vent</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -226,8 +214,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Swiss Meteo</source>
-        <translation>Météo Suisse</translation>
+        <source>Forecasts</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Failed to load data!</source>
@@ -253,19 +241,19 @@
     <name>Opal.About</name>
     <message>
         <source>About</source>
-        <translation>Apropos</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Version %1</source>
-        <translation>Version %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Version %1 (%2)</source>
-        <translation>Version %1 (%2)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Development</source>
-        <translation>Développement</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>show contributors</source>
@@ -277,7 +265,7 @@
     </message>
     <message>
         <source>Translations</source>
-        <translation>Traductions</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Source Code</source>
@@ -319,6 +307,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>External Link</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open in browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copied to clipboard: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Please refer to &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -337,22 +341,6 @@
         <source>Note: please check the source code for most accurate information.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>External Link</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Open in browser</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Copied to clipboard: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Copy to clipboard</source>
-        <translation>Copier dans le presse-papiers</translation>
-    </message>
 </context>
 <context>
     <name>Opal.About.Common</name>
@@ -367,101 +355,6 @@
     <message>
         <source>Your contributions to translations or code would be most welcome.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Author</source>
-        <translation type="vanished">Auteur</translation>
-    </message>
-    <message numerus="yes">
-        <source>Author(s)</source>
-        <translation type="vanished">
-            <numerusform>Auteur</numerusform>
-            <numerusform>Auteurs</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Programming</source>
-        <translation type="vanished">Programmation</translation>
-    </message>
-    <message>
-        <source>Translations</source>
-        <translation type="vanished">Traductions</translation>
-    </message>
-    <message>
-        <source>Swedish</source>
-        <translation type="vanished">suédois</translation>
-    </message>
-    <message>
-        <source>Polish</source>
-        <translation type="vanished">polonais</translation>
-    </message>
-    <message>
-        <source>German</source>
-        <translation type="vanished">allemand</translation>
-    </message>
-    <message>
-        <source>French</source>
-        <translation type="vanished">français</translation>
-    </message>
-    <message>
-        <source>Chinese</source>
-        <translation type="vanished">chinois</translation>
-    </message>
-    <message>
-        <source>English</source>
-        <translation type="vanished">anglais</translation>
-    </message>
-    <message>
-        <source>Italian</source>
-        <translation type="vanished">italien</translation>
-    </message>
-    <message>
-        <source>Finnish</source>
-        <translation type="vanished">finnois</translation>
-    </message>
-    <message>
-        <source>Norwegian</source>
-        <translation type="vanished">norvégien</translation>
-    </message>
-    <message>
-        <source>Estonian</source>
-        <translation type="vanished">estonien</translation>
-    </message>
-    <message>
-        <source>Czech</source>
-        <translation type="vanished">tchèque</translation>
-    </message>
-    <message>
-        <source>Greek</source>
-        <translation type="vanished">grec</translation>
-    </message>
-    <message>
-        <source>Spanish</source>
-        <translation type="vanished">espagnol</translation>
-    </message>
-    <message>
-        <source>Hungarian</source>
-        <translation type="vanished">hongrois</translation>
-    </message>
-    <message>
-        <source>Indonesian</source>
-        <translation type="vanished">indonésien</translation>
-    </message>
-    <message>
-        <source>Russian</source>
-        <translation type="vanished">russe</translation>
-    </message>
-    <message>
-        <source>Dutch</source>
-        <translation type="vanished">néerlandais</translation>
-    </message>
-    <message>
-        <source>Slovak</source>
-        <translation type="vanished">slovaque</translation>
-    </message>
-    <message>
-        <source>Turkish</source>
-        <translation type="vanished">turc</translation>
     </message>
 </context>
 <context>
@@ -483,7 +376,7 @@
     <name>OverviewPage</name>
     <message>
         <source>About</source>
-        <translation>Apropos</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add location</source>
@@ -494,8 +387,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Swiss Meteo</source>
-        <translation>Météo Suisse</translation>
+        <source>Forecasts</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add a location first</source>
@@ -522,49 +415,45 @@
     </message>
     <message>
         <source>Hour</source>
-        <translation>Heure</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Temp.</source>
-        <translation>Temp.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Precip.</source>
-        <translation>Précip.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Wind</source>
-        <translation>Vent</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Description</source>
-        <translation>Description</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>about</name>
     <message>
-        <source>Swiss Meteo</source>
-        <translation type="vanished">Météo Suisse</translation>
-    </message>
-    <message>
         <source>https://www.meteoswiss.admin.ch/</source>
-        <translation type="vanished">https://www.meteosuisse.admin.ch/</translation>
+        <translation type="vanished">https://www.meteosvizzera.admin.ch/</translation>
     </message>
 </context>
 <context>
-    <name>harbour-swissmeteo</name>
+    <name>harbour-forecasts</name>
     <message>
         <source>d MMM yyyy &apos;(&apos;hh&apos;:&apos;mm&apos;)&apos;</source>
-        <translation>d MMM yyyy &apos;(&apos;hh&apos;h&apos;mm&apos;)&apos;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>hh&apos;:&apos;mm</source>
-        <translation>hh&apos;h&apos;mm</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>ddd d MMM yyyy</source>
-        <translation>ddd d MMM yyyy</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Database Maintenance</source>
@@ -587,243 +476,243 @@
     <name>strings</name>
     <message>
         <source>clear</source>
-        <translation>ciel dégagé</translation>
+        <translation>sereno</translation>
     </message>
     <message>
         <source>slightly overcast</source>
-        <translation>peu nuageux</translation>
+        <translation>poco nuvoloso</translation>
     </message>
     <message>
         <source>heavy cloud formations</source>
-        <translation>bancs nuageux denses</translation>
+        <translation>in parte nuvoloso</translation>
     </message>
     <message>
         <source>overcast</source>
-        <translation>nuageux</translation>
+        <translation>nuvoloso</translation>
     </message>
     <message>
         <source>very cloudy</source>
-        <translation>très nuageux</translation>
+        <translation>coperto</translation>
     </message>
     <message>
         <source>overcast, scattered showers</source>
-        <translation>nuageux, averses par moments</translation>
+        <translation>nuvolosità variabile con rovesci di pioggia isolati</translation>
     </message>
     <message>
         <source>overcast, scattered rain and snow showers</source>
-        <translation>nuageux, par moments averses de pluie et neige mêlées</translation>
+        <translation>nuvolosità variabile con rovesci di pioggia e neve isolati</translation>
     </message>
     <message>
         <source>overcast, snow showers</source>
-        <translation>nuageux, giboulées de neige</translation>
+        <translation>nuvolosità variabile con rovesci di neve isolati</translation>
     </message>
     <message>
         <source>overcast, some showers</source>
-        <translation>nuageux, quelques averses</translation>
+        <translation>nuvoloso con rovesci di pioggia</translation>
     </message>
     <message>
         <source>overcast, some sleet</source>
-        <translation>nuageux, quelques averses de pluie et neige mêlées</translation>
+        <translation>nuvoloso con rovesci di pioggia e neve</translation>
     </message>
     <message>
         <source>overcast, some rain and snow showers</source>
-        <translation>nuageux, quelques averses de pluie et neige mêlées</translation>
+        <translation>nuvoloso con rovesci di pioggia e neve</translation>
     </message>
     <message>
         <source>overcast, some snow showers</source>
-        <translation>nuageux, quelques averses de neige</translation>
+        <translation>nuvoloso con rovesci di neve</translation>
     </message>
     <message>
         <source>slightly stormy</source>
-        <translation>faiblement orageux</translation>
+        <translation>nuvolosità variabile, con temporali possibili</translation>
     </message>
     <message>
         <source>storms</source>
-        <translation>orageux</translation>
+        <translation>nuvolosità variabile e temporalesco</translation>
     </message>
     <message>
         <source>very cloudy, light rain</source>
-        <translation>très nuageux, faibles pluies</translation>
+        <translation>molto nuvoloso, deboli piogge</translation>
     </message>
     <message>
         <source>very cloudy, light rain and snow  showers</source>
-        <translation>très nuageux, faibles chutes de pluie et neige mêlées</translation>
+        <translation>molto nuvoloso, debole pioggia frammista a neve</translation>
     </message>
     <message>
         <source>very cloudy, light snowfall</source>
-        <translation>très nuageux, faibles chutes de neige</translation>
+        <translation>molto nuvoloso, deboli nevicate</translation>
     </message>
     <message>
         <source>very cloudy, intermittent rain</source>
-        <translation>très nuageux, pluies intermittences</translation>
+        <translation>molto nuvoloso, piogge intermittenti</translation>
     </message>
     <message>
         <source>very cloudy, intermittant mixed rain and snowfall</source>
-        <translation>très nuageux, chutes intermittentes de pluie et neige mêlées</translation>
+        <translation>molto nuvoloso, pioggia frammista a neve intermittente</translation>
     </message>
     <message>
         <source>very cloudy, intermittent snowfall</source>
-        <translation>très nuageux, chutes de neige intermittentes</translation>
+        <translation>molto nuvoloso, nevicate intermittenti</translation>
     </message>
     <message>
         <source>very cloudy,  constant rain</source>
-        <translation>très nuageux, pluie continue</translation>
+        <translation>molto nuvoloso, piogge intense</translation>
     </message>
     <message>
         <source>very cloudy, frequent rain and snowfall</source>
-        <translation>très nuageux, fréquentes chutes de pluie et neige mêlées</translation>
+        <translation>molto nuvoloso, piogge e nevicate intense</translation>
     </message>
     <message>
         <source>very cloudy, heavy snowfall</source>
-        <translation>très nuageux, fortes chutes de neige</translation>
+        <translation>molto nuvoloso, nevicate intense</translation>
     </message>
     <message>
         <source>very cloudy, slightly stormy</source>
-        <translation>très nuageux, faiblement orageux</translation>
+        <translation>molto nuvoloso, temporali isolati</translation>
     </message>
     <message>
         <source>very cloudy, stormy</source>
-        <translation>très nuageux, orageux</translation>
+        <translation>molto nuvoloso, temporalesco</translation>
     </message>
     <message>
         <source>very cloudy, storms</source>
-        <translation>très nuageux, très orageux</translation>
+        <translation>molto nuvoloso con temporali intensi</translation>
     </message>
     <message>
         <source>high cloud</source>
-        <translation>nuages élevés</translation>
+        <translation>a tratti nuvolosità ad alta quota</translation>
     </message>
     <message>
         <source>stratus</source>
-        <translation>stratus</translation>
+        <translation>nebbia alta</translation>
     </message>
     <message>
         <source>fog</source>
-        <translation>brouillard</translation>
+        <translation>nebbia</translation>
     </message>
     <message>
         <source>slightly overcast, scattered showers</source>
-        <translation>peu nuageux, averses éparses</translation>
+        <translation>in parte nuvoloso, isolati rovesci</translation>
     </message>
     <message>
         <source>sunny intervals, chance of thunderstorms</source>
-        <translation>éclaircies, faiblement orageux</translation>
+        <translation>nuvolosità variabile, con temporali possibili</translation>
     </message>
     <message>
         <source>slightly overcast, scattered snowfall</source>
-        <translation>peu nuageux, giboulées de neige</translation>
+        <translation>in parte nuvoloso, isolati rovesci di neve</translation>
     </message>
     <message>
         <source>slightly overcast, rain and snow showers</source>
-        <translation>peu nuageux, giboulées de pluie et neige mêlées</translation>
+        <translation>in parte nuvoloso, con alcuni rovesci di pioggia e di neve</translation>
     </message>
     <message>
         <source>slightly overcast, some showers</source>
-        <translation>peu nuageux, quelques averses</translation>
+        <translation>in parte nuvoloso con alcuni rovesci</translation>
     </message>
     <message>
         <source>overcast, frequent snow showers</source>
-        <translation>nuageux, fréquentes averses de neige</translation>
+        <translation>nuvoloso con frequenti rovesci di pioggia</translation>
     </message>
     <message>
         <source>overcast and dry</source>
-        <translation>couvert et sec</translation>
+        <translation>estesa nuvolosità ad alta quota</translation>
     </message>
     <message>
         <source>sunny intervals, possible thunderstorms</source>
-        <translation>éclaircies, orageux</translation>
+        <translation>nuvolosità variabile e temporalesco</translation>
     </message>
     <message>
         <source>very cloudy, light sleet</source>
-        <translation>très nuageux, faibles chutes de pluie et neige mêlées</translation>
+        <translation>molto nuvoloso, debole pioggia frammista a neve</translation>
     </message>
     <message>
         <source>very cloudy, light snow showers</source>
-        <translation>très nuageux, faibles chutes de neige</translation>
+        <translation>molto nuvoloso, deboli nevicate</translation>
     </message>
     <message>
         <source>very cloudy, intermittent sleet</source>
-        <translation>très nuageux, chutes intermittentes de pluie et neige mêlées</translation>
+        <translation>molto nuvoloso, pioggia frammista a neve intermittente</translation>
     </message>
     <message>
         <source>very cloudy, intermittent snow</source>
-        <translation>très nuageux, chutes de neige intermittentes</translation>
+        <translation>molto nuvoloso, nevicate intermittenti</translation>
     </message>
     <message>
         <source>sunny</source>
-        <translation>ensoleillé</translation>
+        <translation>soleggiato</translation>
     </message>
     <message>
         <source>very overcast with rain</source>
-        <translation>très nuageux, pluie continue</translation>
+        <translation>molto nuvoloso, piogge intense</translation>
     </message>
     <message>
         <source>very overcast with frequent sleet</source>
-        <translation>très nuageux, fréquentes chutes de pluie et neige mêlées</translation>
+        <translation>molto nuvoloso, piogge e nevicate intense</translation>
     </message>
     <message>
         <source>very overcast with heavy snow</source>
-        <translation>très nuageux, fortes chutes de neige</translation>
+        <translation>molto nuvoloso, nevicate intense</translation>
     </message>
     <message>
         <source>very overcast, slight chance of storms</source>
-        <translation>très nuageux, faiblement orageux</translation>
+        <translation>molto nuvoloso, temporali isolati</translation>
     </message>
     <message>
         <source>very overcast with storms</source>
-        <translation>très nuageux, orageux</translation>
+        <translation>molto nuvoloso, temporalesco</translation>
     </message>
     <message>
         <source>very cloudy, very stormy</source>
-        <translation>très nuageux, très orageux</translation>
+        <translation>molto nuvoloso con temporali intensi</translation>
     </message>
     <message>
         <source>high clouds</source>
-        <translation>nuages élevés</translation>
+        <translation>a tratti nuvolosità ad alta quota</translation>
     </message>
     <message>
         <source>sunny intervals, scattered showers</source>
-        <translation>belles éclaircies, averses éparses</translation>
+        <translation>in parte nuvoloso, isolati rovesci</translation>
     </message>
     <message>
         <source>mostly sunny, some clouds</source>
-        <translation>assez ensoleillé, quelques passages nuageux</translation>
+        <translation>abbastanza soleggiato</translation>
     </message>
     <message>
         <source>sunny intervals, scattered snow showers</source>
-        <translation>belles éclaircies, giboulées de neige</translation>
+        <translation>in parte nuvoloso, isolati rovesci di neve</translation>
     </message>
     <message>
         <source>sunny intervals, scattered sleet</source>
-        <translation>belles éclaircies, giboulées de pluie et de neige mêlées</translation>
+        <translation>in parte nuvoloso, con rovesci di pioggia e di neve</translation>
     </message>
     <message>
         <source>sunny intervals, some showers</source>
-        <translation>éclaircies, quelques averses</translation>
+        <translation>in parte nuvoloso con rovesci</translation>
     </message>
     <message>
         <source>short sunny intervals, frequent rain</source>
-        <translation>rares éclaircies, fréquentes averses</translation>
+        <translation>nuvoloso con frequenti rovesci di pioggia</translation>
     </message>
     <message>
         <source>short sunny intervals, frequent snowfalls</source>
-        <translation>rares éclaircies, fréquentes averses de neige</translation>
+        <translation>nuvoloso con frequenti rovesci di neve</translation>
     </message>
     <message>
         <source>partly sunny, thick passing clouds</source>
-        <translation>en partie ensoleillé, passages nuageux parfois denses</translation>
+        <translation>parzialmente soleggiato</translation>
     </message>
     <message>
         <source>sunny intervals,  isolated showers</source>
-        <translation>éclaircies, averses isolées</translation>
+        <translation>nuvolosità variabile con rovesci di pioggia isolati</translation>
     </message>
     <message>
         <source>sunny intervals, isolated sleet</source>
-        <translation>éclaircies, averses isolées de pluie et neige mêlées</translation>
+        <translation>nuvolosità variabile con rovesci di pioggia e neve isolati</translation>
     </message>
     <message>
         <source>sunny intervals, snow showers</source>
-        <translation>éclaircies, giboulées de neige</translation>
+        <translation>nuvolosità variabile con rovesci di neve isolati</translation>
     </message>
 </context>
 </TS>

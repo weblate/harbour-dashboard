@@ -40,9 +40,9 @@
         <translation type="vanished">Source Code</translation>
     </message>
     <message>
-        <source>Swiss Meteo</source>
+        <source>Forecasts</source>
         <comment>the app&apos;s name</comment>
-        <translation>Swiss Meteo</translation>
+        <translation>Forecasts</translation>
     </message>
     <message>
         <source>A non-official client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (MeteoSwiss).</source>
@@ -120,8 +120,8 @@
 <context>
     <name>CoverPage</name>
     <message>
-        <source>Swiss Meteo</source>
-        <translation>Swiss Meteo</translation>
+        <source>Forecasts</source>
+        <translation>Forecasts</translation>
     </message>
 </context>
 <context>
@@ -253,8 +253,8 @@
 <context>
     <name>ForecastPage</name>
     <message>
-        <source>Swiss Meteo</source>
-        <translation>Swiss Meteo</translation>
+        <source>Forecasts</source>
+        <translation>Forecasts</translation>
     </message>
     <message>
         <source>Failed to load data!</source>
@@ -570,8 +570,8 @@
         <translation>Refresh</translation>
     </message>
     <message>
-        <source>Swiss Meteo</source>
-        <translation>Swiss Meteo</translation>
+        <source>Forecasts</source>
+        <translation>Forecasts</translation>
     </message>
     <message>
         <source>Add location</source>
@@ -644,11 +644,11 @@
         <translation type="vanished">Chinese</translation>
     </message>
     <message>
-        <source>Swiss Meteo</source>
-        <translation type="vanished">Swiss Meteo</translation>
+        <source>Forecasts</source>
+        <translation type="vanished">Forecasts</translation>
     </message>
     <message>
-        <source>Copyright, Federal Office of Meteorology and Climatology Swiss Meteo.</source>
+        <source>Copyright, Federal Office of Meteorology and Climatology Forecasts.</source>
         <translation type="vanished">Copyright, Federal Office of Meteorology and Climatology MeteoSwiss.</translation>
     </message>
     <message>
@@ -673,7 +673,7 @@
     </message>
 </context>
 <context>
-    <name>harbour-swissmeteo</name>
+    <name>harbour-forecasts</name>
     <message>
         <source>d MMM yyyy &apos;(&apos;hh&apos;:&apos;mm&apos;)&apos;</source>
         <translation>d MMM yyyy &apos;(&apos;hh&apos;:&apos;mm&apos;)&apos;</translation>

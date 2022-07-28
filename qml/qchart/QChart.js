@@ -1,5 +1,5 @@
 /*
- * This file is part of QChart.js, adapted for Swiss Meteo.
+ * This file is part of QChart.js, adapted for Forecasts.
  * SPDX-License-Identifier: MIT
  * SPDX-FileCopyrightText: 2014  Julien Wintz
  * SPDX-FileCopyrightText: 2018-2019, 2022  Mirian Margiani

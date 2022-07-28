@@ -1,5 +1,5 @@
 /*
- * This file is part of Swiss Meteo.
+ * This file is part of Forecasts for SailfishOS.
  * SPDX-FileCopyrightText: 2022  Mirian Margiani
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -13,8 +13,8 @@
 int main(int argc, char *argv[])
 {
     QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
-    app->setOrganizationName("harbour-swissmeteo"); // needed for Sailjail
-    app->setApplicationName("harbour-swissmeteo");
+    app->setOrganizationName("harbour-forecasts"); // needed for Sailjail
+    app->setApplicationName("harbour-forecasts");
 
     QScopedPointer<QQuickView> view(SailfishApp::createView());
     view->rootContext()->setContextProperty("APP_VERSION", QString(APP_VERSION));

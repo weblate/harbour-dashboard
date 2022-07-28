@@ -1,5 +1,5 @@
 /*
- * This file is part of Swiss Meteo.
+ * This file is part of Forecasts for SailfishOS.
  * SPDX-FileCopyrightText: 2018-2019, 2022  Mirian Margiani
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -13,7 +13,7 @@ function defaultFor(arg, val) { return typeof arg !== 'undefined' ? arg : val; }
 var initialized = false
 
 function getDatabase() {
-    var db = LS.LocalStorage.openDatabaseSync("harbour-swissmeteo", "2.0", "Swiss Meteo Offline Cache", 1000000);
+    var db = LS.LocalStorage.openDatabaseSync("harbour-forecasts", "2.0", "Forecasts Offline Cache", 1000000);
 
     if (!initialized) {
         initialized = true;

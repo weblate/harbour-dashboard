@@ -21,13 +21,13 @@ for i in raw/*.svg; do
 done
 
 cNAME="app icon"
-cITEMS=(harbour-swissmeteo)
+cITEMS=(harbour-forecasts)
 cRESOLUTIONS=(86 108 128 172)
 cTARGETS=(../icons/RESXxRESY)
 render_batch
 
 cNAME="app details icon"
-cITEMS=(harbour-swissmeteo)
+cITEMS=(harbour-forecasts)
 cRESOLUTIONS=(256)
 cTARGETS=(../qml/images)
 render_batch

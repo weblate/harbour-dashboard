@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# This file is part of Swiss Meteo.
+# This file is part of Forecasts for SailfishOS.
 # SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-FileCopyrightText: 2019-2022 Mirian Margiani
 #
@@ -54,7 +54,7 @@ script="$(basename "$0")"
     echo "\
 ** fetch-strings **
 
-Fetch weather description strings for harbour-swissmeteo.
+Fetch weather description strings for harbour-forecasts.
 
 Note: this is backported from the current development branch.
 
@@ -171,7 +171,7 @@ add_description() { # 1: id, 2: string, 3..: default translations (see add_trans
     add_translation "Weather Descriptions" "$id|$s" "" "$@"
 }
 
-assemble_swissmeteo() {
+assemble_meteoswiss() {
     # Descriptions
     echo "assembling descriptions..."
     local dir="raw/strings"
@@ -233,7 +233,7 @@ assemble_swissmeteo() {
 }
 
 # load data
-assemble_swissmeteo
+assemble_meteoswiss
 
 # finish default translation files
 echo "finishing phrase books..."
@@ -247,4 +247,4 @@ shopt -u nullglob
 echo "finishing translation base..."
 echo "}" >> "$translations"
 
-lupdate-qt5 harbour-swissmeteo.pro
+lupdate-qt5 harbour-forecasts.pro

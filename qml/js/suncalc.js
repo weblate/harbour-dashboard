@@ -1,7 +1,7 @@
 .pragma library
 
 /*
- * This file is part of SunCalc, adapted for Swiss Meteo.
+ * This file is part of SunCalc, adapted for Forecasts.
  * SPDX-License-Identifier: BSD-2-Clause
  * SPDX-FileCopyrightText: 2011-2015  Vladimir Agafonkin
  * SPDX-FileCopyrightText: 2019, 2022  Mirian Margiani

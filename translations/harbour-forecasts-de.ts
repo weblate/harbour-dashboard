@@ -40,7 +40,7 @@
         <translation type="vanished">Quellcode</translation>
     </message>
     <message>
-        <source>Swiss Meteo</source>
+        <source>Forecasts</source>
         <comment>the app&apos;s name</comment>
         <translation>Schweizer Wetter</translation>
     </message>
@@ -120,7 +120,7 @@
 <context>
     <name>CoverPage</name>
     <message>
-        <source>Swiss Meteo</source>
+        <source>Forecasts</source>
         <translation>Schweizer Wetter</translation>
     </message>
 </context>
@@ -253,7 +253,7 @@
 <context>
     <name>ForecastPage</name>
     <message>
-        <source>Swiss Meteo</source>
+        <source>Forecasts</source>
         <translation>Schweizer Wetter</translation>
     </message>
     <message>
@@ -570,7 +570,7 @@
         <translation>Aktualisieren</translation>
     </message>
     <message>
-        <source>Swiss Meteo</source>
+        <source>Forecasts</source>
         <translation>Schweizer Wetter</translation>
     </message>
     <message>
@@ -644,7 +644,7 @@
         <translation type="vanished">Chinesisch</translation>
     </message>
     <message>
-        <source>Swiss Meteo</source>
+        <source>Forecasts</source>
         <translation type="vanished">Schweizer Wetter</translation>
     </message>
     <message>
@@ -673,7 +673,7 @@
     </message>
 </context>
 <context>
-    <name>harbour-swissmeteo</name>
+    <name>harbour-forecasts</name>
     <message>
         <source>d MMM yyyy &apos;(&apos;hh&apos;:&apos;mm&apos;)&apos;</source>
         <translation>d&apos;.&apos; M&apos;.&apos; yyyy &apos;(&apos;hh&apos;:&apos;mm&apos; Uhr)&apos;</translation>

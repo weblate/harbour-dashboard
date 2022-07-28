@@ -1,12 +1,12 @@
-# This file is part of Swiss Meteo.
+# This file is part of Forecasts for SailfishOS.
 # SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-FileCopyrightText: 2019-2022 Mirian Margiani
 [Desktop Entry]
 Type=Application
 X-Nemo-Application-Type=silica-qt5
-Icon=harbour-swissmeteo
-Exec=harbour-swissmeteo
-Name=Swiss Meteo
+Icon=harbour-forecasts
+Exec=harbour-forecasts
+Name=Forecasts
 
 # TRANSLATORS
 # Please add a new line for your locale below, and translate the name. This is
@@ -17,13 +17,13 @@ Name=Swiss Meteo
 Name[de]=Schweizer Meteo
 Name[fr]=Météo suisse
 Name[it]=Meteo elvetico
-Name[en]=Swiss Meteo
+Name[en]=Forecasts
 
 [X-Sailjail]
 Permissions=Internet
-OrganizationName=harbour-swissmeteo
-ApplicationName=harbour-swissmeteo
+OrganizationName=harbour-forecasts
+ApplicationName=harbour-forecasts
 
 [X-HarbourBackup]
-BackupPathList=.local/share/harbour-swissmeteo/:.cache/harbour-swissmeteo:.config/harbour-swissmeteo
-BackupConfigList=/apps/harbour-swissmeteo/
+BackupPathList=.local/share/harbour-forecasts/:.cache/harbour-forecasts:.config/harbour-forecasts
+BackupConfigList=/apps/harbour-forecasts/
