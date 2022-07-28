@@ -26,6 +26,7 @@ class Capability(enum.IntFlag):
 class Provider:
     data_dir: Path = Path()
     cache_dir: Path = Path()
+    config_dir: Path = Path()
 
     name: str = ''
     handle: str = ''
@@ -38,7 +39,7 @@ class Provider:
 
         self.ready = False
 
-        for k, v in {'data': self.data_path, 'cache': self.cache_path}.items():
+        for k, v in {'data': self.data_path, 'cache': self.cache_path, 'config': self.config_path}.items():
             try:
                 self._log(f"preparing {k} path in '{v}'")
                 v.mkdir(parents=True, exist_ok=True)
@@ -55,6 +56,11 @@ class Provider:
     @lru_cache
     def cache_path(self):
         return self.cache_dir / self.handle
+
+    @property
+    @lru_cache
+    def config_path(self):
+        return self.config_dir / self.handle
 
     def refresh(self, ident: str, force: bool) -> None:
         """ Refresh forecast for a given location.

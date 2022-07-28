@@ -84,14 +84,15 @@ class Meteo:
 
             raise self.InvalidVersion
 
-    def __init__(self, data_path: str, cache_path: str):
+    def __init__(self, data_path: str, cache_path: str, config_path: str):
         self.ready = False
         self._data_path = Path(data_path)
         self._cache_path = Path(cache_path)
+        self._config_path = Path(config_path)
         self._providers: Dict[str, provider_base.Provider] = {}
         self._broken_providers: Dict[str, provider_base.Provider] = {}
 
-        for k, v in {'data': self._data_path, 'cache': self._cache_path}.items():
+        for k, v in {'data': self._data_path, 'cache': self._cache_path, 'config': self._config_path}.items():
             try:
                 log(f"preparing local {k} path in '{v}'")
                 v.mkdir(parents=True, exist_ok=True)
@@ -99,8 +100,8 @@ class Meteo:
                 signal_send(f'fatal.local-{k}.inaccessible', v, e)
                 return
 
-        provider_base.Provider.data_dir = self._data_path
-        provider_base.Provider.cache_dir = self._cache_path
+            # set base paths for all provider classes derived from Provider
+            setattr(provider_base.Provider, f'{k}_dir', v)
 
         self._data_db = self.DataDb(self._data_path, 'meteo_data', signal_send, log)
         self._cache_db = self.CacheDb(self._cache_path, 'meteo_cache', signal_send, log)
@@ -159,11 +160,11 @@ class Meteo:
                 signal_send('error.backup.failed', filepath, e)  # TODO handle this...?
 
 
-def initialize(data_path, cache_path):
+def initialize(data_path, cache_path, config_path):
     global METEO
     global INITIALIZED
 
-    METEO = Meteo(data_path, cache_path)
+    METEO = Meteo(data_path, cache_path, config_path)
 
     if METEO.ready:
         INITIALIZED = True
@@ -216,7 +217,7 @@ if __name__ == '__main__':
     log('running standalone')
 
     # TODO remove test lines
-    initialize('test-data/data', 'test-data/cache')
+    initialize('test-data/data', 'test-data/cache', 'test-data/config')
     # refresh('mch|400100', True)
 
 else:
