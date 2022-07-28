@@ -27,14 +27,14 @@ import Opal.About 1.0
 
 AboutPageBase {
     id: page
-    appName: qsTr("Forecasts", "the app's name")
+    appName: qsTr("Forecasts", "as in 'weather forecasts'; this is the app's name")
     appIcon: Qt.resolvedUrl("../images/harbour-forecasts.png")
     appVersion: APP_VERSION
     appRelease: APP_RELEASE
-    description: qsTr("A non-official client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (MeteoSwiss).")
+    description: qsTr("Various meteorological forecasts from different providers.")
     mainAttributions: ["2018-2022 Mirian Margiani"]
     sourcesUrl: "https://github.com/ichthyosaurus/harbour-forecasts"
-    homepageUrl: "https://openrepos.net/content/ichthyosaurus/swiss-meteo"
+    homepageUrl: "https://openrepos.net/content/ichthyosaurus/forecasts"
     allowDownloadingLicenses: true
 
     licenses: License { spdxId: "GPL-3.0-or-later" }
