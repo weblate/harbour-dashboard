@@ -15,6 +15,22 @@ from meteopy.util import signal_send
 from meteopy.util import DatabaseBase
 
 
+# - falls Code von Captain's Log verwendet wird -> dokumentieren
+# x verschiedene Provider unterstützen, aber erstmal nur MeteoSchweiz
+# x als erstes die Ort-Datenkbank herunterladen: https://s3-eu-central-1.amazonaws.com/app-prod-static-fra.meteoswiss-app.ch/v1/db.sqlite
+# x Datenbank für Orte anlegen
+# x Ordner für Cache anlegen
+# x Datenbank für Wetter-Cache anlegen
+# - mit einem Image-Provider (s. pyotherside) Wetter-Icons entweder aus dem Cache laden oder fehlende herunterladen:
+#       https://www.meteoschweiz.admin.ch/etc.clientlibs/internet/clientlibs/meteoswiss/resources/assets/images/icons/meteo/weather-symbols/42.svg
+# - Daten herunterladen: https://app-prod-ws.meteoswiss-app.ch/v1/plzDetail?plz= id
+#       ('id' ist die ID eines Ortes aus der Datenbank; eine Anfrage pro Ort)
+# - immer Header nicht vergessen:
+#       - Accept-Language = de, fr, it, en   <-- abhängig von App-Sprache, Fallback ist Englisch
+#       - User-Agent = MeteoSwissApp-2.3.3-Android  --> 2.16-Android
+
+# - Übersetzungen laden: https://www.meteoschweiz.admin.ch/etc.clientlibs/internet/clientlibs/meteoswiss/clientlibs/lang/de.min.js <-- de, fr, it, en
+#   -> vorher? -> in Kataloge integrieren?
 
 
 _PROVIDERS_REGISTRY = [
@@ -30,21 +46,48 @@ INITIALIZED = False
 class Meteo:
     class DataDb(DatabaseBase):
         def _setup(self):
-            pass  # no special setup needed
+            pass
+
+        def _upgrade_schema(self, from_version):
+            if from_version == '0':
+                raise self.UpToDate
+
+            raise self.InvalidVersion
+
+    class ConfigDb(DatabaseBase):
+        def _setup(self):
+            pass
 
         def _upgrade_schema(self, from_version):
             if from_version == '0':
                 # setup data tables
                 self.cur.execute("""
-                    CREATE TABLE IF NOT EXISTS active_locations(
-                        location_id TEXT NOT NULL PRIMARY KEY,
-                        name TEXT NOT NULL,
-                        zip INTEGER NOT NULL,
-                        regionId TEXT NOT NULL,
-                        region TEXT NOT NULL,
-                        latitude REAL NOT NULL,
-                        longitude REAL NOT NULL,
-                        altitude INTEGER NOT NULL
+                    CREATE TABLE IF NOT EXISTS mainscreen_tiles(
+                        tile_id INTEGER NOT NULL PRIMARY KEY,
+                        sequence INTEGER NOT NULL UNIQUE,
+                        tile_type TEXT NOT NULL,
+                        provider_id TEXT NOT NULL
+                    );""")
+
+                self.cur.execute("""
+                    CREATE TABLE IF NOT EXISTS weather_forecast_details(
+                        tile_id INTEGER NOT NULL PRIMARY KEY,
+                        location_id TEXT NOT NULL
+                    );""")
+
+                # to be requested from providers:
+                # - name TEXT NOT NULL,
+                # - zip INTEGER NOT NULL,
+                # - regionId TEXT NOT NULL,
+                # - region TEXT NOT NULL,
+                # - latitude REAL NOT NULL,
+                # - longitude REAL NOT NULL,
+                # - altitude INTEGER NOT NULL
+
+                self.cur.execute("""
+                    CREATE TABLE IF NOT EXISTS pollen_forecast_details(
+                        tile_id INTEGER NOT NULL PRIMARY KEY,
+                        location_id TEXT NOT NULL
                     );""")
                 return '1'
             elif from_version == '1':
@@ -59,24 +102,33 @@ class Meteo:
         def _upgrade_schema(self, from_version):
             if from_version == '0':
                 self.cur.execute("""
-                    CREATE TABLE IF NOT EXISTS data(
+                    CREATE TABLE IF NOT EXISTS weather_forecast_data(
                         timestamp INTEGER NOT NULL,
-                        location_id INTEGER NOT NULL,
+                        location_id TEXT NOT NULL,
                         data_json TEXT NOT NULL,
                         day_count INTEGER NOT NULL,
                         day_dates TEXT NOT NULL,
                         PRIMARY KEY(timestamp, location_id)
                     );""")
                 self.cur.execute("""
-                    CREATE TABLE IF NOT EXISTS overview(
+                    CREATE TABLE IF NOT EXISTS weather_forecast_overview(
                         datestring STRING NOT NULL,
-                        location_id INTEGER NOT NULL,
+                        location_id TEXT NOT NULL,
                         symbol INTEGER NOT NULL,
                         precipitation INTEGER NOT NULL,
                         temp_max INTEGER NOT NULL,
                         temp_min INTEGER NOT NULL,
                         age INTEGER NOT NULL,
                         PRIMARY KEY(datestring, location_id)
+                    );""")
+                self.cur.execute("""
+                    CREATE TABLE IF NOT EXISTS pollen_forecast_data(
+                        timestamp INTEGER NOT NULL,
+                        location_id TEXT NOT NULL,
+                        data_json TEXT NOT NULL,
+                        day_count INTEGER NOT NULL,
+                        day_dates TEXT NOT NULL,
+                        PRIMARY KEY(timestamp, location_id)
                     );""")
                 return "1"
             elif from_version == '1':
@@ -105,6 +157,7 @@ class Meteo:
 
         self._data_db = self.DataDb(self._data_path, 'meteo_data', signal_send, log)
         self._cache_db = self.CacheDb(self._cache_path, 'meteo_cache', signal_send, log)
+        self._config_db = self.ConfigDb(self._config_path, 'meteo_config', signal_send, log)
 
         self._init_providers()
         self.ready = True
