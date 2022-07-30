@@ -108,6 +108,6 @@ CoverBackground {
         locationId = loc
 
         updateData()
-        meteoApp.dataLoaded.connect(updateData)
+//        meteoApp.dataLoaded.connect(updateData)
     }
 }
