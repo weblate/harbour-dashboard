@@ -4,49 +4,12 @@
 <context>
     <name>AboutPage</name>
     <message>
-        <source>Author</source>
-        <translation type="vanished">Autor</translation>
-    </message>
-    <message>
         <source>Website</source>
         <translation>Webseite</translation>
     </message>
     <message>
-        <source>Version %1</source>
-        <translation type="vanished">Version %1</translation>
-    </message>
-    <message>
-        <source>About %1</source>
-        <translation type="vanished">Über %1</translation>
-    </message>
-    <message>
         <source>Development</source>
         <translation>Entwicklung</translation>
-    </message>
-    <message>
-        <source>&lt;i&gt;show contributors &lt;/i&gt;</source>
-        <translation type="vanished">&lt;i&gt;Mitwirkende zeigen &lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>License</source>
-        <translation type="vanished">Lizenz</translation>
-    </message>
-    <message>
-        <source>&lt;i&gt;show license &lt;/i&gt;</source>
-        <translation type="vanished">&lt;i&gt;Lizenz zeigen &lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>Source Code</source>
-        <translation type="vanished">Quellcode</translation>
-    </message>
-    <message>
-        <source>Forecasts</source>
-        <comment>the app&apos;s name</comment>
-        <translation>Schweizer Wetter</translation>
-    </message>
-    <message>
-        <source>A non-official client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (MeteoSwiss).</source>
-        <translation>Ein inoffizieller Klient für die Wettervorhersagen des Bundesamts für Meteorologie und Klimatologie (MeteoSchweiz).</translation>
     </message>
     <message>
         <source>Meteorological data</source>
@@ -101,27 +64,21 @@
         <source>Weather icons by Zeix.</source>
         <translation>Mit Wetter-Icons von Zeix.</translation>
     </message>
-</context>
-<context>
-    <name>ContributorsPage</name>
     <message>
-        <source>Contributors</source>
-        <translation type="vanished">Mitwirkende</translation>
+        <source>Forecasts</source>
+        <comment>as in &apos;weather forecasts&apos;; this is the app&apos;s name</comment>
+        <translation>Wetterbericht</translation>
     </message>
     <message>
-        <source>Development</source>
-        <translation type="vanished">Entwicklung</translation>
-    </message>
-    <message>
-        <source>Translations</source>
-        <translation type="vanished">Übersetzungen</translation>
+        <source>Various meteorological forecasts from different providers.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CoverPage</name>
     <message>
         <source>Forecasts</source>
-        <translation>Schweizer Wetter</translation>
+        <translation>Wetterbericht</translation>
     </message>
 </context>
 <context>
@@ -266,13 +223,6 @@
     </message>
 </context>
 <context>
-    <name>LicensePage</name>
-    <message>
-        <source>License</source>
-        <translation type="vanished">Lizenz</translation>
-    </message>
-</context>
-<context>
     <name>LocationSearchPage</name>
     <message>
         <source>Add Location</source>
@@ -285,6 +235,25 @@
     <message>
         <source>Bootstrap debug locations</source>
         <translation>Debug-Ortschaften hinzufügen</translation>
+    </message>
+</context>
+<context>
+    <name>MainPage</name>
+    <message>
+        <source>About</source>
+        <translation>Über</translation>
+    </message>
+    <message>
+        <source>Edit tiles</source>
+        <translation>Kacheln bearbeiten</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation>Aktualisieren</translation>
+    </message>
+    <message>
+        <source>Forecasts</source>
+        <translation>Wetterbericht</translation>
     </message>
 </context>
 <context>
@@ -395,143 +364,6 @@
 <context>
     <name>Opal.About.Common</name>
     <message>
-        <source>Author</source>
-        <translation type="vanished">Autor</translation>
-    </message>
-    <message numerus="yes">
-        <source>Author(s)</source>
-        <translation type="vanished">
-            <numerusform>Autor·in</numerusform>
-            <numerusform>Autor·innen</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Maintainer</source>
-        <translation type="vanished">Maintainer·in</translation>
-    </message>
-    <message numerus="yes">
-        <source>Maintainer(s)</source>
-        <translation type="vanished">
-            <numerusform>Maintainer·in</numerusform>
-            <numerusform>Maintainer·innen</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Programming</source>
-        <translation type="vanished">Programmierung</translation>
-    </message>
-    <message>
-        <source>Translations</source>
-        <translation type="vanished">Übersetzungen</translation>
-    </message>
-    <message>
-        <source>Icon Design</source>
-        <translation type="vanished">Icon-Design</translation>
-    </message>
-    <message>
-        <source>Third-party libraries</source>
-        <translation type="vanished">Externe Bibliotheken</translation>
-    </message>
-    <message>
-        <source>Data</source>
-        <translation type="vanished">Daten</translation>
-    </message>
-    <message>
-        <source>Data License</source>
-        <translation type="vanished">Daten-Lizenz</translation>
-    </message>
-    <message numerus="yes">
-        <source>Data License(s)</source>
-        <translation type="vanished">
-            <numerusform>Daten-Lizenz</numerusform>
-            <numerusform>Daten-Lizenzen</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Terms of Use</source>
-        <translation type="vanished">Nutzungsbedingungen</translation>
-    </message>
-    <message>
-        <source>Swedish</source>
-        <translation type="vanished">Schwedisch</translation>
-    </message>
-    <message>
-        <source>Polish</source>
-        <translation type="vanished">Polnisch</translation>
-    </message>
-    <message>
-        <source>German</source>
-        <translation type="vanished">Deutsch</translation>
-    </message>
-    <message>
-        <source>French</source>
-        <translation type="vanished">Französisch</translation>
-    </message>
-    <message>
-        <source>Chinese</source>
-        <translation type="vanished">Chinesisch</translation>
-    </message>
-    <message>
-        <source>English</source>
-        <translation type="vanished">Englisch</translation>
-    </message>
-    <message>
-        <source>Italian</source>
-        <translation type="vanished">Italienisch</translation>
-    </message>
-    <message>
-        <source>Finnish</source>
-        <translation type="vanished">Finnisch</translation>
-    </message>
-    <message>
-        <source>Norwegian</source>
-        <translation type="vanished">Norwegisch</translation>
-    </message>
-    <message>
-        <source>Latvian</source>
-        <translation type="vanished">Lettisch</translation>
-    </message>
-    <message>
-        <source>Estonian</source>
-        <translation type="vanished">Estnisch</translation>
-    </message>
-    <message>
-        <source>Czech</source>
-        <translation type="vanished">Tschechisch</translation>
-    </message>
-    <message>
-        <source>Greek</source>
-        <translation type="vanished">Griechisch</translation>
-    </message>
-    <message>
-        <source>Spanish</source>
-        <translation type="vanished">Spanisch</translation>
-    </message>
-    <message>
-        <source>Hungarian</source>
-        <translation type="vanished">Ungarisch</translation>
-    </message>
-    <message>
-        <source>Indonesian</source>
-        <translation type="vanished">Indonesisch</translation>
-    </message>
-    <message>
-        <source>Russian</source>
-        <translation type="vanished">Russisch</translation>
-    </message>
-    <message>
-        <source>Dutch</source>
-        <translation type="vanished">Niederländisch</translation>
-    </message>
-    <message>
-        <source>Slovak</source>
-        <translation type="vanished">Slowakisch</translation>
-    </message>
-    <message>
-        <source>Turkish</source>
-        <translation type="vanished">Türkisch</translation>
-    </message>
-    <message>
         <source>If you want to support my work, you can buy me a cup of coffee.</source>
         <translation>Sie können mir gerne einen Kaffee spendieren, wenn Sie meine Arbeit unterstützen möchten.</translation>
     </message>
@@ -622,57 +454,6 @@
     </message>
 </context>
 <context>
-    <name>about</name>
-    <message>
-        <source>Programming</source>
-        <translation type="vanished">Programmierung</translation>
-    </message>
-    <message>
-        <source>Weather Icons</source>
-        <translation type="vanished">Wetter-Icons</translation>
-    </message>
-    <message>
-        <source>Weather Descriptions</source>
-        <translation type="vanished">Wetter-Beschreibungen</translation>
-    </message>
-    <message>
-        <source>English, German</source>
-        <translation type="vanished">Englisch, Deutsch</translation>
-    </message>
-    <message>
-        <source>Chinese</source>
-        <translation type="vanished">Chinesisch</translation>
-    </message>
-    <message>
-        <source>Forecasts</source>
-        <translation type="vanished">Schweizer Wetter</translation>
-    </message>
-    <message>
-        <source>Copyright, Federal Office of Meteorology and Climatology MeteoSwiss.</source>
-        <translation type="vanished">Copyright, Bundesamt für Meteorologie und Klimatologie MeteoSchweiz.</translation>
-    </message>
-    <message>
-        <source>Weather icons by Zeix.</source>
-        <translation type="vanished">Mit Wetter-Icons von Zeix.</translation>
-    </message>
-    <message>
-        <source>Sources on GitHub</source>
-        <translation type="vanished">Quellcode auf GitHub</translation>
-    </message>
-    <message>
-        <source>Data</source>
-        <translation type="vanished">Daten</translation>
-    </message>
-    <message>
-        <source>This is an unofficial client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (MeteoSwiss).</source>
-        <translation type="vanished">Dies ist ein inoffizieller Klient für die Wettervorhersagen des Bundesamts für Meteorologie und Klimatologie (MeteoSchweiz).</translation>
-    </message>
-    <message>
-        <source>https://www.meteoswiss.admin.ch/</source>
-        <translation type="vanished">https://www.meteoschweiz.admin.ch/</translation>
-    </message>
-</context>
-<context>
     <name>harbour-forecasts</name>
     <message>
         <source>d MMM yyyy &apos;(&apos;hh&apos;:&apos;mm&apos;)&apos;</source>
@@ -685,22 +466,6 @@
     <message>
         <source>hh&apos;:&apos;mm</source>
         <translation>hh&apos;:&apos;mm &apos;Uhr&apos;</translation>
-    </message>
-    <message>
-        <source>Database Maintenance</source>
-        <translation>Datenbank-Pflege</translation>
-    </message>
-    <message>
-        <source>Please be patient and allow up to 30 seconds for this.</source>
-        <translation>Bitte warten Sie einen Moment und gewähren Sie rund 30 Sekunden für den Vorgang.</translation>
-    </message>
-    <message>
-        <source>Currently unusable</source>
-        <translation>Derzeit nicht verwendbar</translation>
-    </message>
-    <message>
-        <source>This app is currently unusable, due to a change at the data provider&apos;s side.</source>
-        <translation>Die App kann derzeit wegen Änderungen aufseiten der Datenquelle nicht verwendet werden.</translation>
     </message>
 </context>
 <context>

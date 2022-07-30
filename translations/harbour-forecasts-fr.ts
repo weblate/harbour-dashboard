@@ -4,33 +4,12 @@
 <context>
     <name>AboutPage</name>
     <message>
-        <source>Version %1</source>
-        <translation type="vanished">Version %1</translation>
-    </message>
-    <message>
         <source>Website</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Author</source>
-        <translation type="vanished">Auteur</translation>
-    </message>
-    <message>
-        <source>About %1</source>
-        <translation type="vanished">Apropos %1</translation>
-    </message>
-    <message>
         <source>Development</source>
         <translation>Développement</translation>
-    </message>
-    <message>
-        <source>Forecasts</source>
-        <comment>the app&apos;s name</comment>
-        <translation>Météo Suisse</translation>
-    </message>
-    <message>
-        <source>A non-official client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (MeteoSwiss).</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Meteorological data</source>
@@ -85,12 +64,21 @@
         <source>Weather icons by Zeix.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Forecasts</source>
+        <comment>as in &apos;weather forecasts&apos;; this is the app&apos;s name</comment>
+        <translation>Météo</translation>
+    </message>
+    <message>
+        <source>Various meteorological forecasts from different providers.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CoverPage</name>
     <message>
         <source>Forecasts</source>
-        <translation>Météo Suisse</translation>
+        <translation>Météo</translation>
     </message>
 </context>
 <context>
@@ -250,6 +238,25 @@
     </message>
 </context>
 <context>
+    <name>MainPage</name>
+    <message>
+        <source>About</source>
+        <translation type="unfinished">Apropos</translation>
+    </message>
+    <message>
+        <source>Edit tiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Forecasts</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Opal.About</name>
     <message>
         <source>About</source>
@@ -368,101 +375,6 @@
         <source>Your contributions to translations or code would be most welcome.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Author</source>
-        <translation type="vanished">Auteur</translation>
-    </message>
-    <message numerus="yes">
-        <source>Author(s)</source>
-        <translation type="vanished">
-            <numerusform>Auteur</numerusform>
-            <numerusform>Auteurs</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Programming</source>
-        <translation type="vanished">Programmation</translation>
-    </message>
-    <message>
-        <source>Translations</source>
-        <translation type="vanished">Traductions</translation>
-    </message>
-    <message>
-        <source>Swedish</source>
-        <translation type="vanished">suédois</translation>
-    </message>
-    <message>
-        <source>Polish</source>
-        <translation type="vanished">polonais</translation>
-    </message>
-    <message>
-        <source>German</source>
-        <translation type="vanished">allemand</translation>
-    </message>
-    <message>
-        <source>French</source>
-        <translation type="vanished">français</translation>
-    </message>
-    <message>
-        <source>Chinese</source>
-        <translation type="vanished">chinois</translation>
-    </message>
-    <message>
-        <source>English</source>
-        <translation type="vanished">anglais</translation>
-    </message>
-    <message>
-        <source>Italian</source>
-        <translation type="vanished">italien</translation>
-    </message>
-    <message>
-        <source>Finnish</source>
-        <translation type="vanished">finnois</translation>
-    </message>
-    <message>
-        <source>Norwegian</source>
-        <translation type="vanished">norvégien</translation>
-    </message>
-    <message>
-        <source>Estonian</source>
-        <translation type="vanished">estonien</translation>
-    </message>
-    <message>
-        <source>Czech</source>
-        <translation type="vanished">tchèque</translation>
-    </message>
-    <message>
-        <source>Greek</source>
-        <translation type="vanished">grec</translation>
-    </message>
-    <message>
-        <source>Spanish</source>
-        <translation type="vanished">espagnol</translation>
-    </message>
-    <message>
-        <source>Hungarian</source>
-        <translation type="vanished">hongrois</translation>
-    </message>
-    <message>
-        <source>Indonesian</source>
-        <translation type="vanished">indonésien</translation>
-    </message>
-    <message>
-        <source>Russian</source>
-        <translation type="vanished">russe</translation>
-    </message>
-    <message>
-        <source>Dutch</source>
-        <translation type="vanished">néerlandais</translation>
-    </message>
-    <message>
-        <source>Slovak</source>
-        <translation type="vanished">slovaque</translation>
-    </message>
-    <message>
-        <source>Turkish</source>
-        <translation type="vanished">turc</translation>
-    </message>
 </context>
 <context>
     <name>OverviewListDelegate</name>
@@ -542,17 +454,6 @@
     </message>
 </context>
 <context>
-    <name>about</name>
-    <message>
-        <source>Forecasts</source>
-        <translation type="vanished">Météo Suisse</translation>
-    </message>
-    <message>
-        <source>https://www.meteoswiss.admin.ch/</source>
-        <translation type="vanished">https://www.meteosuisse.admin.ch/</translation>
-    </message>
-</context>
-<context>
     <name>harbour-forecasts</name>
     <message>
         <source>d MMM yyyy &apos;(&apos;hh&apos;:&apos;mm&apos;)&apos;</source>
@@ -565,22 +466,6 @@
     <message>
         <source>ddd d MMM yyyy</source>
         <translation>ddd d MMM yyyy</translation>
-    </message>
-    <message>
-        <source>Database Maintenance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please be patient and allow up to 30 seconds for this.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Currently unusable</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This app is currently unusable, due to a change at the data provider&apos;s side.</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -12,15 +12,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Forecasts</source>
-        <comment>the app&apos;s name</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>A non-official client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (MeteoSwiss).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Meteorological data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -71,6 +62,15 @@
     </message>
     <message>
         <source>Weather icons by Zeix.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Forecasts</source>
+        <comment>as in &apos;weather forecasts&apos;; this is the app&apos;s name</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Various meteorological forecasts from different providers.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -234,6 +234,25 @@
     </message>
     <message>
         <source>Bootstrap debug locations</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MainPage</name>
+    <message>
+        <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit tiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Forecasts</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -446,22 +465,6 @@
     </message>
     <message>
         <source>hh&apos;:&apos;mm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Database Maintenance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please be patient and allow up to 30 seconds for this.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Currently unusable</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This app is currently unusable, due to a change at the data provider&apos;s side.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

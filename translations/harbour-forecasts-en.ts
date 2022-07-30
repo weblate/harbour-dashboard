@@ -4,49 +4,12 @@
 <context>
     <name>AboutPage</name>
     <message>
-        <source>Author</source>
-        <translation type="vanished">Author</translation>
-    </message>
-    <message>
         <source>Website</source>
         <translation>Website</translation>
     </message>
     <message>
-        <source>Version %1</source>
-        <translation type="vanished">Version %1</translation>
-    </message>
-    <message>
-        <source>About %1</source>
-        <translation type="vanished">About %1</translation>
-    </message>
-    <message>
         <source>Development</source>
         <translation>Development</translation>
-    </message>
-    <message>
-        <source>&lt;i&gt;show contributors &lt;/i&gt;</source>
-        <translation type="vanished">&lt;i&gt;show contributors &lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>License</source>
-        <translation type="vanished">License</translation>
-    </message>
-    <message>
-        <source>&lt;i&gt;show license &lt;/i&gt;</source>
-        <translation type="vanished">&lt;i&gt;show license &lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>Source Code</source>
-        <translation type="vanished">Source Code</translation>
-    </message>
-    <message>
-        <source>Forecasts</source>
-        <comment>the app&apos;s name</comment>
-        <translation>Forecasts</translation>
-    </message>
-    <message>
-        <source>A non-official client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (MeteoSwiss).</source>
-        <translation>A non-official client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (MeteoSwiss).</translation>
     </message>
     <message>
         <source>Meteorological data</source>
@@ -101,20 +64,14 @@
         <source>Weather icons by Zeix.</source>
         <translation>Weather icons by Zeix.</translation>
     </message>
-</context>
-<context>
-    <name>ContributorsPage</name>
     <message>
-        <source>Contributors</source>
-        <translation type="vanished">Contributors</translation>
+        <source>Forecasts</source>
+        <comment>as in &apos;weather forecasts&apos;; this is the app&apos;s name</comment>
+        <translation>Forecasts</translation>
     </message>
     <message>
-        <source>Development</source>
-        <translation type="vanished">Development</translation>
-    </message>
-    <message>
-        <source>Translations</source>
-        <translation type="vanished">Translations</translation>
+        <source>Various meteorological forecasts from different providers.</source>
+        <translation>Various meteorological forecasts from different providers.</translation>
     </message>
 </context>
 <context>
@@ -266,13 +223,6 @@
     </message>
 </context>
 <context>
-    <name>LicensePage</name>
-    <message>
-        <source>License</source>
-        <translation type="vanished">License</translation>
-    </message>
-</context>
-<context>
     <name>LocationSearchPage</name>
     <message>
         <source>Add Location</source>
@@ -285,6 +235,25 @@
     <message>
         <source>Bootstrap debug locations</source>
         <translation>Bootstrap debug locations</translation>
+    </message>
+</context>
+<context>
+    <name>MainPage</name>
+    <message>
+        <source>About</source>
+        <translation>About</translation>
+    </message>
+    <message>
+        <source>Edit tiles</source>
+        <translation>Edit tiles</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation>Refresh</translation>
+    </message>
+    <message>
+        <source>Forecasts</source>
+        <translation>Forecasts</translation>
     </message>
 </context>
 <context>
@@ -395,143 +364,6 @@
 <context>
     <name>Opal.About.Common</name>
     <message>
-        <source>Author</source>
-        <translation type="vanished">Author</translation>
-    </message>
-    <message numerus="yes">
-        <source>Author(s)</source>
-        <translation type="vanished">
-            <numerusform>Author</numerusform>
-            <numerusform>Authors</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Maintainer</source>
-        <translation type="vanished">Maintainer</translation>
-    </message>
-    <message numerus="yes">
-        <source>Maintainer(s)</source>
-        <translation type="vanished">
-            <numerusform>Maintainer</numerusform>
-            <numerusform>Maintainers</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Programming</source>
-        <translation type="vanished">Programming</translation>
-    </message>
-    <message>
-        <source>Translations</source>
-        <translation type="vanished">Translations</translation>
-    </message>
-    <message>
-        <source>Icon Design</source>
-        <translation type="vanished">Icon Design</translation>
-    </message>
-    <message>
-        <source>Third-party libraries</source>
-        <translation type="vanished">Third-party libraries</translation>
-    </message>
-    <message>
-        <source>Data</source>
-        <translation type="vanished">Data</translation>
-    </message>
-    <message>
-        <source>Data License</source>
-        <translation type="vanished">Data License</translation>
-    </message>
-    <message numerus="yes">
-        <source>Data License(s)</source>
-        <translation type="vanished">
-            <numerusform>Data License</numerusform>
-            <numerusform>Data Licenses</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Terms of Use</source>
-        <translation type="vanished">Terms of Use</translation>
-    </message>
-    <message>
-        <source>Swedish</source>
-        <translation type="vanished">Swedish</translation>
-    </message>
-    <message>
-        <source>Polish</source>
-        <translation type="vanished">Polish</translation>
-    </message>
-    <message>
-        <source>German</source>
-        <translation type="vanished">German</translation>
-    </message>
-    <message>
-        <source>French</source>
-        <translation type="vanished">French</translation>
-    </message>
-    <message>
-        <source>Chinese</source>
-        <translation type="vanished">Chinese</translation>
-    </message>
-    <message>
-        <source>English</source>
-        <translation type="vanished">English</translation>
-    </message>
-    <message>
-        <source>Italian</source>
-        <translation type="vanished">Italian</translation>
-    </message>
-    <message>
-        <source>Finnish</source>
-        <translation type="vanished">Finnish</translation>
-    </message>
-    <message>
-        <source>Norwegian</source>
-        <translation type="vanished">Norwegian</translation>
-    </message>
-    <message>
-        <source>Latvian</source>
-        <translation type="vanished">Latvian</translation>
-    </message>
-    <message>
-        <source>Estonian</source>
-        <translation type="vanished">Estonian</translation>
-    </message>
-    <message>
-        <source>Czech</source>
-        <translation type="vanished">Czech</translation>
-    </message>
-    <message>
-        <source>Greek</source>
-        <translation type="vanished">Greek</translation>
-    </message>
-    <message>
-        <source>Spanish</source>
-        <translation type="vanished">Spanish</translation>
-    </message>
-    <message>
-        <source>Hungarian</source>
-        <translation type="vanished">Hungarian</translation>
-    </message>
-    <message>
-        <source>Indonesian</source>
-        <translation type="vanished">Indonesian</translation>
-    </message>
-    <message>
-        <source>Russian</source>
-        <translation type="vanished">Russian</translation>
-    </message>
-    <message>
-        <source>Dutch</source>
-        <translation type="vanished">Dutch</translation>
-    </message>
-    <message>
-        <source>Slovak</source>
-        <translation type="vanished">Slovak</translation>
-    </message>
-    <message>
-        <source>Turkish</source>
-        <translation type="vanished">Turkish</translation>
-    </message>
-    <message>
         <source>If you want to support my work, you can buy me a cup of coffee.</source>
         <translation>If you want to support my work, you can buy me a cup of coffee.</translation>
     </message>
@@ -622,57 +454,6 @@
     </message>
 </context>
 <context>
-    <name>about</name>
-    <message>
-        <source>Programming</source>
-        <translation type="vanished">Programming</translation>
-    </message>
-    <message>
-        <source>Weather Icons</source>
-        <translation type="vanished">Weather Icons</translation>
-    </message>
-    <message>
-        <source>Weather Descriptions</source>
-        <translation type="vanished">Weather Descriptions</translation>
-    </message>
-    <message>
-        <source>English, German</source>
-        <translation type="vanished">English, German</translation>
-    </message>
-    <message>
-        <source>Chinese</source>
-        <translation type="vanished">Chinese</translation>
-    </message>
-    <message>
-        <source>Forecasts</source>
-        <translation type="vanished">Forecasts</translation>
-    </message>
-    <message>
-        <source>Copyright, Federal Office of Meteorology and Climatology Forecasts.</source>
-        <translation type="vanished">Copyright, Federal Office of Meteorology and Climatology MeteoSwiss.</translation>
-    </message>
-    <message>
-        <source>Weather icons by Zeix.</source>
-        <translation type="vanished">Weather icons by Zeix.</translation>
-    </message>
-    <message>
-        <source>Sources on GitHub</source>
-        <translation type="vanished">Sources on GitHub</translation>
-    </message>
-    <message>
-        <source>Data</source>
-        <translation type="vanished">Data</translation>
-    </message>
-    <message>
-        <source>This is an unofficial client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (MeteoSwiss).</source>
-        <translation type="vanished">This is an unofficial client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (MeteoSwiss).</translation>
-    </message>
-    <message>
-        <source>https://www.meteoswiss.admin.ch/</source>
-        <translation type="vanished">https://www.meteoswiss.admin.ch/</translation>
-    </message>
-</context>
-<context>
     <name>harbour-forecasts</name>
     <message>
         <source>d MMM yyyy &apos;(&apos;hh&apos;:&apos;mm&apos;)&apos;</source>
@@ -685,22 +466,6 @@
     <message>
         <source>hh&apos;:&apos;mm</source>
         <translation>hh&apos;:&apos;mm</translation>
-    </message>
-    <message>
-        <source>Database Maintenance</source>
-        <translation>Database Maintenance</translation>
-    </message>
-    <message>
-        <source>Please be patient and allow up to 30 seconds for this.</source>
-        <translation>Please be patient and allow up to 30 seconds for this.</translation>
-    </message>
-    <message>
-        <source>Currently unusable</source>
-        <translation>Currently unusable</translation>
-    </message>
-    <message>
-        <source>This app is currently unusable, due to a change at the data provider&apos;s side.</source>
-        <translation>This app is currently unusable, due to a change at the data provider&apos;s side.</translation>
     </message>
 </context>
 <context>

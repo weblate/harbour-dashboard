@@ -4,32 +4,11 @@
 <context>
     <name>AboutPage</name>
     <message>
-        <source>Author</source>
-        <translation type="vanished">作者</translation>
-    </message>
-    <message>
         <source>Website</source>
         <translation>网站</translation>
     </message>
     <message>
-        <source>Version %1</source>
-        <translation type="vanished">版本 %1</translation>
-    </message>
-    <message>
         <source>Development</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>License</source>
-        <translation type="vanished">许可协议</translation>
-    </message>
-    <message>
-        <source>Forecasts</source>
-        <comment>the app&apos;s name</comment>
-        <translation type="unfinished">Forecasts</translation>
-    </message>
-    <message>
-        <source>A non-official client to the weather forecast services provided by the Federal Office of Meteorology and Climatology (MeteoSwiss).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -84,6 +63,15 @@
     <message>
         <source>Weather icons by Zeix.</source>
         <translation>天气图标作者为 Zeix 。</translation>
+    </message>
+    <message>
+        <source>Forecasts</source>
+        <comment>as in &apos;weather forecasts&apos;; this is the app&apos;s name</comment>
+        <translation type="unfinished">Forecasts</translation>
+    </message>
+    <message>
+        <source>Various meteorological forecasts from different providers.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -235,13 +223,6 @@
     </message>
 </context>
 <context>
-    <name>LicensePage</name>
-    <message>
-        <source>License</source>
-        <translation type="vanished">许可协议</translation>
-    </message>
-</context>
-<context>
     <name>LocationSearchPage</name>
     <message>
         <source>Add Location</source>
@@ -254,6 +235,25 @@
     <message>
         <source>Bootstrap debug locations</source>
         <translation>调整位置</translation>
+    </message>
+</context>
+<context>
+    <name>MainPage</name>
+    <message>
+        <source>About</source>
+        <translation type="unfinished">关于</translation>
+    </message>
+    <message>
+        <source>Edit tiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished">刷新</translation>
+    </message>
+    <message>
+        <source>Forecasts</source>
+        <translation type="unfinished">Forecasts</translation>
     </message>
 </context>
 <context>
@@ -452,33 +452,6 @@
     </message>
 </context>
 <context>
-    <name>about</name>
-    <message>
-        <source>Forecasts</source>
-        <translation type="vanished">Forecasts</translation>
-    </message>
-    <message>
-        <source>Copyright, Federal Office of Meteorology and Climatology MeteoSwiss.</source>
-        <translation type="vanished">版权所有，联邦气象与气候办公室，MeteoSwiss.</translation>
-    </message>
-    <message>
-        <source>Weather icons by Zeix.</source>
-        <translation type="vanished">天气图标作者为 Zeix 。</translation>
-    </message>
-    <message>
-        <source>Sources on GitHub</source>
-        <translation type="vanished">源代码位于 GitHub</translation>
-    </message>
-    <message>
-        <source>Data</source>
-        <translation type="vanished">数据</translation>
-    </message>
-    <message>
-        <source>https://www.meteoswiss.admin.ch/</source>
-        <translation type="vanished">https://www.meteoswiss.admin.ch/</translation>
-    </message>
-</context>
-<context>
     <name>harbour-forecasts</name>
     <message>
         <source>d MMM yyyy &apos;(&apos;hh&apos;:&apos;mm&apos;)&apos;</source>
@@ -491,22 +464,6 @@
     <message>
         <source>hh&apos;:&apos;mm</source>
         <translation>hh&apos;:&apos;mm</translation>
-    </message>
-    <message>
-        <source>Database Maintenance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please be patient and allow up to 30 seconds for this.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Currently unusable</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This app is currently unusable, due to a change at the data provider&apos;s side.</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
