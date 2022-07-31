@@ -8,15 +8,20 @@ import QtQuick 2.6
 import Sailfish.Silica 1.0
 import "../components"
 
-SilicaControl {
+ListItem {
     id: root
-    highlighted: area.containsPress
     width: 0
     height: 0
+    highlightedColor: "transparent"
+    _backgroundColor: "transparent"
+    contentHeight: 0
     opacity: hidden ? 0.0 : 1.0
 
-    Behavior on width { SmoothedAnimation { duration: 500 } }
-    Behavior on height { SmoothedAnimation { duration: 500 } }
+    Behavior on width { SmoothedAnimation { duration: 200 } }
+    Behavior on height {
+        enabled: !menuOpen
+        SmoothedAnimation { duration: 200 }
+    }
     Behavior on opacity { FadeAnimation { } }
 
     property bool debug: false
@@ -30,16 +35,30 @@ SilicaControl {
     property bool allowMove: true // TODO add button
     property bool allowConfig: true // TODO add button
 
-    property bool editOnPressAndHold: true
+    property bool editOnPressAndHold: !showMenuOnPressAndHold
+    showMenuOnPressAndHold: !!menu
+
     property bool cancelEditOnClick: true
     property string bindEditingProperty: "editing"
     property var bindEditingTarget: null
 
     property bool _showingRemorser: false
 
-    signal clicked(var mouse)
-    signal pressAndHold(var mouse)
     signal removed
+
+    function requestRemoval() {
+        // We have to create the remorse timer manually. See
+        // comment on remorseContainer.
+
+        var remorseItem = remorseComponent.createObject(remorseContainer)
+
+        if (remorseItem) {
+            _showingRemorser = true
+            remorseItem.execute(remorseContainer, "Removed", removeSelf, 4000)
+        } else if (remorseComponent) {
+            console.warn("Failed to create RemorseItem", remorseComponent.errorString())
+        }
+    }
 
     function removeSelf() {
         hidden = true
@@ -59,7 +78,8 @@ SilicaControl {
                 PropertyChanges {
                     target: root
                     width: wThird
-                    height: reducedHeight
+                    height: reducedHeight + (menuOpen ? menu.height : 0)
+                    contentHeight: reducedHeight
                 }
             },
             State {
@@ -67,7 +87,8 @@ SilicaControl {
                 PropertyChanges {
                     target: root
                     width: 2 * wThird
-                    height: reducedHeight
+                    height: reducedHeight + (menuOpen ? menu.height : 0)
+                    contentHeight: reducedHeight
                 }
             },
             State {
@@ -75,7 +96,8 @@ SilicaControl {
                 PropertyChanges {
                     target: root
                     width: 3 * wThird
-                    height: fullHeight
+                    height: fullHeight + (menuOpen ? menu.height : 0)
+                    contentHeight: fullHeight
                 }
             }
         ]
@@ -144,13 +166,6 @@ SilicaControl {
         }
     }
 
-    MouseArea {
-        id: area
-        anchors.fill: parent
-        onClicked: root.clicked(mouse)
-        onPressAndHold: root.pressAndHold(mouse)
-    }
-
     IconButton {
         id: growButton
         visible: allowResize && !_showingRemorser
@@ -210,17 +225,7 @@ SilicaControl {
         Behavior on scale { SmoothedAnimation { velocity: 10 } }
 
         onClicked: {
-            // We have to create the remorse timer manually. See
-            // comment on remorseContainer.
-
-            var remorseItem = remorseComponent.createObject(remorseContainer)
-
-            if (remorseItem) {
-                _showingRemorser = true
-                remorseItem.execute(remorseContainer, "Removed", removeSelf, 4000)
-            } else if (remorseComponent) {
-                console.warn("Failed to create RemorseItem", remorseComponent.errorString())
-            }
+            requestRemoval()
         }
     }
 
