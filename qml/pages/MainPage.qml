@@ -26,6 +26,10 @@ Page {
 
         pullDownMenu: PullDownMenu {
             flickable: flickable
+            enabled: opacity > 0.0
+            opacity: flow.editing ? 0.0 : 1.0
+
+            Behavior on opacity { FadeAnimation { } }
 
             MenuItem {
                 text: qsTr("About")
@@ -34,8 +38,8 @@ Page {
 
             MenuItem {
                 text: qsTr("Edit tiles")
-                onClicked: flow.editing = true
-                // onDelayedClick: flow.editing = true
+                // onClicked: flow.edit()
+                onDelayedClick: flow.edit()
             }
 
             MenuItem {
@@ -60,7 +64,7 @@ Page {
             id: area51
             anchors.fill: parent
             enabled: flow.editing
-            onClicked: flow.editing = false
+            onClicked: flow.cancelEdit()
 
             Rectangle {
                 visible: debug
@@ -168,7 +172,7 @@ Page {
         height: root.height - area51.height
         width: parent.width
         enabled: flow.editing
-        onClicked: flow.editing = false
+        onClicked: flow.cancelEdit()
 
         Rectangle {
             visible: debug
