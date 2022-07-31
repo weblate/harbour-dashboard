@@ -56,6 +56,19 @@ Page {
 
         VerticalScrollDecorator { flickable: flickable }
 
+        MouseArea {
+            id: area51
+            anchors.fill: parent
+            enabled: flow.editing
+            onClicked: flow.editing = false
+
+            Rectangle {
+                visible: debug
+                anchors.fill: parent
+                color: Theme.rgba("red", 0.3)
+            }
+        }
+
         Column {
             id: column
             width: parent.width
@@ -65,7 +78,7 @@ Page {
 
             Flow {
                 id: flow
-                width: parent.width - (parent.width%3 / 2)
+                width: Math.ceil(parent.width - (parent.width%3 / 2))
                 x: (parent.width%3 / 2)
 
                 // Problem: when the Flow is created, there is an initial
@@ -150,23 +163,17 @@ Page {
         }
     }
 
-    // TODO: find a way to intercept clicks outside of the Flow element and set flow.editing=false.
-    // Problem: the MouseArea grabs all mouse input and breaks scrolling while editing
-    //
-    // MouseArea {
-    //     width: flow.editing ? parent.width : 0
-    //     height: flow.editing ? parent.height : 0
-    //     propagateComposedEvents: true
-    //     scrollGestureEnabled: false
-    //     enabled: flow.editing
-    //     onClicked: {
-    //         if (mouse.y < flow.y || mouse.y > flow.y+flow.height || !flow.childAt(mouse.x, mouse.y)) {
-    //
-    //             console.log("=>", mouse.x, mouse.y, flow.childAt(mouse.x, mouse.y))
-    //             flow.editing = false
-    //         } else {
-    //             mouse.accepted = false
-    //         }
-    //     }
-    // }
+    MouseArea {
+        y: area51.height
+        height: root.height - area51.height
+        width: parent.width
+        enabled: flow.editing
+        onClicked: flow.editing = false
+
+        Rectangle {
+            visible: debug
+            anchors.fill: parent
+            color: Theme.rgba("green", 0.3)
+        }
+    }
 }
