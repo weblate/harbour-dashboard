@@ -114,6 +114,8 @@ ListItem {
                 PropertyChanges { target: growButton; scale: 0.0 }
                 PropertyChanges { target: shrinkButton; scale: 0.0 }
                 PropertyChanges { target: closeButton; scale: 0.0 }
+                PropertyChanges { target: moveButton; scale: 0.0 }
+                PropertyChanges { target: configButton; scale: 0.0 }
             },
             State {
                 name: "edit"
@@ -121,6 +123,8 @@ ListItem {
                 PropertyChanges { target: growButton; scale: 1.0 }
                 PropertyChanges { target: shrinkButton; scale: 1.0 }
                 PropertyChanges { target: closeButton; scale: 1.0 }
+                PropertyChanges { target: moveButton; scale: 1.0 }
+                PropertyChanges { target: configButton; scale: 1.0 }
             }
         ]
     }
@@ -132,6 +136,11 @@ ListItem {
             top: parent.top; bottom: parent.bottom
         }
 
+        property real scaledWidth: width * scale
+        property real scaledHeight: height * scale
+        property real horizontalMargin: (width - scaledWidth) / 2
+        property real verticalMargin: (height - scaledHeight) / 2
+
         Behavior on scale { SmoothedAnimation { velocity: 1.3 } }
 
         SilicaItem {
@@ -141,6 +150,13 @@ ListItem {
             SilicaItem {
                 anchors.fill: parent
                 clip: true
+
+                Rectangle {
+                    visible: debug
+                    anchors.fill: parent
+                    border.color: "orange"
+                    color: "transparent"
+                }
 
                 Rectangle {
                     width: parent.width * 2
@@ -166,21 +182,59 @@ ListItem {
         }
     }
 
-    IconButton {
-        id: growButton
-        visible: allowResize && !_showingRemorser
-        icon.source: "image://theme/icon-m-next"
+    TileActionButton {
+        id: closeButton
+        visible: allowClose && !_showingRemorser
+        referenceItem: contentItem
+        icon.source: "image://theme/icon-m-cancel"
+
         anchors {
-            horizontalCenter: contentItem.right
-            verticalCenter: contentItem.bottom
-            verticalCenterOffset: ((contentItem.height * contentItem.scale) - contentItem.height) / 2
-            horizontalCenterOffset: -Theme.paddingMedium + ((contentItem.width * contentItem.scale) - contentItem.width) / 2
+            top: contentItem.top; topMargin: contentItem.verticalMargin
+            left: contentItem.left; leftMargin: contentItem.horizontalMargin
         }
 
+        onClicked: requestRemoval()
+    }
+
+    TileActionButton {
+        id: configButton
+        visible: allowConfig && !_showingRemorser
+        referenceItem: contentItem
+        icon.source: "image://theme/icon-m-edit" + (highlighted ? '-selected' : '')
+
+        anchors {
+            top: contentItem.top; topMargin: contentItem.verticalMargin
+            right: contentItem.right; rightMargin: contentItem.horizontalMargin
+        }
+
+        // onClicked: requestRemoval()
+    }
+
+    TileActionButton {
+        id: moveButton
+        visible: allowMove && !_showingRemorser
+        referenceItem: contentItem
+        icon.source: "image://theme/icon-m-menu"
+
+        anchors {
+            bottom: contentItem.bottom; bottomMargin: contentItem.verticalMargin
+            left: contentItem.left; leftMargin: contentItem.horizontalMargin
+        }
+
+        // onPressed:
+    }
+
+    TileActionButton {
+        id: growButton
+        visible: allowResize && !_showingRemorser
+        referenceItem: contentItem
+        icon.source: "image://theme/icon-m-forward"
         opacity: size == "large" ? 0.0 : 1.0
 
-        Behavior on opacity { FadeAnimation { } }
-        Behavior on scale { SmoothedAnimation { velocity: 10 } }
+        anchors {
+            bottom: contentItem.bottom; bottomMargin: contentItem.verticalMargin
+            right: contentItem.right; rightMargin: contentItem.horizontalMargin
+        }
 
         onClicked: {
             if (size == "small") size = "medium"
@@ -188,44 +242,33 @@ ListItem {
         }
     }
 
-    IconButton {
+    TileActionButton {
         id: shrinkButton
         visible: allowResize && !_showingRemorser
-        icon.source: "image://theme/icon-m-previous"
-        anchors {
-            right: growButton.left
-            rightMargin: Theme.paddingSmall
-            verticalCenter: growButton.verticalCenter
-        }
-
+        referenceItem: contentItem
+        icon.source: "image://theme/icon-m-back"
         opacity: size == "small" ? 0.0 : 1.0
 
-        Behavior on opacity { FadeAnimation { } }
-        Behavior on scale { SmoothedAnimation { velocity: 10 } }
+        anchors {
+            bottom: growButton.bottom
+            right: growButton.left; rightMargin: Theme.paddingMedium
+        }
 
         onClicked: {
             if (size == "large") size = "medium"
             else if (size == "medium") size = "small"
         }
-    }
 
-    IconButton {
-        id: closeButton
-        visible: allowClose && !_showingRemorser
-        icon.source: "image://theme/icon-m-clear"
-        anchors {
-            horizontalCenter: contentItem.left
-            verticalCenter: contentItem.top
-            verticalCenterOffset: - ((contentItem.height * contentItem.scale) - contentItem.height) / 2
-            horizontalCenterOffset: Theme.paddingMedium + (contentItem.width - (contentItem.width * contentItem.scale)) / 2
-        }
-        icon.scale: 1.2
-
-        Behavior on opacity { FadeAnimation { } }
-        Behavior on scale { SmoothedAnimation { velocity: 10 } }
-
-        onClicked: {
-            requestRemoval()
+        states: State {
+            when: growButton.opacity == 0.0
+            AnchorChanges {
+                target: shrinkButton
+                anchors.right: contentItem.right
+            }
+            PropertyChanges {
+                target: shrinkButton
+                anchors.rightMargin: contentItem.horizontalMargin
+            }
         }
     }
 
