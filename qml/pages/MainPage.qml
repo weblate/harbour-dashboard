@@ -116,9 +116,24 @@ Page {
                 }
 
                 Tile {
+                    id: tile42
                     debug: root.debug; objectName: "2"
                     bindEditingTarget: flow
                     size: "small"
+
+                    menu: ContextMenu {
+                        MenuItem {
+                            text: qsTr("Configure")
+                        }
+                        MenuItem {
+                            text: qsTr("Arrange tiles")
+                            onDelayedClick: flow.edit()
+                        }
+                        MenuItem {
+                            text: qsTr("Remove")
+                            onDelayedClick: tile42.requestRemoval()
+                        }
+                    }
                 }
 
                 Tile {
@@ -143,6 +158,8 @@ Page {
                     debug: root.debug; objectName: "addTile"
                     size: "small"
                     bindEditingTarget: flow
+                    editOnPressAndHold: false
+                    cancelEditOnClick: false
 
                     allowResize: false
                     allowClose: false
