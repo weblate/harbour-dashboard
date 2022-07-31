@@ -112,7 +112,7 @@ Page {
                 Tile {
                     debug: root.debug; objectName: "1"
                     bindEditingTarget: flow
-                    size: "small"
+                    size: "medium"
                 }
 
                 Tile {
@@ -145,13 +145,13 @@ Page {
                 Tile {
                     debug: root.debug; objectName: "4"
                     bindEditingTarget: flow
-                    size: "small"
+                    size: "medium"
                 }
 
                 Tile {
                     debug: root.debug; objectName: "5"
                     bindEditingTarget: flow
-                    size: "small"
+                    size: "large"
                 }
 
                 Tile {
