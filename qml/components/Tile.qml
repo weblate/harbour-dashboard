@@ -40,7 +40,7 @@ ListItem {
     property bool hidden: false
 
     property bool allowResize: true
-    property bool allowClose: true
+    property bool allowRemove: true
     property bool allowMove: true // TODO add button
     property bool allowConfig: true // TODO add button
 
@@ -123,7 +123,7 @@ ListItem {
                 PropertyChanges { target: contentItem; scale: 1.0 }
                 PropertyChanges { target: growButton; scale: 0.0 }
                 PropertyChanges { target: shrinkButton; scale: 0.0 }
-                PropertyChanges { target: closeButton; scale: 0.0 }
+                PropertyChanges { target: removeButton; scale: 0.0 }
                 PropertyChanges { target: moveButton; scale: 0.0 }
                 PropertyChanges { target: configButton; scale: 0.0 }
             },
@@ -132,7 +132,7 @@ ListItem {
                 PropertyChanges { target: contentItem; scale: 0.8 }
                 PropertyChanges { target: growButton; scale: 1.0 }
                 PropertyChanges { target: shrinkButton; scale: 1.0 }
-                PropertyChanges { target: closeButton; scale: 1.0 }
+                PropertyChanges { target: removeButton; scale: 1.0 }
                 PropertyChanges { target: moveButton; scale: 1.0 }
                 PropertyChanges { target: configButton; scale: 1.0 }
             }
@@ -193,8 +193,8 @@ ListItem {
     }
 
     TileActionButton {
-        id: closeButton
-        visible: allowClose && !_showingRemorser
+        id: removeButton
+        visible: allowRemove && !_showingRemorser
         referenceItem: contentItem
         icon.source: "image://theme/icon-m-cancel"
 

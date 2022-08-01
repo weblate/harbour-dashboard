@@ -129,7 +129,7 @@ Page {
                     onDelayedClick: flow.edit()
                 }
                 MenuItem {
-                    visible: newTile.allowClose
+                    visible: newTile.allowRemove
                     text: qsTr("Remove")
                     onDelayedClick: newTile.requestRemoval()
                 }
@@ -173,7 +173,7 @@ Page {
             cancelEditOnClick: false
 
             allowResize: false
-            allowClose: false
+            allowRemove: false
             allowMove: false
             allowConfig: false
 
