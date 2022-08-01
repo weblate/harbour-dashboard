@@ -40,7 +40,7 @@ Page {
             }
 
             MenuItem {
-                visible: tilesModel.count > 0
+                visible: tilesModel.count > 1
                 text: qsTr("Refresh")
                 onClicked: {
                     // meteoApp.refreshData(undefined, false);
@@ -61,6 +61,12 @@ Page {
                 anchors.fill: parent
                 color: Theme.rgba("red", 0.3)
             }
+        }
+
+        ViewPlaceholder {
+            enabled: tilesModel.count <= 1 && !flow.editing
+            text: qsTr("Add a tile first")
+            hintText: qsTr("Pull down to manage tiles")
         }
 
         Column {
@@ -208,6 +214,7 @@ Page {
         }
 
         Tile {
+            visible: flow.editing
             debug: root.debug
             objectName: "addTile"
             size: "small"
