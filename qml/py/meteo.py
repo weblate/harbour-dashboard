@@ -45,6 +45,13 @@ INITIALIZED = False
 
 class Meteo:
     class DataDb(DatabaseBase):
+        """
+        Data database.
+
+        This database is intended to be used for storing user-generated data.
+        User-generated configuration goes into the config database.
+        """
+
         def _setup(self):
             pass
 
@@ -55,39 +62,83 @@ class Meteo:
             raise self.InvalidVersion
 
     class ConfigDb(DatabaseBase):
+        """
+        Configuration database.
+
+        The config database contains all user-generated, provider-indepentend
+        configuration. Configuration that is only relevant for certain providers
+        must be handled by the provider implementation. Other data has to be
+        stored in the cache database or the data database.
+        """
         def _setup(self):
             pass
 
         def _upgrade_schema(self, from_version):
             if from_version == '0':
-                # setup data tables
+                # Active data view tiles:
+                # - tile_id: unique identifier
+                # - sequence: sequence number of the tile (0, 1, 2, 3...)
+                #       Tiles will be shown in this order.
+                # - tile_type: string identifier of the data type
+                #       Must be one of:
+                #       - weather
+                #       - pollen
+                #       - clock
+                #
+                #       The tile type defines which tile implementation will be loaded.
+                #       Tile implementations must handle missing capabilities / missing
+                #       data. For example, some providers may not provide precipitation
+                #       forecasts, but they are still grouped in the "weather" category.
                 self.cur.execute("""
                     CREATE TABLE IF NOT EXISTS mainscreen_tiles(
                         tile_id INTEGER NOT NULL PRIMARY KEY,
                         sequence INTEGER NOT NULL UNIQUE,
                         tile_type TEXT NOT NULL,
-                        provider_id TEXT NOT NULL
                     );""")
 
+                # Weather forecast tile:
+                # - tile_id: see above
+                # - location_id: provider-dependent location identifier
+                # - provider_id: provider token string
+                #
+                # Actual forecast data is stored in the cache database.
+                #
+                # TODO: decide how to best store additional location details.
+                #       Locations have names and other related information that
+                #       a) might have to be configurable by the user
+                #       b) might change and should therefore be handled by the provider
+                #
+                #       In case of a), it would make sense to store details in the
+                #       settings database (i.e. here). In case of b), it would be
+                #       better to find a way to request these details from the provider.
+                #
+                #       Some details fields:
+                #       - name TEXT NOT NULL,
+                #       - zip INTEGER NOT NULL,
+                #       - regionId TEXT NOT NULL,
+                #       - region TEXT NOT NULL,
+                #       - latitude REAL NOT NULL,
+                #       - longitude REAL NOT NULL,
+                #       - altitude INTEGER NOT NULL
+                #
+                #       The same problem applies to other location-bound forecasts. There
+                #       also might be a lot of duplication if the user has tiles for different
+                #       forecasts but for the same location.
                 self.cur.execute("""
                     CREATE TABLE IF NOT EXISTS weather_forecast_details(
                         tile_id INTEGER NOT NULL PRIMARY KEY,
-                        location_id TEXT NOT NULL
+                        location_id TEXT NOT NULL,
+                        provider_id TEXT NOT NULL
                     );""")
 
-                # to be requested from providers:
-                # - name TEXT NOT NULL,
-                # - zip INTEGER NOT NULL,
-                # - regionId TEXT NOT NULL,
-                # - region TEXT NOT NULL,
-                # - latitude REAL NOT NULL,
-                # - longitude REAL NOT NULL,
-                # - altitude INTEGER NOT NULL
-
+                # Pollen forecast tile:
+                # cf. weather forecast documentation
                 self.cur.execute("""
                     CREATE TABLE IF NOT EXISTS pollen_forecast_details(
                         tile_id INTEGER NOT NULL PRIMARY KEY,
-                        location_id TEXT NOT NULL
+                        location_id TEXT NOT NULL,
+                        provider_id TEXT NOT NULL
+                    );""")
                     );""")
                 return '1'
             elif from_version == '1':
@@ -96,11 +147,22 @@ class Meteo:
             raise self.InvalidVersion
 
     class CacheDb(DatabaseBase):
+        """
+        Cache database.
+
+        The cache database stores all automatically accumulated data in a
+        provider-independent form. Data that is only relevant for a certain provider
+        must be stored by the provider.
+
+        TODO: document how data can be stored here by providers using signals.
+        """
+
         def _setup(self):
             pass  # no special setup needed
 
         def _upgrade_schema(self, from_version):
             if from_version == '0':
+                # Detailed weather forecast data
                 self.cur.execute("""
                     CREATE TABLE IF NOT EXISTS weather_forecast_data(
                         timestamp INTEGER NOT NULL,
@@ -110,6 +172,8 @@ class Meteo:
                         day_dates TEXT NOT NULL,
                         PRIMARY KEY(timestamp, location_id)
                     );""")
+
+                # Summarised weather forecast data
                 self.cur.execute("""
                     CREATE TABLE IF NOT EXISTS weather_forecast_overview(
                         datestring STRING NOT NULL,
@@ -121,6 +185,8 @@ class Meteo:
                         age INTEGER NOT NULL,
                         PRIMARY KEY(datestring, location_id)
                     );""")
+
+                # Detailed pollen forecast data
                 self.cur.execute("""
                     CREATE TABLE IF NOT EXISTS pollen_forecast_data(
                         timestamp INTEGER NOT NULL,
