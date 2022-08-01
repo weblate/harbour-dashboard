@@ -53,6 +53,16 @@ ListItem {
 
     property bool _showingRemorser: false
 
+    // Compute the scale so that the horizontal margin always stays
+    // the same. The height will vary though.
+    //property real _editShrinkScale: size != 'small' && size != 'large'
+    //                                ? (height - (reducedHeight - (reducedHeight * _editShrinkBaseScale))) / height
+    //                                : (width - 2*_editHorizontalMargin) / width
+    property real _editShrinkScale: (width - 2*_editHorizontalMargin) / width
+    property real _editShrinkBaseScale: 0.8
+    property real _editShrinkBaseWidth: wThird * _editShrinkBaseScale
+    property real _editHorizontalMargin: (wThird - _editShrinkBaseWidth) / 2
+
     signal removed
     signal requestConfig
 
@@ -129,7 +139,7 @@ ListItem {
             },
             State {
                 name: "edit"
-                PropertyChanges { target: contentItem; scale: 0.8 }
+                PropertyChanges { target: contentItem; scale: _editShrinkScale }
                 PropertyChanges { target: growButton; scale: 1.0 }
                 PropertyChanges { target: shrinkButton; scale: 1.0 }
                 PropertyChanges { target: removeButton; scale: 1.0 }
