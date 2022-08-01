@@ -321,7 +321,7 @@ ListItem {
         id: editBinding
         target: root
         property: "editing"
-        value: parent.editing
+        value: bindEditingTarget[bindEditingProperty]
         when:    !!bindEditingTarget
               && !!bindEditingProperty
               && bindEditingTarget.hasOwnProperty(bindEditingProperty)
