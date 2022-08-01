@@ -10,11 +10,7 @@ import Sailfish.Silica 1.0
 IconButton {
     id: root
 
-    // WARNING requires wThird to be defined in the context
-
-    property Item referenceItem
-
-    width: (wThird * referenceItem.scale) / 3
+    width: Theme.itemSizeExtraSmall
     height: width
 
     icon.width: width * 0.8

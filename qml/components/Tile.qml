@@ -22,10 +22,10 @@ ListItem {
     Drag.hotSpot.y: 0
     property bool dragActive: moveButton.dragActive
 
-    Behavior on width { SmoothedAnimation { duration: 200 } }
+    Behavior on width { SmoothedAnimation { duration: 150 } }
     Behavior on height {
         enabled: !menuOpen
-        SmoothedAnimation { duration: 200 }
+        SmoothedAnimation { duration: 150 }
     }
     Behavior on opacity { FadeAnimation { } }
 
@@ -52,16 +52,6 @@ ListItem {
     property var bindEditingTarget: null
 
     property bool _showingRemorser: false
-
-    // Compute the scale so that the horizontal margin always stays
-    // the same. The height will vary though.
-    //property real _editShrinkScale: size != 'small' && size != 'large'
-    //                                ? (height - (reducedHeight - (reducedHeight * _editShrinkBaseScale))) / height
-    //                                : (width - 2*_editHorizontalMargin) / width
-    property real _editShrinkScale: (width - 2*_editHorizontalMargin) / width
-    property real _editShrinkBaseScale: 0.8
-    property real _editShrinkBaseWidth: wThird * _editShrinkBaseScale
-    property real _editHorizontalMargin: (wThird - _editShrinkBaseWidth) / 2
 
     signal removed
     signal requestConfig
@@ -130,7 +120,7 @@ ListItem {
         states: [
             State {
                 name: "view"
-                PropertyChanges { target: contentItem; scale: 1.0 }
+                PropertyChanges { target: contentScale; xScale: 1.0; yScale: 1.0 }
                 PropertyChanges { target: growButton; scale: 0.0 }
                 PropertyChanges { target: shrinkButton; scale: 0.0 }
                 PropertyChanges { target: removeButton; scale: 0.0 }
@@ -139,7 +129,11 @@ ListItem {
             },
             State {
                 name: "edit"
-                PropertyChanges { target: contentItem; scale: _editShrinkScale }
+                PropertyChanges {
+                    target: contentScale
+                    xScale: (width - 2 * Theme.paddingMedium) / width
+                    yScale: (height - 2 * Theme.paddingMedium) / height
+                }
                 PropertyChanges { target: growButton; scale: 1.0 }
                 PropertyChanges { target: shrinkButton; scale: 1.0 }
                 PropertyChanges { target: removeButton; scale: 1.0 }
@@ -151,17 +145,19 @@ ListItem {
 
     SilicaItem {
         id: contentItem
-        anchors {
-            left: parent.left; right: parent.right
-            top: parent.top; bottom: parent.bottom
+        anchors.fill: parent
+
+        transform: Scale {
+            id: contentScale
+            xScale: 1.0
+            yScale: 1.0
+
+            origin.x: width / 2
+            origin.y: height / 2
+
+            Behavior on xScale { SmoothedAnimation { velocity: 1.3 } }
+            // Behavior on yScale { SmoothedAnimation { velocity: 1.3 } }
         }
-
-        property real scaledWidth: width * scale
-        property real scaledHeight: height * scale
-        property real horizontalMargin: (width - scaledWidth) / 2
-        property real verticalMargin: (height - scaledHeight) / 2
-
-        Behavior on scale { SmoothedAnimation { velocity: 1.3 } }
 
         SilicaItem {
             id: background
@@ -205,12 +201,11 @@ ListItem {
     TileActionButton {
         id: removeButton
         visible: allowRemove && !_showingRemorser
-        referenceItem: contentItem
         icon.source: "image://theme/icon-m-cancel"
 
         anchors {
-            top: contentItem.top; topMargin: contentItem.verticalMargin
-            left: contentItem.left; leftMargin: contentItem.horizontalMargin
+            top: contentItem.top; topMargin: Theme.paddingMedium
+            left: contentItem.left; leftMargin: Theme.paddingMedium
         }
 
         onClicked: requestRemoval()
@@ -219,12 +214,11 @@ ListItem {
     TileActionButton {
         id: configButton
         visible: allowConfig && !_showingRemorser
-        referenceItem: contentItem
         icon.source: "image://theme/icon-m-edit" + (highlighted ? '-selected' : '')
 
         anchors {
-            top: contentItem.top; topMargin: contentItem.verticalMargin
-            right: contentItem.right; rightMargin: contentItem.horizontalMargin
+            top: contentItem.top; topMargin: Theme.paddingMedium
+            right: contentItem.right; rightMargin: Theme.paddingMedium
         }
 
         onClicked: requestConfig()
@@ -233,12 +227,11 @@ ListItem {
     TileActionButton {
         id: moveButton
         visible: allowMove && !_showingRemorser
-        referenceItem: contentItem
         icon.source: "image://theme/icon-m-menu"
 
         anchors {
-            bottom: contentItem.bottom; bottomMargin: contentItem.verticalMargin
-            left: contentItem.left; leftMargin: contentItem.horizontalMargin
+            bottom: contentItem.bottom; bottomMargin: Theme.paddingMedium
+            left: contentItem.left; leftMargin: Theme.paddingMedium
         }
 
         property bool dragActive: drag.active
@@ -248,13 +241,12 @@ ListItem {
     TileActionButton {
         id: growButton
         visible: allowResize && !_showingRemorser
-        referenceItem: contentItem
         icon.source: "image://theme/icon-m-forward"
         opacity: size == "large" ? 0.0 : 1.0
 
         anchors {
-            bottom: contentItem.bottom; bottomMargin: contentItem.verticalMargin
-            right: contentItem.right; rightMargin: contentItem.horizontalMargin
+            bottom: contentItem.bottom; bottomMargin: Theme.paddingMedium
+            right: contentItem.right; rightMargin: Theme.paddingMedium
         }
 
         onClicked: {
@@ -266,7 +258,6 @@ ListItem {
     TileActionButton {
         id: shrinkButton
         visible: allowResize && !_showingRemorser
-        referenceItem: contentItem
         icon.source: "image://theme/icon-m-back"
         opacity: size == "small" ? 0.0 : 1.0
 
@@ -288,7 +279,7 @@ ListItem {
             }
             PropertyChanges {
                 target: shrinkButton
-                anchors.rightMargin: contentItem.horizontalMargin
+                anchors.rightMargin: Theme.paddingMedium
             }
         }
     }
