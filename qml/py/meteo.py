@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-from typing import Dict
+from typing import Dict, List, Any, Tuple
 from pathlib import Path
 
 from meteopy.providers import provider_base
@@ -93,7 +93,7 @@ class Meteo:
                     CREATE TABLE IF NOT EXISTS mainscreen_tiles(
                         tile_id INTEGER NOT NULL PRIMARY KEY,
                         sequence INTEGER NOT NULL UNIQUE,
-                        tile_type TEXT NOT NULL,
+                        tile_type TEXT NOT NULL
                     );""")
 
                 # Weather forecast tile:
@@ -247,6 +247,18 @@ class Meteo:
         self._init_providers()
         self.ready = True
 
+    @property
+    def data_db(self):
+        return self._data_db
+
+    @property
+    def cache_db(self):
+        return self._cache_db
+
+    @property
+    def config_db(self):
+        return self._config_db
+
     def refresh(self, provider: str, ident: str, force: bool) -> None:
         if provider in self._broken_providers:
             signal_send('error.refresh.broken-provider', provider, ident, force)
@@ -298,6 +310,33 @@ class Meteo:
                 signal_send('error.backup.failed', filepath, e)  # TODO handle this...?
 
 
+def _check_init() -> bool:
+    """
+    Check whether the API has been initialized.
+
+    Returns True if everything is fine. If the API has *not* been initialized,
+    a signal will be sent and the function returns False. In that case, API
+    functions should return safe, empty data.
+    """
+
+    global INITIALIZED
+    global METEO
+
+    if not INITIALIZED or not METEO.ready:
+        signal_send('bug.main.not-initialized')  # TODO add more info for debugging
+        return False
+
+    return True
+
+
+# ------------------------------------------------------------------------------
+# Public API:
+#
+# Public API is not encapsulated in the Meteo class because pyotherside can only
+# be used with simple stand-alone functions.
+#
+# All functions are *only* safe to use after initialize(...) has been called.
+
 def initialize(data_path, cache_path, config_path):
     global METEO
     global INITIALIZED
@@ -309,6 +348,67 @@ def initialize(data_path, cache_path, config_path):
         return True
 
     return False
+
+
+def get_tiles() -> List[Tuple[str, Dict[str, Any]]]:
+    """
+    Get tiles and settings for the main screen.
+
+    Returns a list of tiles. Each tile is a tuple of (tile_type, settings). Settings
+    are specific to each tile type and are documented above (database schema).
+    """
+    if not _check_init():
+        return []
+
+    signal_send('info.main.load-tiles.started')
+
+    METEO.config_db.cur.execute("""SELECT * FROM mainscreen_tiles ORDER BY sequence ASC; """)
+    rows = METEO.config_db.cur.fetchall()
+    model = []
+
+    for row in rows:
+        entry = {
+            'tile_id': row['tile_id'],
+            'sequence': row['sequence'],
+            'tile_type': row['tile_type'],
+            'settings': {},
+        }
+
+        tile_type = row['tile_type']
+        tile_id = row['tile_id']
+
+        if tile_type in ['weather', 'pollen', 'clock']:
+            settings_row = METEO.config_db.con.execute(f"SELECT * FROM {tile_type}_details WHERE tile_id = ?", (tile_id, )).fetchone()
+            entry['settings'] = dict(settings_row)
+        else:
+            signal_send('warning.main.load-tiles.unknown-tile-type', tile_type, tile_id)
+
+        model.append(entry)
+
+    signal_send('info.main.load-tiles.finished')
+
+    return model
+
+
+def add_tile(tile_type: str, settings: dict) -> None:
+    """
+    Save a new tile for the main screen.
+
+    Takes the tile's type and its settings. Settings are specific to each tile
+    type and are documented above (database schema).
+    """
+    if not _check_init():
+        return
+
+    signal_send('info.main.add-tile.started')
+    signal_send('info.main.add-tile.finished')
+
+    pass
+
+
+# #### ---------------------------------
+# TODO vvvv not final API
+# #### ---------------------------------
 
 
 def get_active_locations():
@@ -333,6 +433,10 @@ def deactivate_location(ident):
 
 def move_location(ident, direction):
     pass  # should be stored in dconf from QML
+
+# #### ---------------------------------
+# TODO ^^^^ not final API
+# #### ---------------------------------
 
 
 def refresh(location: str, force: bool) -> None:

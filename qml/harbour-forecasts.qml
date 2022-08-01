@@ -54,6 +54,51 @@ ApplicationWindow {
     //     hintText: qsTr("This app is currently unusable, due to a change at the data provider's side.")
     // }
 
+    signal tilesLoaded(var tiles)
+    function loadTiles() {
+        py.call("meteo.get_tiles", [], function(tiles) {
+            console.log("loaded", tiles, "tiles from the backend")
+            tilesLoaded(tiles)
+        })
+    }
+
+    function addTile(tile_type, settings) {
+        py.call("meteo.add_tile", [tile_type, settings], function() {
+            console.log("tile addded:", tile_type, JSON.stringify(settings))
+        })
+    }
+
+    Python {
+        id: py
+        property bool ready: false
+
+        onReceived: console.log(JSON.stringify(data))
+        onError: console.error(traceback)
+
+        Component.onCompleted: {
+            // Add the directory of this .qml file to the search path
+            addImportPath(Qt.resolvedUrl('./py'))
+            importModule("meteo", function() {
+                console.log("meteo.py loaded")
+                py.call("meteo.initialize",
+                        [StandardPaths.data, StandardPaths.cache, String(StandardPaths.cache).replace('.cache', '.config')],
+                        function(success) {
+                            if (success) {
+                                console.log("backend successfully initialized")
+                                console.log("paths:",
+                                            StandardPaths.data,
+                                            StandardPaths.cache,
+                                            String(StandardPaths.cache).replace('.cache', '.config'))
+                                ready = true
+                            } else {
+                                // TODO improve error reporting
+                                console.log('[FATAL] failed to initialize backend')
+                            }
+                        })
+            })
+        }
+    }
+
     Component.onCompleted: {
         // Avoid hard dependency on Nemo.Time and load it in a complicated
         // way to make Jolla's validator script happy.

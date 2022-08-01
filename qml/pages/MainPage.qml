@@ -174,14 +174,6 @@ Page {
             tilesModel.insert(tilesModel.count-1, tileComponent.createObject(tilesModel, {'objectName': name, 'size': size}))
         }
 
-        Component.onCompleted: {
-            addDebugTile('1', 'medium')
-            addDebugTile('2', 'small')
-            addDebugTile('3', 'small')
-            addDebugTile('4', 'medium')
-            addDebugTile('5', 'large')
-        }
-
         Tile {
             bindEditingTarget: flow
             dragProxyTarget: floatingTile
@@ -237,6 +229,16 @@ Page {
                 flickable.scrollToBottom()
             }
         }
+
+        Component.onCompleted: {
+//            addDebugTile('1', 'medium')
+//            addDebugTile('2', 'small')
+//            addDebugTile('3', 'small')
+//            addDebugTile('4', 'medium')
+//            addDebugTile('5', 'large')
+
+            app.loadTiles()
+        }
     }
 
     MouseArea {
@@ -251,6 +253,18 @@ Page {
             visible: debug
             anchors.fill: parent
             color: Theme.rgba("green", 0.3)
+        }
+    }
+
+    Connections {
+        target: app
+        onTilesLoaded: {
+            for (var i in tiles) {
+                console.log("- tile:", tiles[i].tile_type, tiles[i].settings)
+                tilesModel.addDebugTile(String(tilesModel.count), 'small')
+            }
+
+            console.log("all tiles loaded")
         }
     }
 }

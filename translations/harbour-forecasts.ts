@@ -267,6 +267,14 @@
         <source>Manage tiles</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Add a tile first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pull down to manage tiles</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Opal.About</name>
