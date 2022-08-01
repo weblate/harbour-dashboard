@@ -24,6 +24,10 @@ ListItem {
     }
     Behavior on opacity { FadeAnimation { } }
 
+    readonly property int wThird: Math.floor(((orientation & Orientation.PortraitMask) ? Screen.width : Screen.height)/3)
+    readonly property int fullHeight: 2.3 * Theme.itemSizeHuge
+    readonly property int reducedHeight: 1.5 * Theme.itemSizeHuge
+
     property bool debug: false
 
     property alias size: sizeState.state

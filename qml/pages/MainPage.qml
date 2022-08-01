@@ -12,10 +12,6 @@ Page {
     id: root
     allowedOrientations: Orientation.All
 
-    readonly property int wThird: Math.floor(root.width/3)
-    readonly property int fullHeight: 2.3 * Theme.itemSizeHuge
-    readonly property int reducedHeight: 1.5 * Theme.itemSizeHuge
-
     property bool debug: false
 
     SilicaFlickable {
