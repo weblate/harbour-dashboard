@@ -45,11 +45,6 @@ Page {
                     // meteoApp.refreshData(undefined, false);
                 }
             }
-
-            MenuLabel {
-                visible: app.haveWallClock
-                text: app.wallClock ? app.wallClock.time.toLocaleString(Qt.locale(), app.dateTimeFormat) : ''
-            }
         }
 
         VerticalScrollDecorator { flickable: flickable }
@@ -72,7 +67,10 @@ Page {
             width: parent.width
             spacing: Theme.paddingMedium
 
-            PageHeader { title: qsTr("Forecasts") }
+            PageHeader {
+                title: qsTr("Forecasts")
+                description: app.haveWallClock ? app.wallClock.time.toLocaleString(Qt.locale(), app.dateTimeFormat) : ''
+            }
 
             Flow {
                 id: flow
