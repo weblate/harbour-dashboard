@@ -17,6 +17,11 @@ ListItem {
     contentHeight: 0
     opacity: hidden ? 0.0 : 1.0
 
+    Drag.active: moveButton.dragActive
+    Drag.hotSpot.x: 0
+    Drag.hotSpot.y: 0
+    property bool dragActive: moveButton.dragActive
+
     Behavior on width { SmoothedAnimation { duration: 200 } }
     Behavior on height {
         enabled: !menuOpen
@@ -226,7 +231,8 @@ ListItem {
             left: contentItem.left; leftMargin: contentItem.horizontalMargin
         }
 
-        // onPressed:
+        property bool dragActive: drag.active
+        drag.target: root
     }
 
     TileActionButton {
