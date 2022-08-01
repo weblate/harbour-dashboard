@@ -139,6 +139,25 @@ class Meteo:
                         location_id TEXT NOT NULL,
                         provider_id TEXT NOT NULL
                     );""")
+
+                # World clock tile:
+                # - tile_id: see above
+                # - utcOffsetMinutes: difference to UTC for this clock
+                #       Negative means west of UTC, positive means east of UTC.
+                # - showLocalTime: (bool) whether this clock shows global time or local time
+                #       If showLocalTime == 1, the value set in utcOffsetMinutes is ignored.
+                # - label: user-defined name of this clock, could e.g. be a city or a timezone
+                # - showNumbers: (bool) whether to show numbers on the clock face
+                #       TODO: support translated clock faces. Currently, there is only one
+                #             numbered clock face using arabic numbers. There should be
+                #             translated versions using different scripts.
+                self.cur.execute("""
+                    CREATE TABLE IF NOT EXISTS worldclock_details(
+                        tile_id INTEGER NOT NULL PRIMARY KEY,
+                        utcOffsetMinutes INTEGER DEFAULT 0,
+                        showLocalTime INTEGER DEFAULT 0,
+                        label TEXT DEFAULT "",
+                        showNumbers INTEGER DEFAULT 0
                     );""")
                 return '1'
             elif from_version == '1':
