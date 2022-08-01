@@ -244,10 +244,6 @@
         <translation>Über</translation>
     </message>
     <message>
-        <source>Edit tiles</source>
-        <translation>Kacheln bearbeiten</translation>
-    </message>
-    <message>
         <source>Refresh</source>
         <translation>Aktualisieren</translation>
     </message>
@@ -266,6 +262,10 @@
     <message>
         <source>Remove</source>
         <translation>Entfernen</translation>
+    </message>
+    <message>
+        <source>Manage tiles</source>
+        <translation>Kacheln verwalten</translation>
     </message>
 </context>
 <context>

@@ -244,10 +244,6 @@
         <translation type="unfinished">Apropos</translation>
     </message>
     <message>
-        <source>Edit tiles</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
@@ -265,6 +261,10 @@
     </message>
     <message>
         <source>Remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Manage tiles</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -244,10 +244,6 @@
         <translation type="unfinished">关于</translation>
     </message>
     <message>
-        <source>Edit tiles</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Refresh</source>
         <translation type="unfinished">刷新</translation>
     </message>
@@ -266,6 +262,10 @@
     <message>
         <source>Remove</source>
         <translation type="unfinished">移除</translation>
+    </message>
+    <message>
+        <source>Manage tiles</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
