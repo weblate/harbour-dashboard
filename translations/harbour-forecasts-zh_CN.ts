@@ -255,6 +255,18 @@
         <source>Forecasts</source>
         <translation type="unfinished">Forecasts</translation>
     </message>
+    <message>
+        <source>Configure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Arrange tiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="unfinished">移除</translation>
+    </message>
 </context>
 <context>
     <name>Opal.About</name>

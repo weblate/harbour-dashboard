@@ -255,6 +255,18 @@
         <source>Forecasts</source>
         <translation>Wetterbericht</translation>
     </message>
+    <message>
+        <source>Configure</source>
+        <translation>Einrichten</translation>
+    </message>
+    <message>
+        <source>Arrange tiles</source>
+        <translation>Kacheln anordnen</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>Entfernen</translation>
+    </message>
 </context>
 <context>
     <name>Opal.About</name>
