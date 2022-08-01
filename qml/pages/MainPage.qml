@@ -5,6 +5,7 @@
  */
 
 import QtQuick 2.6
+import QtQml.Models 2.2
 import Sailfish.Silica 1.0
 import "../components"
 
@@ -81,12 +82,13 @@ Page {
                 // "jumping" animation as if the contents move to their initial place.
                 // This is ugly and should not happen as there is no "populate" transition.
                 //
-                // add: Transition {
-                //     NumberAnimation {
-                //         properties: "x,y"; easing.type: Easing.OutBack
-                //     }
-                // }
-                // move: add
+                 add: Transition {
+                     NumberAnimation {
+                         properties: "x,y"; easing.type: Easing.InOutQuad
+                         duration: 75
+                     }
+                 }
+                 move: add
 
                 // ARCHITECTURE:
                 //
@@ -96,7 +98,7 @@ Page {
                 // Providers can provide specialised versions of a certain type of tiles.
                 //
 
-                property bool editing: false
+                property bool editing: true
 
                 function edit() { flow.editing = true }
                 function cancelEdit() { flow.editing = false }
@@ -116,7 +118,8 @@ Page {
             debug: root.debug
             objectName: "new-tile"
             bindEditingTarget: flow
-            // cancelEditOnClick: false
+            dragProxyTarget: floatingTile
+            cancelEditOnClick: false
             size: "small"
 
             menu: ContextMenu {
@@ -135,25 +138,30 @@ Page {
                 }
             }
 
-            onXChanged: {
-                if (dragActive) {
-                    var map = parent.mapToItem(flow, x, y)
-                    console.log(objectName, x, y, map.x, map.y, map.y + height, height)
-                    console.log(objectName, flow.childAt(map.x, map.y + height))
-                }
+            onRequestMove: {
+                tilesModel.move(from, to)
             }
-
-//            onDragActiveChanged: {
-//                console.log("DRAGGING", dragActive)
-//            }
         }
     }
 
-    VisualItemModel {
+    Image {
+        id: floatingTile
+        property Tile sourceTile
+        property TileActionButton dragHandle
+        property SilicaFlickable flickable: flickable
+
+        // hotspot bottom left, where the drag handle sits
+        Drag.hotSpot.x: 0
+        Drag.hotSpot.y: height
+        Drag.active: dragHandle ? dragHandle.held : false
+        Drag.source: sourceTile
+    }
+
+    ObjectModel {
         id: tilesModel
 
         function addDebugTile(name, size) {
-            tilesModel.insert(tilesModel.count-1, tileComponent.createObject(flow, {'objectName': name, 'size': size}))
+            tilesModel.insert(tilesModel.count-1, tileComponent.createObject(tilesModel, {'objectName': name, 'size': size}))
         }
 
         Component.onCompleted: {

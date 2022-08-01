@@ -10,6 +10,11 @@ import Sailfish.Silica 1.0
 IconButton {
     id: root
 
+    property bool held: false
+    onPressed: held = true
+    onPressAndHold: held = true
+    onReleased: held = false
+
     width: Theme.itemSizeExtraSmall
     height: width
 

@@ -5,6 +5,7 @@
  */
 
 import QtQuick 2.6
+import QtQml.Models 2.2
 import Sailfish.Silica 1.0
 import "../components"
 
@@ -17,10 +18,9 @@ ListItem {
     contentHeight: 0
     opacity: hidden ? 0.0 : 1.0
 
-    Drag.active: moveButton.dragActive
-    Drag.hotSpot.x: 0
-    Drag.hotSpot.y: 0
-    property bool dragActive: moveButton.dragActive
+    property int _dragStartIndex: -1
+    property int _dragLastHoverIndex: -1
+    property var dragProxyTarget
 
     Behavior on width { SmoothedAnimation { duration: 150 } }
     Behavior on height {
@@ -55,6 +55,7 @@ ListItem {
 
     signal removed
     signal requestConfig
+    signal requestMove(var from, var to)
 
     function requestRemoval() {
         // We have to create the remorse timer manually. See
@@ -230,12 +231,39 @@ ListItem {
         icon.source: "image://theme/icon-m-menu"
 
         anchors {
-            bottom: contentItem.bottom; bottomMargin: Theme.paddingMedium
-            left: contentItem.left; leftMargin: Theme.paddingMedium
+            bottom: parent.bottom; bottomMargin: Theme.paddingMedium
+            left: parent.left; leftMargin: Theme.paddingMedium
         }
 
+        drag.target: dragProxyTarget
         property bool dragActive: drag.active
-        drag.target: root
+
+        onHeldChanged: {
+            if (held) {
+                dragProxyTarget.sourceTile = root
+                _dragStartIndex = root.ObjectModel.index
+                dragProxyTarget.visible = false
+                dragProxyTarget.dragHandle = moveButton
+                dragProxyTarget.x = root.x + root.parent.x - dragProxyTarget.flickable.contentX
+                dragProxyTarget.y = root.y + root.parent.y - dragProxyTarget.flickable.contentY
+            }
+        }
+
+        onDragActiveChanged: {
+            if (dragActive) {
+                root.grabToImage(function(result){
+                    dragProxyTarget.source = result.url
+                    dragProxyTarget.visible = true
+                    moveButton.parent = dragProxyTarget
+                    root.visible = false
+                })
+            } else {
+                requestMove(_dragStartIndex, _dragLastHoverIndex)
+                moveButton.parent = root
+                dragProxyTarget.visible = false
+                root.visible = true
+            }
+        }
     }
 
     TileActionButton {
@@ -332,6 +360,65 @@ ListItem {
         when:    !!bindEditingTarget
               && !!bindEditingProperty
               && bindEditingTarget.hasOwnProperty(bindEditingProperty)
+    }
+
+    DropArea {
+        enabled: allowMove
+
+        anchors {
+            left: parent.left
+            top: parent.top; bottom: parent.bottom
+        }
+        onContainsDragChanged: console.log(containsDrag)
+        width: parent.width / 2
+        onEntered: drag.source._dragLastHoverIndex = root.ObjectModel.index
+
+        Rectangle {
+            id: leftDropHighlight
+            anchors.fill: parent
+            anchors.margins: Theme.paddingMedium
+            radius: 6
+            visible: parent.containsDrag && !moveButton.held
+            color: Theme.rgba(Theme.highlightBackgroundColor, Theme.highlightBackgroundOpacity)
+        }
+
+        OpacityRampEffect{
+            sourceItem: leftDropHighlight
+            direction: OpacityRamp.LeftToRight
+        }
+    }
+
+    DropArea {
+        enabled: allowMove
+
+        anchors {
+            right: parent.right
+            top: parent.top; bottom: parent.bottom
+        }
+        onContainsDragChanged: console.log(containsDrag)
+        width: parent.width / 2
+        onEntered: drag.source._dragLastHoverIndex = root.ObjectModel.index + 1
+
+        Rectangle {
+            id: rightDropHighlight
+            anchors.fill: parent
+            anchors.margins: Theme.paddingMedium
+            radius: 6
+            visible: parent.containsDrag && !moveButton.held
+            color: Theme.rgba(Theme.highlightBackgroundColor, Theme.highlightBackgroundOpacity)
+        }
+
+        OpacityRampEffect{
+            sourceItem: rightDropHighlight
+            direction: OpacityRamp.RightToLeft
+        }
+    }
+
+    Rectangle {
+        id: dragHoverHighlight
+        visible: false
+        anchors.fill: parent
+        color: Theme.rgba(Theme.highlightColor, Theme.opacityLow)
     }
 
     onClicked: {
