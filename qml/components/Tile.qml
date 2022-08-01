@@ -45,6 +45,7 @@ ListItem {
     property bool _showingRemorser: false
 
     signal removed
+    signal requestConfig
 
     function requestRemoval() {
         // We have to create the remorse timer manually. See
@@ -207,7 +208,7 @@ ListItem {
             right: contentItem.right; rightMargin: contentItem.horizontalMargin
         }
 
-        // onClicked: requestRemoval()
+        onClicked: requestConfig()
     }
 
     TileActionButton {
