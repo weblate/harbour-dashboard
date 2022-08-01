@@ -98,7 +98,7 @@ Page {
                 // Providers can provide specialised versions of a certain type of tiles.
                 //
 
-                property bool editing: true
+                property bool editing: false
 
                 function edit() { flow.editing = true }
                 function cancelEdit() { flow.editing = false }
