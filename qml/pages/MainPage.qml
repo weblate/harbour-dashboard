@@ -39,7 +39,7 @@ Page {
             }
 
             MenuItem {
-                visible: itemsModel.count > 0
+                visible: tilesModel.count > 0
                 text: qsTr("Refresh")
                 onClicked: {
                     // meteoApp.refreshData(undefined, false);
@@ -50,7 +50,7 @@ Page {
         VerticalScrollDecorator { flickable: flickable }
 
         MouseArea {
-            id: area51
+            id: cancelEditArea
             anchors.fill: parent
             enabled: flow.editing
             onClicked: flow.cancelEdit()
@@ -101,84 +101,98 @@ Page {
                 function edit() { flow.editing = true }
                 function cancelEdit() { flow.editing = false }
 
-                Tile {
-                    debug: root.debug; objectName: "1"
-                    bindEditingTarget: flow
-                    size: "medium"
-                }
-
-                Tile {
-                    id: tile42
-                    debug: root.debug; objectName: "2"
-                    bindEditingTarget: flow
-                    size: "small"
-
-                    menu: ContextMenu {
-                        MenuItem {
-                            text: qsTr("Configure")
-                        }
-                        MenuItem {
-                            text: qsTr("Arrange tiles")
-                            onDelayedClick: flow.edit()
-                        }
-                        MenuItem {
-                            text: qsTr("Remove")
-                            onDelayedClick: tile42.requestRemoval()
-                        }
-                    }
-                }
-
-                Tile {
-                    debug: root.debug; objectName: "3"
-                    bindEditingTarget: flow
-                    size: "small"
-                }
-
-                Tile {
-                    debug: root.debug; objectName: "4"
-                    bindEditingTarget: flow
-                    size: "medium"
-                }
-
-                Tile {
-                    debug: root.debug; objectName: "5"
-                    bindEditingTarget: flow
-                    size: "large"
-                }
-
-                Tile {
-                    debug: root.debug; objectName: "addTile"
-                    size: "small"
-                    bindEditingTarget: flow
-                    editOnPressAndHold: false
-                    cancelEditOnClick: false
-
-                    allowResize: false
-                    allowClose: false
-                    allowMove: false
-                    allowConfig: false
-
-                    HighlightImage {
-                        anchors.centerIn: parent
-                        source: "image://theme/icon-l-add"
-                    }
-                }
-
-//                ViewPlaceholder {
-//                    id: placeholder
-//                    enabled: (locationsModel.count === 0 && Storage.getLocationsCount() === 0)
-//                    text: qsTr("Add a location first")
-//                    hintText: qsTr("Pull down to add items")
-//                }
+                Repeater { model: tilesModel }
             }
 
             VerticalSpacing { }
         }
     }
 
+    Component {
+        id: tileComponent
+
+        Tile {
+            id: newTile
+            debug: root.debug
+            objectName: "new-tile"
+            bindEditingTarget: flow
+            // cancelEditOnClick: false
+            size: "small"
+
+            menu: ContextMenu {
+                MenuItem {
+                    visible: newTile.allowConfig
+                    text: qsTr("Configure")
+                }
+                MenuItem {
+                    text: qsTr("Arrange tiles")
+                    onDelayedClick: flow.edit()
+                }
+                MenuItem {
+                    visible: newTile.allowClose
+                    text: qsTr("Remove")
+                    onDelayedClick: newTile.requestRemoval()
+                }
+            }
+
+            onXChanged: {
+                if (dragActive) {
+                    var map = parent.mapToItem(flow, x, y)
+                    console.log(objectName, x, y, map.x, map.y, map.y + height, height)
+                    console.log(objectName, flow.childAt(map.x, map.y + height))
+                }
+            }
+
+//            onDragActiveChanged: {
+//                console.log("DRAGGING", dragActive)
+//            }
+        }
+    }
+
+    VisualItemModel {
+        id: tilesModel
+
+        function addDebugTile(name, size) {
+            tilesModel.insert(tilesModel.count-1, tileComponent.createObject(flow, {'objectName': name, 'size': size}))
+        }
+
+        Component.onCompleted: {
+            addDebugTile('1', 'medium')
+            addDebugTile('2', 'small')
+            addDebugTile('3', 'small')
+            addDebugTile('4', 'medium')
+            addDebugTile('5', 'large')
+        }
+
+        Tile {
+            debug: root.debug
+            objectName: "addTile"
+            size: "small"
+            bindEditingTarget: flow
+            editOnPressAndHold: false
+            cancelEditOnClick: false
+
+            allowResize: false
+            allowClose: false
+            allowMove: false
+            allowConfig: false
+
+            HighlightImage {
+                anchors.centerIn: parent
+                source: "image://theme/icon-l-add"
+            }
+
+            onClicked: {
+                tilesModel.addDebugTile(String(tilesModel.count), 'small')
+                flickable.scrollToBottom()
+            }
+        }
+    }
+
     MouseArea {
-        y: area51.height
-        height: root.height - area51.height
+        id: cancelEditAreaBelow
+        y: cancelEditArea.height
+        height: root.height - cancelEditArea.height
         width: parent.width
         enabled: flow.editing
         onClicked: flow.cancelEdit()
