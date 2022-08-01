@@ -17,7 +17,9 @@ source ../libs/opal-render-icons.sh
 cFORCE=false
 
 for i in raw/*.svg; do
-    scour "$i" > "${i#raw/}"
+    if [[ "$i" -nt "${i#raw/}" ]]; then
+        scour "$i" > "${i#raw/}"
+    fi
 done
 
 cNAME="app icon"
@@ -35,5 +37,11 @@ render_batch
 cNAME="cover background"
 cITEMS=(cover-bg)
 cRESOLUTIONS=(460x736)
+cTARGETS=(../qml/images)
+render_batch
+
+cNAME="clock faces"
+cITEMS=(clock-face-num clock-face-plain)
+cRESOLUTIONS=(350)
 cTARGETS=(../qml/images)
 render_batch

@@ -21,6 +21,7 @@ CONFIG += sailfishapp
 SOURCES += src/harbour-forecasts.cpp
 
 DISTFILES += \
+    qml/components/AnalogClock.qml \
     qml/components/TileActionButton.qml \
     qml/qchart/LICENSE.md \
     qml/qchart/QChart.js \

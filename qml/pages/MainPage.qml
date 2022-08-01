@@ -173,6 +173,37 @@ Page {
         }
 
         Tile {
+            bindEditingTarget: flow
+            dragProxyTarget: floatingTile
+
+            AnalogClock {
+                id: clockView
+                anchors {
+                    top: parent.top
+                    horizontalCenter: parent.horizontalCenter
+                    topMargin: Theme.paddingLarge
+                }
+                height: width
+                width: Math.min(parent.height, parent.width) - 2 * Theme.paddingLarge
+                showLocalTime: true
+                showNumbers: true
+            }
+
+            Label {
+                width: parent.width
+                wrapMode: Text.Wrap
+                text: app.wallClock.time.toLocaleString(Qt.locale(), app.timeFormat)
+                font.pixelSize: Theme.fontSizeExtraLarge
+                horizontalAlignment: Text.AlignHCenter
+
+                anchors {
+                    bottom: parent.bottom
+                    bottomMargin: Theme.paddingLarge
+                }
+            }
+        }
+
+        Tile {
             debug: root.debug
             objectName: "addTile"
             size: "small"
