@@ -39,6 +39,9 @@ ApplicationWindow {
     property string rainUnitShort: "mm"
     property string windUnit: "km/h"
 
+    property bool haveWallClock: wallClock != null
+    property QtObject wallClock
+
     // MaintenanceOverlay {
     //     id: maintenanceOverlay
     //     text: qsTr("Database Maintenance")
@@ -52,6 +55,16 @@ ApplicationWindow {
     // }
 
     Component.onCompleted: {
+        // Avoid hard dependency on Nemo.Time and load it in a complicated
+        // way to make Jolla's validator script happy.
+        wallClock = Qt.createQmlObject("
+            import QtQuick 2.0
+            import %1 1.0
+            WallClock {
+                enabled: Qt.application.active
+                updateFrequency: WallClock.Minute
+            }".arg("Nemo.Time"), app, 'WallClock')
+
         // TODO implement a way to detect API breakage and enable the overlay automatically
         // disableAppOverlay.state = "visible";
 

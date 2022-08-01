@@ -33,25 +33,23 @@ Page {
             }
 
             MenuItem {
-                text: qsTr("Edit tiles")
+                text: qsTr("Manage tiles")
                 // onClicked: flow.edit()
                 onDelayedClick: flow.edit()
             }
 
             MenuItem {
+                visible: itemsModel.count > 0
                 text: qsTr("Refresh")
-                // visible: locationsModel.count > 0
                 onClicked: {
                     // meteoApp.refreshData(undefined, false);
                 }
             }
 
-            // Label {
-            //     id: clockLabel
-            //     text: new Date().toLocaleString(Qt.locale(), meteoApp.dateTimeFormat)
-            //     color: Theme.highlightColor
-            //     anchors.horizontalCenter: parent.horizontalCenter
-            // }
+            MenuLabel {
+                visible: app.haveWallClock
+                text: app.wallClock ? app.wallClock.time.toLocaleString(Qt.locale(), app.dateTimeFormat) : ''
+            }
         }
 
         VerticalScrollDecorator { flickable: flickable }
