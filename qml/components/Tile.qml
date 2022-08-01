@@ -53,7 +53,7 @@ ListItem {
 
     property bool _showingRemorser: false
 
-    signal removed
+    signal removed(var index)
     signal requestConfig
     signal requestMove(var from, var to)
 
@@ -73,8 +73,7 @@ ListItem {
 
     function removeSelf() {
         hidden = true
-        removed()
-        destroy()
+        removed(root.ObjectModel.index)
     }
 
     default property alias _contents: contentItem.children

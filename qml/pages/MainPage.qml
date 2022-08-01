@@ -141,6 +141,10 @@ Page {
             onRequestMove: {
                 tilesModel.move(from, to)
             }
+
+            onRemoved: {
+                tilesModel.remove(index)
+            }
         }
     }
 
