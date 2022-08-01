@@ -8,7 +8,9 @@ import QtQuick 2.6
 import Sailfish.Silica 1.0
 
 IconButton {
-    id: btn
+    id: root
+
+    // WARNING requires wThird to be defined in the context
 
     property Item referenceItem
 
