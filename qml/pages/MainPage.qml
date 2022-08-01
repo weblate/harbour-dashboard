@@ -81,14 +81,14 @@ Page {
                 // Problem: when the Flow is created, there is an initial
                 // "jumping" animation as if the contents move to their initial place.
                 // This is ugly and should not happen as there is no "populate" transition.
-                //
-                 add: Transition {
-                     NumberAnimation {
-                         properties: "x,y"; easing.type: Easing.InOutQuad
-                         duration: 75
-                     }
-                 }
-                 move: add
+
+                move: Transition {
+                    enabled: flow.editing
+                    NumberAnimation {
+                        properties: "x,y"; easing.type: Easing.InOutQuad
+                        duration: 75
+                    }
+                }
 
                 // ARCHITECTURE:
                 //
