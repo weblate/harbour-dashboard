@@ -83,6 +83,12 @@ ApplicationWindow {
         })
     }
 
+    function resizeTile(tile_id, size) {
+        py.call("meteo.resize_tile", [tile_id, size], function() {
+            console.log("tile size changed:", tile_id, size)
+        })
+    }
+
     Python {
         id: py
         property bool ready: false

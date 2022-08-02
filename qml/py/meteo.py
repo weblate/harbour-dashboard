@@ -520,20 +520,32 @@ def add_tile(tile_type: str, size: str, settings: dict) -> None:
 
     METEO.config_db.con.commit()
     signal_send('info.main.add-tile.finished', tile_type, settings, tile_id, sequence)
+
+
+def resize_tile(tile_id: int, size: str) -> None:
+    """
+    Save a new size for a tile.
+
+    Sizes must be strings defined in _KNOWN_TILE_SIZES.
+    """
+    if not _check_init() or tile_id < 0:
         return
 
-    # TODO is this dangerous? Rationale: the names come directly from the
-    #      database so they should be safe to use.
-    columns_string = ', '.join(required_keys)
-    placeholder_string = ', '.join(['?'] * len(required_keys))
-    sorted_values = tuple([settings[x] for x in required_keys])
+    signal_send('info.main.resize-tile.started', tile_id, size)
+
+    if size not in _KNOWN_TILE_SIZES.keys():
+        signal_send('warning.main.resize-tile.unknown-tile-size', tile_id, size)
+        signal_send('warning.main.resize-tile.failed')
+        METEO.config_db.con.rollback()
+        return
 
     METEO.config_db.con.execute(f"""
-        INSERT INTO {tile_type}_details ({columns_string}) VALUES ({placeholder_string});
-    """, sorted_values)
+        UPDATE mainscreen_tiles SET size = ? WHERE tile_id = ?;
+    """, (_KNOWN_TILE_SIZES[size], tile_id))
 
     METEO.config_db.con.commit()
-    signal_send('info.main.add-tile.finished', tile_type, settings, tile_id, sequence)
+    signal_send('info.main.resize-tile.finished', tile_id, size)
+
 
 
 # #### ---------------------------------

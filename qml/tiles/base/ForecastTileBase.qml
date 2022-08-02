@@ -64,4 +64,8 @@ TileBase {
         tilesViewModel.remove(index)
         app.removeTile(tile_id)
     }
+
+    onSizeChanged: {
+        app.resizeTile(tile_id, size)
+    }
 }
