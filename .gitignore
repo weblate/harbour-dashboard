@@ -22,4 +22,5 @@ raw/strings/*.clean
 raw/strings/strings
 liverunner*
 
+test-data/
 __pycache__
