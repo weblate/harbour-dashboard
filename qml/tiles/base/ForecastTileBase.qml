@@ -56,8 +56,7 @@ TileBase {
 
     onRequestMove: {
         tilesViewModel.move(from, to)
-
-        // TODO actually save the new sequence to the database
+        app.moveTile(tile_id, from, to)
     }
 
     onRemoved: {

@@ -89,6 +89,12 @@ ApplicationWindow {
         })
     }
 
+    function moveTile(tile_id, from, to) {
+        py.call("meteo.move_tile", [tile_id, from, to], function() {
+            console.log("tile moved:", tile_id, from, to)
+        })
+    }
+
     Python {
         id: py
         property bool ready: false

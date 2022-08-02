@@ -564,6 +564,67 @@ def get_providers():
 def search_locations(provider, query):
     return []
 
+def move_tile(tile_id: int, from_index: int, to_index: int) -> None:
+    """
+    Update tile sequence.
+
+    Both indices must be >= 0.
+    """
+    if not _check_init() or tile_id < 0 or from_index < 0 or to_index < 0:
+        return
+
+    signal_send('info.main.move-tile.started', tile_id, from_index, to_index)
+
+    METEO.config_db.cur.execute("""SELECT tile_id FROM mainscreen_tiles ORDER BY sequence ASC; """)
+    rows = METEO.config_db.cur.fetchall()
+    old_sequence = []
+
+    for row in rows:
+        old_sequence.append(row['tile_id'])
+
+    old_count = len(old_sequence)
+
+    if tile_id not in old_sequence:
+        signal_send('warning.main.move-tile.tile-not-found', tile_id, from_index, to_index)
+        signal_send('warning.main.move-tile.failed')
+        METEO.config_db.con.rollback()
+        return
+
+    if from_index > old_count or to_index > old_count:
+        log(f"indices are out of range: {from_index}->{to_index} > {old_count}")
+        to_index = old_count
+        from_index = old_sequence.index(tile_id)
+    elif old_sequence[from_index] != tile_id:
+        log(f"tile id {tile_id} not at expected position {from_index}")
+        from_index = old_sequence.index(tile_id)
+
+    if to_index < from_index:
+        new_sequence = old_sequence[:to_index] + [tile_id] + old_sequence[to_index:from_index] + old_sequence[from_index+1:]
+    elif from_index < to_index:
+        new_sequence = old_sequence[:from_index] + old_sequence[from_index+1:to_index] + [tile_id] + old_sequence[to_index:]
+    else:
+        new_sequence = old_sequence  # nothing to do
+
+    # We have to update each row twice to avoid hitting the UNIQUE constraint
+    # on the sequence column while moving.
+
+    for i, tile in enumerate(old_sequence):
+        METEO.config_db.con.execute(f"""
+            UPDATE mainscreen_tiles SET sequence = ? WHERE tile_id = ?;
+        """, (i + old_count + 1, tile))
+
+        signal_send('MOVE', tile, i, i+old_count+1)
+
+    for i, tile in enumerate(new_sequence):
+        METEO.config_db.con.execute(f"""
+            UPDATE mainscreen_tiles SET sequence = ? WHERE tile_id = ?;
+        """, (i, tile))
+
+        signal_send('MOVE-2', tile, i)
+
+    METEO.config_db.con.commit()
+    signal_send('info.main.move-tile.finished', tile_id, from_index, to_index)
+
 
 def activate_location(ident):
     pass
