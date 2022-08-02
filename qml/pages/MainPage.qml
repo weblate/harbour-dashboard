@@ -149,6 +149,7 @@ Page {
                 'bindEditingTarget': flow,
                 'bindEditingProperty': 'editing',
                 'dragProxyTarget': floatingTile,
+                'objectIndex': Qt.binding(function(){ return loader.ObjectModel.index }),
                 'tilesViewModel': tilesModel
             })
 
@@ -162,8 +163,8 @@ Page {
 
     Image {
         id: floatingTile
-        property Tile sourceTile
-        property TileActionButton dragHandle
+        property var sourceTile
+        property var dragHandle
         property SilicaFlickable flickable: flickable
 
         // hotspot bottom left, where the drag handle sits

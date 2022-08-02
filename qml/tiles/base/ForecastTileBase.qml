@@ -17,6 +17,7 @@ TileBase {
     bindEditingTarget: null  // item or QtObject containing bindEditingProperty
     bindEditingProperty: "editing"  // boolean property indicating edit mode
     dragProxyTarget: null  // Image{} outside of the tile container used for showing preview while dragging
+    objectIndex: -1 // explicit binding to attached property <loader>.ObjectModel.index
     property ObjectModel tilesViewModel: null  // container holding tile instances
 
     // must be redefined by the tile implementation

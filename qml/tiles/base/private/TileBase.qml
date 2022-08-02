@@ -17,6 +17,7 @@ ListItem {
     contentHeight: 0
     opacity: hidden ? 0.0 : 1.0
 
+    property int objectIndex: -1
     property int _dragStartIndex: -1
     property int _dragLastHoverIndex: -1
     property var dragProxyTarget
@@ -72,7 +73,7 @@ ListItem {
 
     function removeSelf() {
         hidden = true
-        removed(root.ObjectModel.index)
+        removed(objectIndex)
     }
 
     default property alias _contents: contentItem.children
@@ -239,7 +240,7 @@ ListItem {
         onHeldChanged: {
             if (held) {
                 dragProxyTarget.sourceTile = root
-                _dragStartIndex = root.ObjectModel.index
+                _dragStartIndex = objectIndex
                 dragProxyTarget.visible = false
                 dragProxyTarget.dragHandle = moveButton
                 dragProxyTarget.x = root.x + root.parent.x - dragProxyTarget.flickable.contentX
@@ -256,6 +257,7 @@ ListItem {
                     root.visible = false
                 })
             } else {
+                console.log("requesting to move tile", root, "from", _dragStartIndex, "to", _dragLastHoverIndex)
                 requestMove(_dragStartIndex, _dragLastHoverIndex)
                 moveButton.parent = root
                 dragProxyTarget.visible = false
@@ -367,9 +369,9 @@ ListItem {
             left: parent.left
             top: parent.top; bottom: parent.bottom
         }
-        onContainsDragChanged: console.log(containsDrag)
+
         width: parent.width / 2
-        onEntered: drag.source._dragLastHoverIndex = root.ObjectModel.index
+        onEntered: drag.source._dragLastHoverIndex = objectIndex
 
         Rectangle {
             id: leftDropHighlight
@@ -395,7 +397,7 @@ ListItem {
         }
         onContainsDragChanged: console.log(containsDrag)
         width: parent.width / 2
-        onEntered: drag.source._dragLastHoverIndex = root.ObjectModel.index + 1
+        onEntered: drag.source._dragLastHoverIndex = objectIndex + 1
 
         Rectangle {
             id: rightDropHighlight
