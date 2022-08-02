@@ -227,6 +227,13 @@ Page {
             onClicked: {
                 tilesModel.addDebugTile(String(tilesModel.count), 'small')
                 flickable.scrollToBottom()
+
+                app.addTile('clock', {
+                    'utcOffsetMinutes': 0,
+                    'showLocalTime': 1,
+                    'label': '',
+                    'showNumbers': 1
+                })
             }
         }
 
