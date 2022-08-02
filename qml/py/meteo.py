@@ -404,9 +404,50 @@ def add_tile(tile_type: str, settings: dict) -> None:
         return
 
     signal_send('info.main.add-tile.started')
-    signal_send('info.main.add-tile.finished')
 
-    pass
+    if tile_type not in _KNOWN_TILE_TYPES:
+        signal_send('warning.main.add-tile.unknown-tile-type', tile_type, settings)
+        signal_send('warning.main.add-tile.failed')
+        METEO.config_db.con.rollback()
+        return
+
+    tile_id = METEO.config_db.con.execute("""
+        SELECT tile_id FROM mainscreen_tiles ORDER BY tile_id DESC LIMIT 1;
+    """).fetchone()
+    tile_id = int(tile_id['tile_id']) + 1 if tile_id else 0
+
+    sequence = METEO.config_db.con.execute("""
+        SELECT sequence FROM mainscreen_tiles ORDER BY sequence DESC LIMIT 1;
+    """).fetchone()
+    sequence = int(sequence['sequence']) + 1 if sequence else 0
+
+    METEO.config_db.con.execute("""
+        INSERT INTO mainscreen_tiles (tile_id, sequence, tile_type) VALUES (?, ?, ?);
+    """, (tile_id, sequence, tile_type))
+
+    settings['tile_id'] = tile_id
+    required_keys = METEO.config_db.con.execute(f"SELECT * FROM {tile_type}_details LIMIT 0;")
+    required_keys = [column[0] for column in required_keys.description]
+    provided_keys = list(settings.keys())
+
+    if not all([x in provided_keys for x in required_keys]):
+        signal_send('warning.main.add-tile.settings-key-missing', tile_type, settings, required_keys)
+        signal_send('warning.main.add-tile.failed')
+        METEO.config_db.con.rollback()
+        return
+
+    # TODO is this dangerous? Rationale: the names come directly from the
+    #      database so they should be safe to use.
+    columns_string = ', '.join(required_keys)
+    placeholder_string = ', '.join(['?'] * len(required_keys))
+    sorted_values = tuple([settings[x] for x in required_keys])
+
+    METEO.config_db.con.execute(f"""
+        INSERT INTO {tile_type}_details ({columns_string}) VALUES ({placeholder_string});
+    """, sorted_values)
+
+    METEO.config_db.con.commit()
+    signal_send('info.main.add-tile.finished')
 
 
 # #### ---------------------------------
