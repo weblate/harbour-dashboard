@@ -267,27 +267,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Configure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Arrange tiles</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Manage tiles</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add a tile first</source>
+        <source>Pull down to manage tiles</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pull down to manage tiles</source>
+        <source>Add a tile</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

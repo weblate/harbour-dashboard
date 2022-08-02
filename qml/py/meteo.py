@@ -393,6 +393,39 @@ def get_tiles() -> List[Tuple[str, Dict[str, Any]]]:
     return model
 
 
+def remove_tile(tile_id) -> None:
+    """
+    Delete a tile from the database.
+    """
+    if not _check_init():
+        return
+
+    signal_send('info.main.remove-tile.started', tile_id)
+
+    tile_type = METEO.config_db.con.execute("""
+        SELECT tile_type from mainscreen_tiles WHERE tile_id = ? LIMIT 1;
+    """, (tile_id, )).fetchone()
+
+    if tile_type and tile_type['tile_type']:
+        tile_type = tile_type['tile_type']
+
+        if tile_type not in _KNOWN_TILE_TYPES:
+            signal_send('warning.main.remove-tile.unknown-tile-type', tile_type, tile_id)
+        else:
+            METEO.config_db.con.execute(f"""
+                DELETE FROM {tile_type}_details WHERE tile_id = ?;
+            """, (tile_id, ))
+    else:
+        signal_send('warning.main.remove-tile.missing-tile-type', tile_id)
+
+    METEO.config_db.con.execute("""
+        DELETE FROM mainscreen_tiles WHERE tile_id = ?;
+    """, (tile_id, ))
+
+    METEO.config_db.con.commit()
+    signal_send('info.main.remove-tile.finished', tile_id)
+
+
 def add_tile(tile_type: str, settings: dict) -> None:
     """
     Save a new tile for the main screen.
@@ -403,7 +436,7 @@ def add_tile(tile_type: str, settings: dict) -> None:
     if not _check_init():
         return
 
-    signal_send('info.main.add-tile.started')
+    signal_send('info.main.add-tile.started', tile_type, settings)
 
     if tile_type not in _KNOWN_TILE_TYPES:
         signal_send('warning.main.add-tile.unknown-tile-type', tile_type, settings)
@@ -447,7 +480,7 @@ def add_tile(tile_type: str, settings: dict) -> None:
     """, sorted_values)
 
     METEO.config_db.con.commit()
-    signal_send('info.main.add-tile.finished')
+    signal_send('info.main.add-tile.finished', tile_type, settings, tile_id, sequence)
 
 
 # #### ---------------------------------

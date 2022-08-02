@@ -267,28 +267,16 @@
         <translation>Wetterbericht</translation>
     </message>
     <message>
-        <source>Configure</source>
-        <translation>Einrichten</translation>
-    </message>
-    <message>
-        <source>Arrange tiles</source>
-        <translation>Kacheln anordnen</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation>Entfernen</translation>
-    </message>
-    <message>
         <source>Manage tiles</source>
         <translation>Kacheln verwalten</translation>
     </message>
     <message>
-        <source>Add a tile first</source>
-        <translation>Fügen Sie zuerst eine Kachel hinzu</translation>
-    </message>
-    <message>
         <source>Pull down to manage tiles</source>
         <translation>Herunterziehen, um Kacheln zu verwalten</translation>
+    </message>
+    <message>
+        <source>Add a tile</source>
+        <translation>Fügen Sie eine Kachel hinzu</translation>
     </message>
 </context>
 <context>

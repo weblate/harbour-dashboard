@@ -77,6 +77,12 @@ ApplicationWindow {
         })
     }
 
+    function removeTile(tile_id) {
+        py.call("meteo.remove_tile", [tile_id], function() {
+            console.log("tile removed:", tile_id)
+        })
+    }
+
     Python {
         id: py
         property bool ready: false

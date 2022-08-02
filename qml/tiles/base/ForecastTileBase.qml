@@ -20,6 +20,8 @@ TileBase {
     objectIndex: -1 // explicit binding to attached property <loader>.ObjectModel.index
     property ObjectModel tilesViewModel: null  // container holding tile instances
 
+    property int tile_id: -1  // database identifier
+
     // must be redefined by the tile implementation
     objectName: "ForecastTileBase"
 
@@ -53,9 +55,12 @@ TileBase {
 
     onRequestMove: {
         tilesViewModel.move(from, to)
+
+        // TODO actually save the new sequence to the database
     }
 
     onRemoved: {
         tilesViewModel.remove(index)
+        app.removeTile(tile_id)
     }
 }

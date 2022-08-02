@@ -67,7 +67,7 @@ Page {
 
         ViewPlaceholder {
             enabled: tilesModel.count <= 1 && !flow.editing && app.initReady >= 3
-            text: qsTr("Add a tile first")
+            text: qsTr("Add a tile")
             hintText: qsTr("Pull down to manage tiles")
         }
 
@@ -156,7 +156,10 @@ Page {
             function load(tile_type, settings) {
                 // TODO handle settings
                 // TODO handle tile type
+
+                defaultProperties['tile_id'] = settings['tile_id']
                 loader.setSource("../tiles/clock/Tile.qml", defaultProperties)
+                console.log("loading tile", tile_type, defaultProperties['tile_id'], JSON.stringify(settings))
             }
         }
     }
@@ -177,10 +180,10 @@ Page {
     ObjectModel {
         id: tilesModel
 
-        function addDebugTile(name, size) {
-            var item = tileComponent.createObject(tilesModel, {'objectName': name, 'size': size})
+        function loadTile(tile_type, settings) {
+            var item = tileComponent.createObject(tilesModel)
             tilesModel.insert(tilesModel.count-1, item)
-            item.load('clock', {})
+            item.load(tile_type, settings)
         }
 
         AddMoreTile {
@@ -191,25 +194,29 @@ Page {
             tilesViewModel: tilesModel
 
             onClicked: {
-                tilesModel.addDebugTile(String(tilesModel.count), 'small')
                 flickable.scrollToBottom()
 
-                app.addTile('clock', {
+                // TODO
+                // - select which tile type to add
+                // - configure the new tile
+                // - save the new tile with custom settings
+                // - ->>> important: get the new tile_id back from the database
+                // - add the tile to the view
+
+                // DEBUG
+                var type = 'clock'
+                var settings = {
                     'utcOffsetMinutes': 0,
                     'showLocalTime': 1,
                     'label': '',
                     'showNumbers': 1
-                })
+                }
+                tilesModel.loadTile(type, settings)
+                app.addTile(type, settings)
             }
         }
 
         Component.onCompleted: {
-//            addDebugTile('1', 'medium')
-//            addDebugTile('2', 'small')
-//            addDebugTile('3', 'small')
-//            addDebugTile('4', 'medium')
-//            addDebugTile('5', 'large')
-
             app.initReady += 1
         }
     }
@@ -241,8 +248,8 @@ Page {
 
         onTilesLoaded: {
             for (var i in tiles) {
-                console.log("- tile:", tiles[i].tile_type, JSON.stringify(tiles[i].settings))
-                tilesModel.addDebugTile(String(tilesModel.count), 'small')
+                console.log("- tile:", tiles[i].tile_id, tiles[i].tile_type, JSON.stringify(tiles[i].settings))
+                tilesModel.loadTile(tiles[i].tile_type, tiles[i].settings)
             }
 
             console.log("all tiles loaded")

@@ -226,15 +226,15 @@
     <name>ForecastTileBase</name>
     <message>
         <source>Configure</source>
-        <translation type="unfinished"></translation>
+        <translation>Configure</translation>
     </message>
     <message>
         <source>Arrange tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrange tiles</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished">Remove</translation>
+        <translation>Remove</translation>
     </message>
 </context>
 <context>
@@ -267,28 +267,16 @@
         <translation>Forecasts</translation>
     </message>
     <message>
-        <source>Configure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Arrange tiles</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation type="unfinished">Remove</translation>
-    </message>
-    <message>
         <source>Manage tiles</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add a tile first</source>
-        <translation type="unfinished"></translation>
+        <translation>Manage tiles</translation>
     </message>
     <message>
         <source>Pull down to manage tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Pull down to manage tiles</translation>
+    </message>
+    <message>
+        <source>Add a tile</source>
+        <translation>Add a tile</translation>
     </message>
 </context>
 <context>
