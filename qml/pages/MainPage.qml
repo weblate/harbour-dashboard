@@ -148,6 +148,13 @@ Page {
             asynchronous: false
             source: ""
 
+            onStatusChanged: {
+                if (status == Loader.Error) {
+                    setSource('../tiles/common/BrokenTile.qml', defaultProperties)
+                    // console.error("failed to show tile:", JSON.stringify(defaultProperties))
+                }
+            }
+
             property var defaultProperties: ({
                 'debug': Qt.binding(function(){ return root.debug }),
                 'bindEditingTarget': flow,

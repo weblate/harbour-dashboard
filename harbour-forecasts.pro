@@ -29,6 +29,8 @@ DISTFILES += \
     qml/tiles/base/private/TileBase.qml \
     qml/tiles/base/private/TileActionButton.qml \
     qml/tiles/common/AddMoreTile.qml \
+    qml/tiles/common/BrokenTile.qml \
+    qml/tiles/common/private/icon-l-warning.png \
     qml/tiles/spacer/Tile.qml \
     qml/tiles/clock/Tile.qml \
     qml/tiles/clock/private/AnalogClock.qml \

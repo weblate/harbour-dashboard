@@ -75,6 +75,13 @@
     </message>
 </context>
 <context>
+    <name>BrokenTile</name>
+    <message>
+        <source>Invalid tile: %1 (%2)</source>
+        <translation>Defekte Kachel: %1 (%2)</translation>
+    </message>
+</context>
+<context>
     <name>CoverPage</name>
     <message>
         <source>Forecasts</source>

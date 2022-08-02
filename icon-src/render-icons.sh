@@ -49,3 +49,11 @@ cITEMS=(
 cRESOLUTIONS=(350)
 cTARGETS=(../qml/tiles/clock/private)
 render_batch
+
+cNAME="common icons"
+cITEMS=(
+    icon-l-warning
+)
+cRESOLUTIONS=(168)
+cTARGETS=(../qml/tiles/common/private)
+render_batch
