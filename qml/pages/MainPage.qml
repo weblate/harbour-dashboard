@@ -157,13 +157,22 @@ Page {
                 'tilesViewModel': tilesModel
             })
 
-            function load(tile_type, settings) {
-                // TODO handle settings
-                // TODO handle tile type
-
+            function load(tile_type, size, settings) {
+                settings['tile_type'] = tile_type
                 defaultProperties['tile_id'] = settings['tile_id']
-                loader.setSource("../tiles/clock/Tile.qml", defaultProperties)
-                console.log("loading tile", tile_type, defaultProperties['tile_id'], JSON.stringify(settings))
+                defaultProperties['size'] = size
+                defaultProperties['settings'] = settings
+
+                var source = "../tiles/%1/Tile.qml"
+
+                if (settings.hasOwnProperty('provider_id')) {
+                    source = source.arg(tile_type + '/' + settings.provider_id)
+                } else {
+                    source = source.arg(tile_type)
+                }
+
+                loader.setSource(source, defaultProperties)
+                console.log("loading tile id", defaultProperties['tile_id'], "(", tile_type, ") using", source, JSON.stringify(settings))
             }
         }
     }
@@ -184,10 +193,10 @@ Page {
     ObjectModel {
         id: tilesModel
 
-        function loadTile(tile_type, settings) {
+        function loadTile(tile_type, size, settings) {
             var item = tileComponent.createObject(tilesModel)
             tilesModel.insert(tilesModel.count-1, item)
-            item.load(tile_type, settings)
+            item.load(tile_type, size, settings)
         }
 
         AddMoreTile {
@@ -209,14 +218,15 @@ Page {
 
                 // DEBUG
                 var type = 'clock'
+                var size = 'small'
                 var settings = {
                     'utcOffsetMinutes': 0,
                     'showLocalTime': 1,
                     'label': '',
                     'showNumbers': 1
                 }
-                tilesModel.loadTile(type, settings)
-                app.addTile(type, settings)
+                tilesModel.loadTile(type, size, settings)
+                app.addTile(type, size, settings)
             }
         }
 
@@ -238,7 +248,7 @@ Page {
         onTilesLoaded: {
             for (var i in tiles) {
                 console.log("- tile:", tiles[i].tile_id, tiles[i].tile_type, JSON.stringify(tiles[i].settings))
-                tilesModel.loadTile(tiles[i].tile_type, tiles[i].settings)
+                tilesModel.loadTile(tiles[i].tile_type, tiles[i].size, tiles[i].settings)
             }
 
             console.log("all tiles loaded")

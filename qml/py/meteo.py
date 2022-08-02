@@ -45,6 +45,17 @@ _KNOWN_TILE_TYPES = [
     'clock',
 ]
 
+_KNOWN_TILES_WITHOUT_DETAILS = [
+    # simple tile types that do *not* need a
+    # separate settings table ("<type>_details")
+]
+
+_KNOWN_TILE_SIZES = {
+    'small': 0,
+    'medium': 1,
+    'large': 2,
+}
+
 METEO = None
 INITIALIZED = False
 
@@ -85,6 +96,10 @@ class Meteo:
                 # - tile_id: unique identifier
                 # - sequence: sequence number of the tile (0, 1, 2, 3...)
                 #       Tiles will be shown in this order.
+                # - size: size of the tile
+                #       Must be one of 0=small, 1=medium, 2=large, as defined in
+                #       _KNOWN_TILE_SIZES. There are only 3 sizes of tiles but this
+                #       could change in the future.
                 # - tile_type: string identifier of the data type
                 #       Must be one of the strings defined in _KNOWN_TILE_TYPES.
                 #
@@ -96,6 +111,7 @@ class Meteo:
                     CREATE TABLE IF NOT EXISTS mainscreen_tiles(
                         tile_id INTEGER NOT NULL PRIMARY KEY,
                         sequence INTEGER NOT NULL UNIQUE,
+                        size INTEGER NOT NULL,
                         tile_type TEXT NOT NULL
                     );""")
 
@@ -370,21 +386,33 @@ def get_tiles() -> List[Tuple[str, Dict[str, Any]]]:
     model = []
 
     for row in rows:
-        entry = {
-            'tile_id': row['tile_id'],
-            'sequence': row['sequence'],
-            'tile_type': row['tile_type'],
-            'settings': {},
-        }
-
+        size = row['size']
         tile_type = row['tile_type']
         tile_id = row['tile_id']
 
-        if tile_type in _KNOWN_TILE_TYPES:
+        entry = {
+            'tile_id': tile_id,
+            'sequence': row['sequence'],
+            'size': '--- set below ---',
+            'tile_type': tile_type,
+            'settings': '--- set below ---',
+        }
+
+        if tile_type in _KNOWN_TILES_WITHOUT_DETAILS:
+            entry['settings'] = {'tile_id': tile_id, 'tile_type': tile_type, 'size': size}
+        elif tile_type in _KNOWN_TILE_TYPES:
             settings_row = METEO.config_db.con.execute(f"SELECT * FROM {tile_type}_details WHERE tile_id = ?", (tile_id, )).fetchone()
             entry['settings'] = dict(settings_row)
         else:
+            entry['settings'] = {'tile_id': tile_id, 'tile_type': tile_type, 'size': size}
             signal_send('warning.main.load-tiles.unknown-tile-type', tile_type, tile_id)
+
+        if size in _KNOWN_TILE_SIZES.values():
+            size = [k for k, v in _KNOWN_TILE_SIZES.items() if v == size][0]
+            entry['size'] = size
+        else:
+            entry['size'] = 'small'
+            signal_send('warning.main.load-tiles.unknown-size', size, tile_type, tile_id)
 
         model.append(entry)
 
@@ -393,11 +421,11 @@ def get_tiles() -> List[Tuple[str, Dict[str, Any]]]:
     return model
 
 
-def remove_tile(tile_id) -> None:
+def remove_tile(tile_id: int) -> None:
     """
     Delete a tile from the database.
     """
-    if not _check_init():
+    if not _check_init() or tile_id < 0:
         return
 
     signal_send('info.main.remove-tile.started', tile_id)
@@ -411,7 +439,7 @@ def remove_tile(tile_id) -> None:
 
         if tile_type not in _KNOWN_TILE_TYPES:
             signal_send('warning.main.remove-tile.unknown-tile-type', tile_type, tile_id)
-        else:
+        elif tile_type not in _KNOWN_TILES_WITHOUT_DETAILS:
             METEO.config_db.con.execute(f"""
                 DELETE FROM {tile_type}_details WHERE tile_id = ?;
             """, (tile_id, ))
@@ -426,12 +454,15 @@ def remove_tile(tile_id) -> None:
     signal_send('info.main.remove-tile.finished', tile_id)
 
 
-def add_tile(tile_type: str, settings: dict) -> None:
+def add_tile(tile_type: str, size: str, settings: dict) -> None:
     """
     Save a new tile for the main screen.
 
-    Takes the tile's type and its settings. Settings are specific to each tile
+    Takes the tile's type, its size, and its settings. Settings are specific to each tile
     type and are documented above (database schema).
+
+    The type must be one the items defined in _KNOWN_TILE_TYPES.
+    The size must be one of the keys defined in _KNOWN_TILE_SIZES.
     """
     if not _check_init():
         return
@@ -440,6 +471,12 @@ def add_tile(tile_type: str, settings: dict) -> None:
 
     if tile_type not in _KNOWN_TILE_TYPES:
         signal_send('warning.main.add-tile.unknown-tile-type', tile_type, settings)
+        signal_send('warning.main.add-tile.failed')
+        METEO.config_db.con.rollback()
+        return
+
+    if size not in _KNOWN_TILE_SIZES.keys():
+        signal_send('warning.main.add-tile.unknown-tile-size', size, tile_type, settings)
         signal_send('warning.main.add-tile.failed')
         METEO.config_db.con.rollback()
         return
@@ -455,18 +492,34 @@ def add_tile(tile_type: str, settings: dict) -> None:
     sequence = int(sequence['sequence']) + 1 if sequence else 0
 
     METEO.config_db.con.execute("""
-        INSERT INTO mainscreen_tiles (tile_id, sequence, tile_type) VALUES (?, ?, ?);
-    """, (tile_id, sequence, tile_type))
+        INSERT INTO mainscreen_tiles (tile_id, sequence, size, tile_type) VALUES (?, ?, ?, ?);
+    """, (tile_id, sequence, _KNOWN_TILE_SIZES[size], tile_type))
 
-    settings['tile_id'] = tile_id
-    required_keys = METEO.config_db.con.execute(f"SELECT * FROM {tile_type}_details LIMIT 0;")
-    required_keys = [column[0] for column in required_keys.description]
-    provided_keys = list(settings.keys())
+    if tile_type not in _KNOWN_TILES_WITHOUT_DETAILS:
+        settings['tile_id'] = tile_id
+        required_keys = METEO.config_db.con.execute(f"SELECT * FROM {tile_type}_details LIMIT 0;")
+        required_keys = [column[0] for column in required_keys.description]
 
-    if not all([x in provided_keys for x in required_keys]):
-        signal_send('warning.main.add-tile.settings-key-missing', tile_type, settings, required_keys)
-        signal_send('warning.main.add-tile.failed')
-        METEO.config_db.con.rollback()
+        provided_keys = list(settings.keys())
+
+        if not all([x in provided_keys for x in required_keys]):
+            signal_send('warning.main.add-tile.settings-key-missing', tile_type, settings, required_keys)
+            signal_send('warning.main.add-tile.failed')
+            METEO.config_db.con.rollback()
+            return
+
+        # TODO is this dangerous? Rationale: the names come directly from the
+        #      database so they should be safe to use.
+        columns_string = ', '.join(required_keys)
+        placeholder_string = ', '.join(['?'] * len(required_keys))
+        sorted_values = tuple([settings[x] for x in required_keys])
+
+        METEO.config_db.con.execute(f"""
+            INSERT INTO {tile_type}_details ({columns_string}) VALUES ({placeholder_string});
+        """, sorted_values)
+
+    METEO.config_db.con.commit()
+    signal_send('info.main.add-tile.finished', tile_type, settings, tile_id, sequence)
         return
 
     # TODO is this dangerous? Rationale: the names come directly from the

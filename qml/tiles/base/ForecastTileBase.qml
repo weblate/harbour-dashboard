@@ -19,6 +19,7 @@ TileBase {
     dragProxyTarget: null  // Image{} outside of the tile container used for showing preview while dragging
     objectIndex: -1 // explicit binding to attached property <loader>.ObjectModel.index
     property ObjectModel tilesViewModel: null  // container holding tile instances
+    property var settings: ({})  // implementation specific settings passed from/to the database
 
     property int tile_id: -1  // database identifier
 

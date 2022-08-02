@@ -71,9 +71,9 @@ ApplicationWindow {
         })
     }
 
-    function addTile(tile_type, settings) {
-        py.call("meteo.add_tile", [tile_type, settings], function() {
-            console.log("tile addded:", tile_type, JSON.stringify(settings))
+    function addTile(tile_type, size, settings) {
+        py.call("meteo.add_tile", [tile_type, size, settings], function() {
+            console.log("tile addded:", tile_type, ", size", size, JSON.stringify(settings))
         })
     }
 
