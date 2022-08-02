@@ -477,6 +477,13 @@
     </message>
 </context>
 <context>
+    <name>Tile</name>
+    <message>
+        <source>Placeholder</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>harbour-forecasts</name>
     <message>
         <source>d MMM yyyy &apos;(&apos;hh&apos;:&apos;mm&apos;)&apos;</source>

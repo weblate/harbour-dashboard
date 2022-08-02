@@ -40,6 +40,7 @@ _PROVIDERS_REGISTRY = [
 ]
 
 _KNOWN_TILE_TYPES = [
+    'spacer',
     'weather',
     'pollen',
     'clock',
@@ -48,6 +49,7 @@ _KNOWN_TILE_TYPES = [
 _KNOWN_TILES_WITHOUT_DETAILS = [
     # simple tile types that do *not* need a
     # separate settings table ("<type>_details")
+    'spacer',
 ]
 
 _KNOWN_TILE_SIZES = {
@@ -547,23 +549,6 @@ def resize_tile(tile_id: int, size: str) -> None:
     signal_send('info.main.resize-tile.finished', tile_id, size)
 
 
-
-# #### ---------------------------------
-# TODO vvvv not final API
-# #### ---------------------------------
-
-
-def get_active_locations():
-    return []
-
-
-def get_providers():
-    return []
-
-
-def search_locations(provider, query):
-    return []
-
 def move_tile(tile_id: int, from_index: int, to_index: int) -> None:
     """
     Update tile sequence.
@@ -624,6 +609,23 @@ def move_tile(tile_id: int, from_index: int, to_index: int) -> None:
 
     METEO.config_db.con.commit()
     signal_send('info.main.move-tile.finished', tile_id, from_index, to_index)
+
+
+# #### ---------------------------------
+# TODO vvvv not final API
+# #### ---------------------------------
+
+
+def get_active_locations():
+    return []
+
+
+def get_providers():
+    return []
+
+
+def search_locations(provider, query):
+    return []
 
 
 def activate_location(ident):
