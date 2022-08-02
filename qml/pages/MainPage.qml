@@ -20,8 +20,12 @@ Page {
     SilicaFlickable {
         id: flickable
         anchors.fill: parent
-        contentHeight: column.height
         flickableDirection: Flickable.VerticalFlick
+
+        // This makes sure that the flickable fills the whole page.
+        // That in turn ensures that a single MouseArea is enough to
+        // catch all click/press-and-hold events to cancel/start editing.
+        contentHeight: Math.max(column.height, root.height)
 
         pullDownMenu: PullDownMenu {
             flickable: flickable
@@ -55,8 +59,8 @@ Page {
         MouseArea {
             id: cancelEditArea
             anchors.fill: parent
-            enabled: flow.editing
-            onClicked: flow.cancelEdit()
+            onClicked: if (flow.editing) flow.cancelEdit()
+            onPressAndHold: if (!flow.editing) flow.edit()
 
             Rectangle {
                 visible: debug
@@ -218,21 +222,6 @@ Page {
 
         Component.onCompleted: {
             app.initReady += 1
-        }
-    }
-
-    MouseArea {
-        id: cancelEditAreaBelow
-        y: cancelEditArea.height
-        height: root.height - cancelEditArea.height
-        width: parent.width
-        enabled: flow.editing
-        onClicked: flow.cancelEdit()
-
-        Rectangle {
-            visible: debug
-            anchors.fill: parent
-            color: Theme.rgba("green", 0.3)
         }
     }
 
