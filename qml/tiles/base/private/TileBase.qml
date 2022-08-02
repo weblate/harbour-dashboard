@@ -41,8 +41,9 @@ ListItem {
 
     property bool allowResize: true
     property bool allowRemove: true
-    property bool allowMove: true // TODO add button
-    property bool allowConfig: true // TODO add button
+    property bool allowMove: true
+    property bool allowConfig: true
+    property bool showBackground: true
 
     property bool editOnPressAndHold: !showMenuOnPressAndHold
     showMenuOnPressAndHold: !!menu
@@ -162,6 +163,7 @@ ListItem {
         SilicaItem {
             id: background
             anchors.fill: parent
+            visible: showBackground
 
             SilicaItem {
                 anchors.fill: parent
