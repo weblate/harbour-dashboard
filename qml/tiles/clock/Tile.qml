@@ -14,8 +14,12 @@ ForecastTileBase {
     id: root
     objectName: "ClockTile"
 
+    // TODO implement using user defined settings
+    // TODO improve the layout...
+    // TODO define different layouts for different sizes
+
     size: "small"
-    allowResize: false  // not yet implemented
+    allowResize: true  // not yet implemented
     allowConfig: false  // not yet implemented
 
     AnalogClock {
@@ -26,23 +30,40 @@ ForecastTileBase {
             horizontalCenter: parent.horizontalCenter
             topMargin: Theme.paddingLarge
         }
-        height: width
-        width: Math.min(parent.height, parent.width) - 2 * Theme.paddingLarge
+        height: parent.height - Theme.paddingLarge - Theme.paddingLarge - label.height
+        width: height
 
         showLocalTime: true
         showNumbers: true
     }
 
     Label {
+        id: label
         width: parent.width
         wrapMode: Text.Wrap
-        text: clock.wallClock.time.toLocaleString(Qt.locale(), app.timeFormat)
+        text: !!settings['label'] ? settings.label : clock.wallClock.time.toLocaleString(Qt.locale(), app.timeFormat)
         font.pixelSize: Theme.fontSizeExtraLarge
         horizontalAlignment: Text.AlignHCenter
 
         anchors {
+            bottom: subLabel.top
+            bottomMargin: subLabel.visible ? -Theme.paddingMedium : -subLabel.height+Theme.paddingMedium
+        }
+    }
+
+    Label {
+        id: subLabel
+        visible: !!settings['label'] && settings['label'] !== ''
+        width: parent.width
+        wrapMode: Text.Wrap
+        text: visible ? clock.wallClock.time.toLocaleString(Qt.locale(), app.timeFormat) : ''
+        font.pixelSize: Theme.fontSizeMedium
+        horizontalAlignment: Text.AlignHCenter
+        color: highlighted ? palette.secondaryHighlightColor : palette.secondaryColor
+
+        anchors {
             bottom: parent.bottom
-            bottomMargin: Theme.paddingLarge
+            bottomMargin: Theme.paddingSmall
         }
     }
 }
