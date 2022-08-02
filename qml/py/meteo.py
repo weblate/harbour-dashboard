@@ -39,6 +39,12 @@ _PROVIDERS_REGISTRY = [
     'dwd',
 ]
 
+_KNOWN_TILE_TYPES = [
+    'weather',
+    'pollen',
+    'clock',
+]
+
 METEO = None
 INITIALIZED = False
 
@@ -80,10 +86,7 @@ class Meteo:
                 # - sequence: sequence number of the tile (0, 1, 2, 3...)
                 #       Tiles will be shown in this order.
                 # - tile_type: string identifier of the data type
-                #       Must be one of:
-                #       - weather
-                #       - pollen
-                #       - clock
+                #       Must be one of the strings defined in _KNOWN_TILE_TYPES.
                 #
                 #       The tile type defines which tile implementation will be loaded.
                 #       Tile implementations must handle missing capabilities / missing
@@ -377,7 +380,7 @@ def get_tiles() -> List[Tuple[str, Dict[str, Any]]]:
         tile_type = row['tile_type']
         tile_id = row['tile_id']
 
-        if tile_type in ['weather', 'pollen', 'clock']:
+        if tile_type in _KNOWN_TILE_TYPES:
             settings_row = METEO.config_db.con.execute(f"SELECT * FROM {tile_type}_details WHERE tile_id = ?", (tile_id, )).fetchone()
             entry['settings'] = dict(settings_row)
         else:
