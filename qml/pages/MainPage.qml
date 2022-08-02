@@ -64,7 +64,7 @@ Page {
         }
 
         ViewPlaceholder {
-            enabled: tilesModel.count <= 1 && !flow.editing
+            enabled: tilesModel.count <= 1 && !flow.editing && app.initReady >= 3
             text: qsTr("Add a tile first")
             hintText: qsTr("Pull down to manage tiles")
         }
@@ -237,7 +237,7 @@ Page {
 //            addDebugTile('4', 'medium')
 //            addDebugTile('5', 'large')
 
-            app.loadTiles()
+            app.initReady += 1
         }
     }
 
@@ -258,13 +258,22 @@ Page {
 
     Connections {
         target: app
+
+        onInitReadyChanged: {
+            if (app.initReady == 2) {
+                // both the backend and the main page are ready
+                app.loadTiles()
+            }
+        }
+
         onTilesLoaded: {
             for (var i in tiles) {
-                console.log("- tile:", tiles[i].tile_type, tiles[i].settings)
+                console.log("- tile:", tiles[i].tile_type, JSON.stringify(tiles[i].settings))
                 tilesModel.addDebugTile(String(tilesModel.count), 'small')
             }
 
             console.log("all tiles loaded")
+            initReady += 1
         }
     }
 }

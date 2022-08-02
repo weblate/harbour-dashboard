@@ -42,6 +42,10 @@ ApplicationWindow {
     property bool haveWallClock: wallClock != null
     property QtObject wallClock
 
+    // Track init status of the Python backend and the main page.
+    // When both components are ready, we should start loading data.
+    property int initReady: 0
+
     // MaintenanceOverlay {
     //     id: maintenanceOverlay
     //     text: qsTr("Database Maintenance")
@@ -57,8 +61,13 @@ ApplicationWindow {
     signal tilesLoaded(var tiles)
     function loadTiles() {
         py.call("meteo.get_tiles", [], function(tiles) {
-            console.log("loaded", tiles, "tiles from the backend")
-            tilesLoaded(tiles)
+            if (tiles.constructor === Array) {
+                console.log("loaded", tiles.length, "tiles from the backend")
+                tilesLoaded(tiles)
+            } else {
+                console.log("failed to load tiles, got:", tiles)
+                tilesLoaded([])
+            }
         })
     }
 
@@ -74,6 +83,7 @@ ApplicationWindow {
 
         onReceived: console.log(JSON.stringify(data))
         onError: console.error(traceback)
+        onReadyChanged: initReady += 1
 
         Component.onCompleted: {
             // Add the directory of this .qml file to the search path
