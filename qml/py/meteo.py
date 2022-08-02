@@ -125,7 +125,7 @@ class Meteo:
                 #       also might be a lot of duplication if the user has tiles for different
                 #       forecasts but for the same location.
                 self.cur.execute("""
-                    CREATE TABLE IF NOT EXISTS weather_forecast_details(
+                    CREATE TABLE IF NOT EXISTS weather_details(
                         tile_id INTEGER NOT NULL PRIMARY KEY,
                         location_id TEXT NOT NULL,
                         provider_id TEXT NOT NULL
@@ -134,7 +134,7 @@ class Meteo:
                 # Pollen forecast tile:
                 # cf. weather forecast documentation
                 self.cur.execute("""
-                    CREATE TABLE IF NOT EXISTS pollen_forecast_details(
+                    CREATE TABLE IF NOT EXISTS pollen_details(
                         tile_id INTEGER NOT NULL PRIMARY KEY,
                         location_id TEXT NOT NULL,
                         provider_id TEXT NOT NULL
@@ -152,7 +152,7 @@ class Meteo:
                 #             numbered clock face using arabic numbers. There should be
                 #             translated versions using different scripts.
                 self.cur.execute("""
-                    CREATE TABLE IF NOT EXISTS worldclock_details(
+                    CREATE TABLE IF NOT EXISTS clock_details(
                         tile_id INTEGER NOT NULL PRIMARY KEY,
                         utcOffsetMinutes INTEGER DEFAULT 0,
                         showLocalTime INTEGER DEFAULT 0,
