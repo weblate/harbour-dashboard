@@ -46,7 +46,7 @@ SilicaItem {
     HighlightImage {
         id: background
         anchors.fill: parent
-        source: "../images/clock-face-" + (showNumbers ? "num" : "plain") + ".png"
+        source: "clock-face-" + (showNumbers ? "num-arabic" : "plain") + ".png"
         color: highlighted ? Theme.highlightColor : Theme.primaryColor
         fillMode: Image.PreserveAspectFit
     }

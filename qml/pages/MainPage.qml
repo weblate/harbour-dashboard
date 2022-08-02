@@ -7,7 +7,9 @@
 import QtQuick 2.6
 import QtQml.Models 2.2
 import Sailfish.Silica 1.0
+
 import "../components"
+import "../tiles/common"
 
 Page {
     id: root
@@ -103,6 +105,24 @@ Page {
                 // There are different types of tiles: weather forecast, pollen forecast, dangers, etc.
                 // Providers can provide specialised versions of a certain type of tiles.
                 //
+                // Tile implementations are stored in the "tiles" directory:
+                //      qml/
+                //          tiles/
+                //              base/
+                //                  ForecastTileBase.qml        -- all tiles should derive from this component
+                //                  private/
+                //
+                //              <tile-type>/                    -- all tiles of type <tile-type>, e.g. "weather"
+                //                  private/
+                //                  optional: Tile.qml          -- provider-independent implementation of the tile
+                //                  optional: Settings.qml      -- provider-independent settings page for this tile
+                //
+                //                  <provider>/                 -- specific implementation of the tile for <provider>, e.g. "mch"
+                //                      private/
+                //                      Tile.qml                -- provider-dependent implementation of the tile,
+                //                                                 could be based on <tile-type>/Tile.qml
+                //                      Settings.qml            -- provider-specific settings page,
+                //                                                 could be based on <tile-type>/Settings.qml
 
                 property bool editing: false
 
@@ -119,37 +139,23 @@ Page {
     Component {
         id: tileComponent
 
-        Tile {
-            id: newTile
-            debug: root.debug
-            objectName: "new-tile"
-            bindEditingTarget: flow
-            dragProxyTarget: floatingTile
-            cancelEditOnClick: false
-            size: "small"
+        Loader {
+            id: loader
+            asynchronous: false
+            source: ""
 
-            menu: ContextMenu {
-                MenuItem {
-                    visible: newTile.allowConfig
-                    text: qsTr("Configure")
-                }
-                MenuItem {
-                    text: qsTr("Arrange tiles")
-                    onDelayedClick: flow.edit()
-                }
-                MenuItem {
-                    visible: newTile.allowRemove
-                    text: qsTr("Remove")
-                    onDelayedClick: newTile.requestRemoval()
-                }
-            }
+            property var defaultProperties: ({
+                'debug': Qt.binding(function(){ return root.debug }),
+                'bindEditingTarget': flow,
+                'bindEditingProperty': 'editing',
+                'dragProxyTarget': floatingTile,
+                'tilesViewModel': tilesModel
+            })
 
-            onRequestMove: {
-                tilesModel.move(from, to)
-            }
-
-            onRemoved: {
-                tilesModel.remove(index)
+            function load(tile_type, settings) {
+                // TODO handle settings
+                // TODO handle tile type
+                loader.setSource("../tiles/clock/Tile.qml", defaultProperties)
             }
         }
     }
@@ -171,58 +177,17 @@ Page {
         id: tilesModel
 
         function addDebugTile(name, size) {
-            tilesModel.insert(tilesModel.count-1, tileComponent.createObject(tilesModel, {'objectName': name, 'size': size}))
+            var item = tileComponent.createObject(tilesModel, {'objectName': name, 'size': size})
+            tilesModel.insert(tilesModel.count-1, item)
+            item.load('clock', {})
         }
 
-        Tile {
-            bindEditingTarget: flow
-            dragProxyTarget: floatingTile
-
-            AnalogClock {
-                id: clockView
-                anchors {
-                    top: parent.top
-                    horizontalCenter: parent.horizontalCenter
-                    topMargin: Theme.paddingLarge
-                }
-                height: width
-                width: Math.min(parent.height, parent.width) - 2 * Theme.paddingLarge
-                showLocalTime: true
-                showNumbers: true
-            }
-
-            Label {
-                width: parent.width
-                wrapMode: Text.Wrap
-                text: app.wallClock.time.toLocaleString(Qt.locale(), app.timeFormat)
-                font.pixelSize: Theme.fontSizeExtraLarge
-                horizontalAlignment: Text.AlignHCenter
-
-                anchors {
-                    bottom: parent.bottom
-                    bottomMargin: Theme.paddingLarge
-                }
-            }
-        }
-
-        Tile {
-            visible: flow.editing
+        AddMoreTile {
+            visible: editing
             debug: root.debug
-            objectName: "addTile"
-            size: "small"
             bindEditingTarget: flow
-            editOnPressAndHold: false
-            cancelEditOnClick: false
-
-            allowResize: false
-            allowRemove: false
-            allowMove: false
-            allowConfig: false
-
-            HighlightImage {
-                anchors.centerIn: parent
-                source: "image://theme/icon-l-add"
-            }
+            dragProxyTarget: null
+            tilesViewModel: tilesModel
 
             onClicked: {
                 tilesModel.addDebugTile(String(tilesModel.count), 'small')

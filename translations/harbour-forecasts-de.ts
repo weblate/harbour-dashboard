@@ -223,6 +223,21 @@
     </message>
 </context>
 <context>
+    <name>ForecastTileBase</name>
+    <message>
+        <source>Configure</source>
+        <translation>Einrichten</translation>
+    </message>
+    <message>
+        <source>Arrange tiles</source>
+        <translation>Kacheln anordnen</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>Entfernen</translation>
+    </message>
+</context>
+<context>
     <name>LocationSearchPage</name>
     <message>
         <source>Add Location</source>
@@ -269,11 +284,11 @@
     </message>
     <message>
         <source>Add a tile first</source>
-        <translation type="unfinished"></translation>
+        <translation>Fügen Sie zuerst eine Kachel hinzu</translation>
     </message>
     <message>
         <source>Pull down to manage tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Herunterziehen, um Kacheln zu verwalten</translation>
     </message>
 </context>
 <context>

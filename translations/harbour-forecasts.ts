@@ -223,6 +223,21 @@
     </message>
 </context>
 <context>
+    <name>ForecastTileBase</name>
+    <message>
+        <source>Configure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Arrange tiles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LocationSearchPage</name>
     <message>
         <source>Add Location</source>

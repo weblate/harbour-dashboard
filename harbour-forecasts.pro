@@ -21,26 +21,49 @@ CONFIG += sailfishapp
 SOURCES += src/harbour-forecasts.cpp
 
 DISTFILES += \
-    qml/components/AnalogClock.qml \
-    qml/components/TileActionButton.qml \
+    qml/harbour-forecasts.qml \
+    qml/pages/MainPage.qml \
+    qml/pages/AboutPage.qml \
+    \
+    qml/tiles/base/ForecastTileBase.qml \
+    qml/tiles/base/private/TileBase.qml \
+    qml/tiles/base/private/TileActionButton.qml \
+    qml/tiles/common/AddMoreTile.qml \
+    qml/tiles/clock/Tile.qml \
+    qml/tiles/clock/private/AnalogClock.qml \
+    qml/tiles/clock/private/clock-face-num-arabic.png \
+    qml/tiles/clock/private/clock-face-num-roman.png \
+    qml/tiles/clock/private/clock-face-plain.png \
+    \
+    qml/py/meteo.py \
+    qml/py/meteopy/util.py \
+    qml/py/meteopy/providers/provider_base.py \
+    qml/py/meteopy/providers/meteoswiss.py \
+    qml/py/meteopy/providers/yrno.py \
+    \
+    images/harbour-forecasts.png \
+    \
+    harbour-forecasts.desktop \
+    rpm/harbour-forecasts.changes.in \
+    rpm/harbour-forecasts.changes.run.in \
+    rpm/harbour-forecasts.spec \
+    rpm/harbour-forecasts.yaml \
+    translations/*.ts \
+    \
     qml/qchart/LICENSE.md \
     qml/qchart/QChart.js \
     qml/qchart/QChart.qml \
+    \
     qml/js/*.js \
-    qml/harbour-forecasts.qml \
+    \
     qml/cover/CoverPage.qml \
     qml/cover/cover.png \
     qml/pages/ForecastPage.qml \
     qml/pages/OverviewPage.qml \
     qml/pages/TablePage.qml \
     qml/pages/components/*.qml \
-    rpm/harbour-forecasts.changes.in \
-    rpm/harbour-forecasts.changes.run.in \
-    rpm/harbour-forecasts.spec \
-    rpm/harbour-forecasts.yaml \
-    translations/*.ts \
     weather-icons/*.svg \
-    harbour-forecasts.desktop
+
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
 
@@ -58,6 +81,14 @@ SOURCES += \
     qml/*.qml \
     qml/cover/*.qml \
     qml/pages/*.qml \
+    qml/tiles/*.qml \
+    qml/tiles/base/*.qml \
+    qml/tiles/base/private/*.qml \
+    qml/tiles/clock/*.qml \
+    qml/tiles/clock/private/*.qml \
+    qml/tiles/weather/*.qml \
+    qml/tiles/weather/mch/*.qml \
+    qml/tiles/weather/mch/private/*.qml \
     qml/pages/components/*.qml \
     qml/js/*.js
 }

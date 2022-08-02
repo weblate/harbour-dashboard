@@ -41,7 +41,11 @@ cTARGETS=(../qml/images)
 render_batch
 
 cNAME="clock faces"
-cITEMS=(clock-face-num clock-face-plain)
+cITEMS=(
+    clock-face-num-arabic
+    clock-face-num-roman
+    clock-face-plain
+)
 cRESOLUTIONS=(350)
-cTARGETS=(../qml/images)
+cTARGETS=(../qml/tiles/clock/private)
 render_batch

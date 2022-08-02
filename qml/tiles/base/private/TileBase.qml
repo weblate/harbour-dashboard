@@ -7,7 +7,6 @@
 import QtQuick 2.6
 import QtQml.Models 2.2
 import Sailfish.Silica 1.0
-import "../components"
 
 ListItem {
     id: root
