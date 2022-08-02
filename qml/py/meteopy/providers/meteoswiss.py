@@ -30,7 +30,7 @@ class _MeteoDb(DatabaseBase):
     def _setup(self):
         if not self._db_path.exists():
             # download locations database if it does not exists
-            self._signal_send('warning.providers.local-data.database-download-started', self._db_path)
+            self._signal_send('info.providers.local-data.database-download-started', self._db_path)
 
             try:
                 r = requests.get(self.URL_DB, headers=HEADERS, timeout=1)
@@ -52,7 +52,7 @@ class _MeteoDb(DatabaseBase):
                 self._signal_send('warning.providers.local-data.database-download-failed', self._db_path, e)
                 return
 
-            self._signal_send('warning.providers.local-data.database-download-finished', self._db_path)
+            self._signal_send('info.providers.local-data.database-download-finished', self._db_path)
 
         if self._db_path.exists() and not self._db_path.is_file():
             self._signal_send('warning.providers.local-data.database-broken', self._db_path)
