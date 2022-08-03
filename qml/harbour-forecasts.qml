@@ -58,7 +58,16 @@ ApplicationWindow {
     //     hintText: qsTr("This app is currently unusable, due to a change at the data provider's side.")
     // }
 
+    // -------------------------------------------------------------------------
+    // BACKEND/DATABASE STATUS SIGNALS
+
     signal tilesLoaded(var tiles)
+    signal tileAdded(var tile_type, var size, var settings, var tile_id, var sequence)
+
+
+    // -------------------------------------------------------------------------
+    // BACKEND/DATABASE INTERACTION FUNCTIONS
+
     function loadTiles() {
         py.call("meteo.get_tiles", [], function(tiles) {
             if (tiles.constructor === Array) {
@@ -95,6 +104,10 @@ ApplicationWindow {
         })
     }
 
+
+    // -------------------------------------------------------------------------
+    // BRIDGE TO THE BACKEND
+
     Python {
         id: py
         property bool ready: false
@@ -104,6 +117,11 @@ ApplicationWindow {
         onReadyChanged: initReady += 1
 
         Component.onCompleted: {
+            // Define signal callbacks
+            setHandler('info.main.add-tile.finished', function(tile_type, size, settings, tile_id, sequence){
+                tileAdded(tile_type, size, settings, tile_id, sequence)
+            })
+
             // Add the directory of this .qml file to the search path
             addImportPath(Qt.resolvedUrl('./py'))
             importModule("meteo", function() {
@@ -126,6 +144,10 @@ ApplicationWindow {
             })
         }
     }
+
+
+    // -------------------------------------------------------------------------
+    // MAIN APP SETUP
 
     Component.onCompleted: {
         // Avoid hard dependency on Nemo.Time and load it in a complicated

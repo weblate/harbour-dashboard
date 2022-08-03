@@ -486,16 +486,16 @@ def add_tile(tile_type: str, size: str, settings: dict) -> None:
     if not _check_init():
         return
 
-    signal_send('info.main.add-tile.started', tile_type, settings)
+    signal_send('info.main.add-tile.started', tile_type, size, settings)
 
     if tile_type not in _KNOWN_TILE_TYPES:
-        signal_send('warning.main.add-tile.unknown-tile-type', tile_type, settings)
+        signal_send('warning.main.add-tile.unknown-tile-type', tile_type, size, settings)
         signal_send('warning.main.add-tile.failed')
         METEO.config_db.con.rollback()
         return
 
     if size not in _KNOWN_TILE_SIZES.keys():
-        signal_send('warning.main.add-tile.unknown-tile-size', size, tile_type, settings)
+        signal_send('warning.main.add-tile.unknown-tile-size', tile_type, size, settings)
         signal_send('warning.main.add-tile.failed')
         METEO.config_db.con.rollback()
         return
@@ -514,15 +514,17 @@ def add_tile(tile_type: str, size: str, settings: dict) -> None:
         INSERT INTO mainscreen_tiles (tile_id, sequence, size, tile_type) VALUES (?, ?, ?, ?);
     """, (tile_id, sequence, _KNOWN_TILE_SIZES[size], tile_type))
 
+    # the settings dict must always contain the tile ID
+    settings['tile_id'] = tile_id
+
     if tile_type not in _KNOWN_TILES_WITHOUT_DETAILS:
-        settings['tile_id'] = tile_id
         required_keys = METEO.config_db.con.execute(f"SELECT * FROM {tile_type}_details LIMIT 0;")
         required_keys = [column[0] for column in required_keys.description]
 
         provided_keys = list(settings.keys())
 
         if not all([x in provided_keys for x in required_keys]):
-            signal_send('warning.main.add-tile.settings-key-missing', tile_type, settings, required_keys)
+            signal_send('warning.main.add-tile.settings-key-missing', tile_type, size, settings, required_keys)
             signal_send('warning.main.add-tile.failed')
             METEO.config_db.con.rollback()
             return
@@ -538,7 +540,7 @@ def add_tile(tile_type: str, size: str, settings: dict) -> None:
         """, sorted_values)
 
     METEO.config_db.con.commit()
-    signal_send('info.main.add-tile.finished', tile_type, settings, tile_id, sequence)
+    signal_send('info.main.add-tile.finished', tile_type, size, settings, tile_id, sequence)
 
 
 def resize_tile(tile_id: int, size: str) -> None:

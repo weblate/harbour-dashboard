@@ -206,6 +206,12 @@ Page {
             item.load(tile_type, size, settings)
         }
 
+        function insertTile(tile_type, size, settings, index) {
+            var item = tileComponent.createObject(tilesModel)
+            tilesModel.insert(index, item)
+            item.load(tile_type, size, settings)
+        }
+
         AddMoreTile {
             visible: editing
             debug: root.debug
@@ -220,8 +226,8 @@ Page {
                 // - select which tile type to add
                 // - configure the new tile
                 // - save the new tile with custom settings
-                // - ->>> important: get the new tile_id back from the database
-                // - add the tile to the view
+                // x ->>> important: get the new tile_id back from the database
+                // x add the tile to the view
 
                 // DEBUG
                 var type = 'clock'
@@ -232,7 +238,9 @@ Page {
                     'label': '',
                     'showNumbers': 1
                 }
-                tilesModel.loadTile(type, size, settings)
+
+                // Save the tile and wait for confirmation.
+                // The tile will be added to the view in the handler for app.tileAdded(...).
                 app.addTile(type, size, settings)
             }
         }
@@ -260,6 +268,12 @@ Page {
 
             console.log("all tiles loaded")
             initReady += 1
+        }
+
+        onTileAdded: {
+            console.log("new tile notification received:", tile_id, tile_type, size, sequence, JSON.stringify(settings))
+            // tile_type, size, settings, tile_id, sequence
+            tilesModel.insertTile(tile_type, size, settings, sequence)
         }
     }
 }
