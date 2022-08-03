@@ -541,7 +541,7 @@ def resize_tile(tile_id: int, size: str) -> None:
         METEO.config_db.con.rollback()
         return
 
-    METEO.config_db.con.execute(f"""
+    METEO.config_db.con.execute("""
         UPDATE mainscreen_tiles SET size = ? WHERE tile_id = ?;
     """, (_KNOWN_TILE_SIZES[size], tile_id))
 
@@ -584,9 +584,9 @@ def move_tile(tile_id: int, from_index: int, to_index: int) -> None:
         from_index = old_sequence.index(tile_id)
 
     if to_index < from_index:
-        new_sequence = old_sequence[:to_index] + [tile_id] + old_sequence[to_index:from_index] + old_sequence[from_index+1:]
+        new_sequence = old_sequence[:to_index] + [tile_id] + old_sequence[to_index:from_index] + old_sequence[from_index + 1:]
     elif from_index < to_index:
-        new_sequence = old_sequence[:from_index] + old_sequence[from_index+1:to_index] + [tile_id] + old_sequence[to_index:]
+        new_sequence = old_sequence[:from_index] + old_sequence[from_index + 1:to_index] + [tile_id] + old_sequence[to_index:]
     else:
         new_sequence = old_sequence  # nothing to do
 
@@ -594,14 +594,14 @@ def move_tile(tile_id: int, from_index: int, to_index: int) -> None:
     # on the sequence column while moving.
 
     for i, tile in enumerate(old_sequence):
-        METEO.config_db.con.execute(f"""
+        METEO.config_db.con.execute("""
             UPDATE mainscreen_tiles SET sequence = ? WHERE tile_id = ?;
         """, (i + old_count + 1, tile))
 
-        signal_send('MOVE', tile, i, i+old_count+1)
+        signal_send('MOVE', tile, i, i + old_count + 1)
 
     for i, tile in enumerate(new_sequence):
-        METEO.config_db.con.execute(f"""
+        METEO.config_db.con.execute("""
             UPDATE mainscreen_tiles SET sequence = ? WHERE tile_id = ?;
         """, (i, tile))
 
@@ -616,10 +616,6 @@ def move_tile(tile_id: int, from_index: int, to_index: int) -> None:
 # #### ---------------------------------
 
 
-def get_active_locations():
-    return []
-
-
 def get_providers():
     return []
 
@@ -627,17 +623,6 @@ def get_providers():
 def search_locations(provider, query):
     return []
 
-
-def activate_location(ident):
-    pass
-
-
-def deactivate_location(ident):
-    pass
-
-
-def move_location(ident, direction):
-    pass  # should be stored in dconf from QML
 
 # #### ---------------------------------
 # TODO ^^^^ not final API
