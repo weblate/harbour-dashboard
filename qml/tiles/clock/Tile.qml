@@ -16,7 +16,6 @@ ForecastTileBase {
 
     // TODO improve the layout...
     // TODO define different layouts for different sizes
-    // TODO show converted time in labels
 
     size: "small"
     allowResize: true  // not yet implemented
@@ -35,7 +34,7 @@ ForecastTileBase {
 
         timeFormat: settings['time_format']
         timezone: settings['timezone']
-        utcOffsetMinutes: settings['utc_offset_minutes']
+        utcOffsetSeconds: settings['utc_offset_seconds']
         clockFace: settings['clock_face']
     }
 
@@ -43,8 +42,7 @@ ForecastTileBase {
         id: label
         width: parent.width
         wrapMode: Text.Wrap
-        // TODO show converted time
-        text: !!settings['label'] ? settings.label : clock.wallClock.time.toLocaleString(Qt.locale(), app.timeFormat)
+        text: !!settings['label'] ? settings.label : clock.convertedTime.toLocaleString(Qt.locale(), app.timeFormat)
         font.pixelSize: Theme.fontSizeExtraLarge
         horizontalAlignment: Text.AlignHCenter
 
@@ -59,8 +57,7 @@ ForecastTileBase {
         visible: !!settings['label'] && settings['label'] !== ''
         width: parent.width
         wrapMode: Text.Wrap
-        // TODO show converted time
-        text: visible ? clock.wallClock.time.toLocaleString(Qt.locale(), app.timeFormat) : ''
+        text: visible ? clock.convertedTime.toLocaleString(Qt.locale(), app.timeFormat) : ''
         font.pixelSize: Theme.fontSizeMedium
         horizontalAlignment: Text.AlignHCenter
         color: highlighted ? palette.secondaryHighlightColor : palette.secondaryColor

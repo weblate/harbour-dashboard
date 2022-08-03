@@ -168,7 +168,7 @@ class Meteo:
                 #       1. local: shows the time in the system-defined timezone
                 #       2. offset: shows the time shifted by a specific amount of minutes from UTC
                 #       3. timezone: shows the time in a specific timezone
-                # - utc_offset_minutes: difference to UTC for this clock
+                # - utc_offset_seconds: difference to UTC for this clock
                 #       Only used if time_format == offset.
                 #       Negative means west of UTC, positive means east of UTC.
                 # - timezone: timezone name
@@ -183,7 +183,7 @@ class Meteo:
                         tile_id INTEGER NOT NULL PRIMARY KEY,
                         time_format TEXT NOT NULL,
                         timezone TEXT DEFAULT "",
-                        utc_offset_minutes INTEGER DEFAULT 0,
+                        utc_offset_seconds INTEGER DEFAULT 0,
                         label TEXT DEFAULT "",
                         clock_face TEXT DEFAULT "plain"
                     );""")

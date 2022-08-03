@@ -41,7 +41,7 @@ ForecastTileBase {
         var size = 'small'
         var settings = {
             'time_format': 'local',
-            'utc_offset_minutes': 0,
+            'utc_offset_seconds': 0,
             'timezone': '',
             'label': '',
             'clock_face': 'arabic'
