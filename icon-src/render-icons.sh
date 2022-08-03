@@ -42,8 +42,8 @@ render_batch
 
 cNAME="tiles: clock faces"
 cITEMS=(
-    clock-face-num-arabic
-    clock-face-num-roman
+    clock-face-arabic
+    clock-face-roman
     clock-face-plain
 )
 cRESOLUTIONS=(350)

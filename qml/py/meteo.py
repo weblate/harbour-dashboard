@@ -163,22 +163,29 @@ class Meteo:
 
                 # World clock tile:
                 # - tile_id: see above
-                # - utcOffsetMinutes: difference to UTC for this clock
+                # - time_format: how to show the time
+                #       A clock can be configured with three mutually exclusive settings:
+                #       1. local: shows the time in the system-defined timezone
+                #       2. offset: shows the time shifted by a specific amount of minutes from UTC
+                #       3. timezone: shows the time in a specific timezone
+                # - utc_offset_minutes: difference to UTC for this clock
+                #       Only used if time_format == offset.
                 #       Negative means west of UTC, positive means east of UTC.
-                # - showLocalTime: (bool) whether this clock shows global time or local time
-                #       If showLocalTime == 1, the value set in utcOffsetMinutes is ignored.
+                # - timezone: timezone name
+                #       Only used if time_format == timezone.
                 # - label: user-defined name of this clock, could e.g. be a city or a timezone
-                # - showNumbers: (bool) whether to show numbers on the clock face
-                #       TODO: support translated clock faces. Currently, there is only one
-                #             numbered clock face using arabic numbers. There should be
-                #             translated versions using different scripts.
+                # - clock_face: which clock face style to use
+                #       There are different clock faces with numbers in different scripts.
+                #       If the clock face graphic for a certain style is missing, the
+                #       clock will show the plain clock face without numbers.
                 self.cur.execute("""
                     CREATE TABLE IF NOT EXISTS clock_details(
                         tile_id INTEGER NOT NULL PRIMARY KEY,
-                        utcOffsetMinutes INTEGER DEFAULT 0,
-                        showLocalTime INTEGER DEFAULT 0,
+                        time_format TEXT NOT NULL,
+                        timezone TEXT DEFAULT "",
+                        utc_offset_minutes INTEGER DEFAULT 0,
                         label TEXT DEFAULT "",
-                        showNumbers INTEGER DEFAULT 0
+                        clock_face TEXT DEFAULT "plain"
                     );""")
                 return '1'
             elif from_version == '1':

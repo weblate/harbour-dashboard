@@ -16,14 +16,18 @@ SilicaItem {
     readonly property bool haveWallClock: wallClock != null
     property var wallClock: null
 
-    property bool showNumbers: false
-    property bool showLocalTime: false
+    property string clockFace: "plain"
+    property string timeFormat: "local"
+    property string timezone: ""
     property int utcOffsetMinutes: 0
 
     function _convertedTime(time) {
-        if (showLocalTime) {
+        if (timeFormat == "local") {
             return [time.getHours(), time.getMinutes()]
-        } else {
+        } else if (timeFormat == "offset") {
+            return [time.getUTCHours() + Math.floor(utcOffsetMinutes / 60), time.getUTCMinutes() + (utcOffsetMinutes % 60)]
+        } else if (timeFormat == "timezone") {
+            // TODO implement
             return [time.getUTCHours() + Math.floor(utcOffsetMinutes / 60), time.getUTCMinutes() + (utcOffsetMinutes % 60)]
         }
     }
@@ -46,9 +50,15 @@ SilicaItem {
     HighlightImage {
         id: background
         anchors.fill: parent
-        source: "clock-face-" + (showNumbers ? "num-arabic" : "plain") + ".png"
+        source: "clock-face-" + clockFace + ".png"
         color: highlighted ? Theme.highlightColor : Theme.primaryColor
         fillMode: Image.PreserveAspectFit
+
+        onStatusChanged: {
+            if (status == Image.Error && source != "clock-face-plain.png") {
+                source = "clock-face-plain.png"
+            }
+        }
     }
 
     Rectangle {
