@@ -16,7 +16,7 @@ ListItem {
     _backgroundColor: "transparent"
     contentHeight: 0
     opacity: hidden ? 0.0 : 1.0
-    highlighted: (down || menuOpen) && !editing
+    highlighted: (down || menuOpen) && (!editing || enabledWhileEditing)
 
     property int objectIndex: -1
     property int _dragStartIndex: -1
@@ -45,6 +45,7 @@ ListItem {
     property bool allowMove: true
     property bool allowConfig: true
     property bool showBackground: true
+    property bool enabledWhileEditing: false
 
     property bool editOnPressAndHold: !openMenuOnPressAndHold
     openMenuOnPressAndHold: !!menu && !editing
@@ -149,7 +150,7 @@ ListItem {
         id: contentItem
         anchors.fill: parent
         enabled: !editing
-        opacity: (!editing || (editing && (moveButton.held || root.down))) ? 1.0 : Theme.opacityFaint
+        opacity: ((!editing || enabledWhileEditing) || (editing && (moveButton.held || root.down))) ? 1.0 : Theme.opacityFaint
         Behavior on opacity { FadeAnimator {} }
 
         transform: Scale {

@@ -21,6 +21,7 @@ ForecastTileBase {
 
     editOnPressAndHold: false
     cancelEditOnClick: false
+    enabledWhileEditing: true
 
     HighlightImage {
         anchors.centerIn: parent
