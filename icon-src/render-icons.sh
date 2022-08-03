@@ -22,25 +22,25 @@ for i in raw/*.svg; do
     fi
 done
 
-cNAME="app icon"
+cNAME="app: app icon"
 cITEMS=(harbour-forecasts)
 cRESOLUTIONS=(86 108 128 172)
 cTARGETS=(../icons/RESXxRESY)
 render_batch
 
-cNAME="app details icon"
+cNAME="app: details icon"
 cITEMS=(harbour-forecasts)
 cRESOLUTIONS=(256)
 cTARGETS=(../qml/images)
 render_batch
 
-cNAME="cover background"
+cNAME="cover: background"
 cITEMS=(cover-bg)
 cRESOLUTIONS=(460x736)
 cTARGETS=(../qml/images)
 render_batch
 
-cNAME="clock faces"
+cNAME="tiles: clock faces"
 cITEMS=(
     clock-face-num-arabic
     clock-face-num-roman
@@ -50,10 +50,26 @@ cRESOLUTIONS=(350)
 cTARGETS=(../qml/tiles/clock/private)
 render_batch
 
-cNAME="common icons"
+cNAME="tiles: common icons"
 cITEMS=(
     icon-l-warning
 )
 cRESOLUTIONS=(168)
 cTARGETS=(../qml/tiles/common/private)
+render_batch
+
+cNAME="tiles: common icons"
+cITEMS=(
+    icon-l-warning
+)
+cRESOLUTIONS=(168)
+cTARGETS=(../qml/tiles/common/private)
+render_batch
+
+cNAME="tiles: base icons"
+cITEMS=(
+    icon-s-drop
+)
+cRESOLUTIONS=(56)
+cTARGETS=(../qml/tiles/base/private)
 render_batch

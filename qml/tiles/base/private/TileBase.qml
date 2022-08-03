@@ -368,7 +368,86 @@ ListItem {
               && bindEditingTarget.hasOwnProperty(bindEditingProperty)
     }
 
+    Item {
+        id: dropHint
+        visible: false
+        anchors {
+            rightMargin: -Theme.paddingSmall
+            right: parent.left
+            top: parent.top
+            bottom: parent.bottom
+        }
+        width: Theme.paddingSmall
+
+        Rectangle {
+            anchors {
+                top: parent.top
+                bottom: dropIcon.top
+                bottomMargin: Theme.paddingSmall
+                horizontalCenter: parent.horizontalCenter
+            }
+            height: parent.height / 2 - dropIcon.height
+            radius: 6
+            width: Theme.paddingSmall * 0.5
+            color: palette.primaryColor
+        }
+
+        Icon {
+            id: dropIcon
+            anchors {
+                verticalCenter: parent.verticalCenter
+                horizontalCenter: parent.horizontalCenter
+            }
+            source: "icon-s-drop.png"
+        }
+
+        Rectangle {
+            anchors {
+                top: dropIcon.bottom
+                topMargin: Theme.paddingSmall
+                bottom: parent.bottom
+                horizontalCenter: parent.horizontalCenter
+            }
+            height: parent.height / 2 - dropIcon.height
+            radius: 6
+            width: Theme.paddingSmall * 0.5
+            color: palette.primaryColor
+        }
+
+        states: [
+            State {
+                name: "showLeft"
+                when: leftDropArea.containsDrag && !moveButton.held
+                PropertyChanges {
+                    target: dropHint
+                    visible: true
+                }
+            },
+            State {
+                name: "showRight"
+                when: rightDropArea.containsDrag && !moveButton.held
+                PropertyChanges {
+                    target: dropHint
+                    visible: true
+                    anchors {
+                        rightMargin: 0
+                        leftMargin: -Theme.paddingSmall
+                    }
+                }
+                AnchorChanges {
+                    target: dropHint
+                    anchors {
+                        right: undefined
+                        left: parent.right
+                    }
+                }
+            }
+
+        ]
+    }
+
     DropArea {
+        id: leftDropArea
         enabled: allowMove
 
         anchors {
@@ -378,46 +457,19 @@ ListItem {
 
         width: parent.width / 2
         onEntered: drag.source._dragLastHoverIndex = objectIndex
-
-        Rectangle {
-            id: leftDropHighlight
-            anchors.fill: parent
-            anchors.margins: Theme.paddingMedium
-            radius: 6
-            visible: parent.containsDrag && !moveButton.held
-            color: Theme.rgba(Theme.highlightBackgroundColor, Theme.highlightBackgroundOpacity)
-        }
-
-        OpacityRampEffect{
-            sourceItem: leftDropHighlight
-            direction: OpacityRamp.LeftToRight
-        }
     }
 
     DropArea {
+        id: rightDropArea
         enabled: allowMove
 
         anchors {
             right: parent.right
             top: parent.top; bottom: parent.bottom
         }
-        onContainsDragChanged: console.log(containsDrag)
+
         width: parent.width / 2
         onEntered: drag.source._dragLastHoverIndex = objectIndex + 1
-
-        Rectangle {
-            id: rightDropHighlight
-            anchors.fill: parent
-            anchors.margins: Theme.paddingMedium
-            radius: 6
-            visible: parent.containsDrag && !moveButton.held
-            color: Theme.rgba(Theme.highlightBackgroundColor, Theme.highlightBackgroundOpacity)
-        }
-
-        OpacityRampEffect{
-            sourceItem: rightDropHighlight
-            direction: OpacityRamp.RightToLeft
-        }
     }
 
     onClicked: {

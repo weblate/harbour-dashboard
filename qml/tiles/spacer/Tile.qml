@@ -19,10 +19,11 @@ ForecastTileBase {
     allowMove: true
     allowConfig: false
 
-    editOnPressAndHold: false
+    editOnPressAndHold: true
     cancelEditOnClick: false
 
     showBackground: true
+    menu: null
 
     Label {
         visible: editing
