@@ -250,6 +250,14 @@ class Meteo:
         self._providers: Dict[str, provider_base.Provider] = {}
         self._broken_providers: Dict[str, provider_base.Provider] = {}
 
+        # TODO test if this actually works - it probably makes it impossible to
+        #      complete any transaction because we always re-open the database
+        #
+        # Set this to True while working with QmlLive.
+        # The sqlite driver does not like multithreading and databases
+        # cannot be used when they are created in a different thread.
+        self.debug_reinit_db = False
+
         for k, v in {'data': self._data_path, 'cache': self._cache_path, 'config': self._config_path}.items():
             try:
                 log(f"preparing local {k} path in '{v}'")
@@ -270,14 +278,23 @@ class Meteo:
 
     @property
     def data_db(self):
+        if self.debug_reinit_db:
+            self._data_db = self.DataDb(self._data_path, 'meteo_data', signal_send, log)
+
         return self._data_db
 
     @property
     def cache_db(self):
+        if self.debug_reinit_db:
+            self._cache_db = self.CacheDb(self._cache_path, 'meteo_cache', signal_send, log)
+
         return self._cache_db
 
     @property
     def config_db(self):
+        if self.debug_reinit_db:
+            self._config_db = self.ConfigDb(self._config_path, 'meteo_config', signal_send, log)
+
         return self._config_db
 
     def refresh(self, provider: str, ident: str, force: bool) -> None:
