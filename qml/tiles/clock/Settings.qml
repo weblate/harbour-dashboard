@@ -28,7 +28,7 @@ SettingsDialogBase {
         updatedSettings['clock_face'] = clock.clockFace
     }
 
-    property string _initialTimeFormat: !!settings['time_format'] ? settings['time_format'] : 'local'
+    property string _initialTimeFormat: defaultFor(settings['time_format'], 'local')
 
     Row {
         anchors.horizontalCenter: parent.horizontalCenter
@@ -86,12 +86,32 @@ SettingsDialogBase {
         width: parent.width
         focus: !settings['label']  // only force focus for new clocks
 
-        // TODO set the label automatically when selecting a time zone and the
-        //      label is currently empty
-        text: settings['label']
+        // We break the binding if the user changes the text manually.
+        // Otherwise, the field will be set to the currently selected city/timezone automatically.
+        text: !!settings['label'] ? settings['label'] : (timezoneSwitch.checked && clock.timezoneInfo ? clock.timezoneInfo.city : '')
+
         placeholderText: qsTr("e.g. %1").arg(cities[Math.floor(Math.random() * cities.length)])
         label: qsTr("Clock label (optional)")
         hideLabelOnEmptyField: false
+
+        Connections {
+            target: labelField._editor
+
+            onEditingFinished: {  // intercept when the user actually edits the text field manually
+                var text = labelField.text
+
+                if (text === clock.timezoneInfo.city) {
+                    return
+                } else if (text === '' && !timezoneSwitch.checked) {
+                    // restore the binding when the user manually clears the field
+                    labelField.text = Qt.binding(function(){ return timezoneSwitch.checked && clock.timezoneInfo ? clock.timezoneInfo.city : '' })
+                } else if (timezoneSwitch.checked && clock.timezoneInfo && text !== clock.timezoneInfo.city) {
+                    labelField.text = labelField.text  // break the binding
+                } else if (!timezoneSwitch.checked && text !== '') {
+                    labelField.text = labelField.text  // break the binding
+                }
+            }
+        }
     }
 
     ComboBox {
@@ -106,7 +126,7 @@ SettingsDialogBase {
         }
 
         Component.onCompleted: {
-            if (!!settings['clock_face']) {
+            if (defaultFor(settings['clock_face'], false)) {
                 for (var i = 0; i < menu.children.length; i++) {
                     var child = menu.children[i]
 
