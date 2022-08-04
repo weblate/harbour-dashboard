@@ -7,7 +7,7 @@
 import QtQuick 2.6
 import Sailfish.Silica 1.0
 import Nemo.Configuration 1.0
-import Nemo.Notifications 1.0
+// import Nemo.Notifications 1.0
 import io.thp.pyotherside 1.5
 
 import "pages"
@@ -26,7 +26,7 @@ ApplicationWindow {
     _defaultPageOrientations: Orientation.All
 
     initialPage: Component {
-        LandingPage {}
+        MainPage {}
     }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 
@@ -46,6 +46,7 @@ ApplicationWindow {
     // Track init status of the Python backend and the main page.
     // When both components are ready, we should start loading data.
     property int initReady: 0
+
 
     // -------------------------------------------------------------------------
     // NAVIGATION FUNCTIONS
@@ -160,6 +161,38 @@ ApplicationWindow {
 
 
     // -------------------------------------------------------------------------
+    // BACKEND MAINTENANCE
+
+    ConfigurationGroup {
+        id: config
+        path: "/apps/harbour-forecasts"
+        property string lastMaintenance: "2000-01-01"
+    }
+
+    function _checkMaintenance() {
+        if (config.lastMaintenance === "2000-01-01") {
+            // Don't run maintenance the very first time the app is started.
+            config.lastMaintenance = (new Date()).toISOString()
+            return
+        }
+
+        var prev = new Date(config.lastMaintenance)
+        var now = new Date()
+        var monthInMilliseconds = 1000 * 60 * 60 * 24 * 30
+
+        if (prev.getTime() + 3*monthInMilliseconds < now.getTime()) {
+            console.log("last database maintenance:", prev.toISOString(), "- today:", now.toISOString())
+
+            var maintenancePage = pageStack.push(Qt.resolvedUrl("pages/MaintenancePage.qml"))
+            maintenancePage.finished.connect(function(){
+                pageStack.pop()
+                config.lastMaintenance = (new Date()).toISOString()
+            })
+        }
+    }
+
+
+    // -------------------------------------------------------------------------
     // BRIDGE TO THE BACKEND
 
     Python {
@@ -210,7 +243,9 @@ ApplicationWindow {
                                             StandardPaths.data,
                                             StandardPaths.cache,
                                             String(StandardPaths.cache).replace('.cache', '.config'))
+
                                 ready = true
+                                _checkMaintenance()
                             } else {
                                 showFatalError(qsTr("Failed to initialize the backend."))
                             }

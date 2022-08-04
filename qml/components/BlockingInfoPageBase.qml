@@ -61,7 +61,6 @@ Page {
                     id: appIcon
                     anchors.fill: parent
                     fillMode: Image.PreserveAspectFit
-                    // TODO use a higher resolution source image (not SVG though, not supported)
                     source: iconSource
                     verticalAlignment: Image.AlignVCenter
                     opacity: busySpinner.running ? Theme.opacityLow : 1.0
