@@ -396,6 +396,34 @@ def initialize(data_path, cache_path, config_path):
     return False
 
 
+def run_database_maintenance(caller: str) -> None:
+    """
+    Run regular database maintenance.
+
+    Cleans caches and vacuums all databases. All providers will be requested
+    to follow this order but they must implement the process individually.
+    """
+    if not _check_init():
+        signal_send('info.main.database-maintenance.finished', caller)
+        return
+
+    signal_send('info.main.database-maintenance.started', caller)
+
+    for kind in ["data", "cache", "config"]:
+        db = getattr(METEO, f"{kind}_db", None)
+
+        if db:
+            signal_send('info.main.database-maintenance.status', caller, 'vacuum', "main-" + kind)
+            db.con.execute("VACUUM")
+
+    # TODO drop stale cache entries
+    #   signal_send('info.main.database-maintenance.status', caller, 'clean-cache', 'main')
+
+    # TODO vacuum all provider databases
+
+    signal_send('info.main.database-maintenance.finished', caller)
+
+
 def get_tiles() -> List[Tuple[str, Dict[str, Any]]]:
     """
     Get tiles and settings for the main screen.

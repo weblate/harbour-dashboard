@@ -47,12 +47,6 @@ ApplicationWindow {
     // When both components are ready, we should start loading data.
     property int initReady: 0
 
-    // MaintenanceOverlay {
-    //     id: maintenanceOverlay
-    //     text: qsTr("Database Maintenance")
-    //     hintText: qsTr("Please be patient and allow up to 30 seconds for this.")
-    // }
-
     // -------------------------------------------------------------------------
     // NAVIGATION FUNCTIONS
 
@@ -155,6 +149,12 @@ ApplicationWindow {
     function moveTile(tile_id, from, to) {
         py.call("meteo.move_tile", [tile_id, from, to], function() {
             console.log("tile moved:", tile_id, from, to)
+        })
+    }
+
+    function runDatabaseMaintenance(caller) {
+        py.call("meteo.run_database_maintenance", [caller], function() {
+            console.log("database maintenance started by", caller, "is done")
         })
     }
 

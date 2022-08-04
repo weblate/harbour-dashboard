@@ -24,6 +24,7 @@ DISTFILES += \
     qml/harbour-forecasts.qml \
     qml/pages/MainPage.qml \
     qml/pages/FatalErrorPage.qml \
+    qml/pages/MaintenancePage.qml \
     qml/pages/LandingPage.qml \
     qml/pages/AboutPage.qml \
     qml/components/DescriptionLabel.qml \
