@@ -24,10 +24,7 @@ SettingsDialogBase {
             updatedSettings['timezone'] = clock.timezone
         }
 
-        if (labelField.text !== "") {
-            updatedSettings['label'] = labelField.text
-        }
-
+        updatedSettings['label'] = labelField.text
         updatedSettings['clock_face'] = clock.clockFace
     }
 
