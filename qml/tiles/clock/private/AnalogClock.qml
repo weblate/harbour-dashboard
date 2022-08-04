@@ -127,7 +127,8 @@ SilicaItem {
         width: 1.5 * Theme.paddingSmall
         height: parent.height / 2 / 2.2
         radius: 10
-        color: parent.highlighted ? palette.highlightColor : palette.primaryColor
+        // color: parent.highlighted ? palette.highlightColor : palette.primaryColor
+        color: parent.highlighted ? palette.secondaryHighlightColor : palette.secondaryColor
     }
 
     Rectangle {
@@ -153,6 +154,7 @@ SilicaItem {
         height: parent.height / 2 / 1.55
         radius: 10
         color: parent.highlighted ? palette.highlightColor : palette.primaryColor
+        // color: parent.highlighted ? palette.secondaryHighlightColor : palette.secondaryColor
     }
 
     Component.onCompleted: {
