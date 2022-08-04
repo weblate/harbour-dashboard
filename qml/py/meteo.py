@@ -604,6 +604,69 @@ def resize_tile(tile_id: int, size: str) -> None:
     signal_send('info.main.resize-tile.finished', tile_id, size)
 
 
+def update_tile(tile_id: int, settings: dict) -> None:
+    """
+    Update a tile's detailed settings.
+
+    Keys in the settings dict will be updated in the correct details
+    database. Keys that don't match any column name will be ignored.
+    Columns that are not mentioned in the settings dict will be left
+    unchanged.
+
+    Use the move_tile(...) and resize_tile(...) functions to update
+    general settings.
+    """
+    if not _check_init() or tile_id < 0:
+        return
+
+    signal_send('info.main.update-tile.started', tile_id, settings)
+
+    # - check if the tile exists and find out its type
+    tile_type = METEO.config_db.con.execute("""
+        SELECT tile_type FROM mainscreen_tiles WHERE tile_id = ? LIMIT 1;
+    """, (tile_id, )).fetchone()
+
+    if not tile_type or not tile_type['tile_type']:
+        signal_send('warning.main.update-tile.invalid-tile', tile_id, settings)
+        signal_send('warning.main.update-tile.failed')
+        return
+
+    tile_type = tile_type['tile_type']
+
+    # - check if this type has detailed settings
+    if tile_type in _KNOWN_TILES_WITHOUT_DETAILS:
+        signal_send('warning.main.update-tile.tile-without-settings', tile_id, settings)
+        signal_send('warning.main.update-tile.failed')
+        return
+
+    # - read column names from the settings table
+    valid_keys = METEO.config_db.con.execute(f"SELECT * FROM {tile_type}_details LIMIT 0;")
+    valid_keys = [column[0] for column in valid_keys.description]
+    provided_keys = sorted(list(settings.keys()))
+
+    # - filter the settings dict and remove unknown keys
+    filtered_settings = {k: v for k, v in settings.items() if k in valid_keys}
+    filtered_keys = sorted(list(filtered_settings.keys()))
+
+    if filtered_keys != provided_keys:
+        unknown_keys = [x for x in provided_keys if x not in filtered_keys]
+        signal_send('warning.main.update-tile.unknown-keys', tile_id, settings, unknown_keys)
+
+    # - update the settings table
+    set_string = ', '.join([f'{k} = ?' for k in filtered_keys])
+    sorted_values = tuple([settings[x] for x in filtered_keys] + [tile_id])
+
+    METEO.config_db.con.execute(f"""
+        UPDATE {tile_type}_details SET {set_string} WHERE tile_id = ?;
+    """, sorted_values)
+
+    # - commit changes
+    METEO.config_db.con.commit()
+
+    # - notify the frontend
+    signal_send('info.main.update-tile.finished', tile_id, settings)
+
+
 def move_tile(tile_id: int, from_index: int, to_index: int) -> None:
     """
     Update tile sequence.

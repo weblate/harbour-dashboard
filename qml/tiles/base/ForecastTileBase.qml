@@ -12,6 +12,14 @@ import "private"
 TileBase {
     id: root
 
+    function defaultFor(what, fallback) {
+        return (what === '' || typeof what === 'undefined' || what === null) ? fallback : what
+    }
+
+    function defaultOrNullFor(what, fallback) {
+        return (what === '' || typeof what === 'undefined') ? fallback : what
+    }
+
     // must be provided by the container (main page)
     debug: false  // bind to global debug toggle
     bindEditingTarget: null  // item or QtObject containing bindEditingProperty
@@ -38,6 +46,8 @@ TileBase {
     allowMove: true
     allowRemove: true
     cancelEditOnClick: false
+
+    property int _registeredUpdateSignalFor: -1
 
     // the default context menu should not be changed by tile implementations
     menu: ContextMenu {
@@ -75,11 +85,19 @@ TileBase {
                 'tile_id': Qt.binding(function(){ return tile_id })
             })
             dialog.accepted.connect(function() {
-                // TODO save changed settings to the database
-                // TODO don't simply assign the new object as it may miss unchanged keys
-                settings = dialog.updatedSettings
+                app.updateTile(tile_id, dialog.updatedSettings)
             })
         }
+    }
+
+    onTile_idChanged: {
+        if (tile_id < 0 || tile_id == _registeredUpdateSignalFor) return
+        console.log("got a new tile_id", tile_id)
+        _registeredUpdateSignalFor = tile_id
+
+        app.registerBackendSignal(tile_id, "info.main.update-tile.finished", function(args) {
+            root.settings = args[2]  // 0=signal, 1=tile_id, 2+=args
+        })
     }
 
     onRequestMove: {
@@ -94,5 +112,14 @@ TileBase {
 
     onSizeChanged: {
         app.resizeTile(tile_id, size)
+    }
+
+    Component.onCompleted: {
+        if (tile_id >= 0 && tile_id != _registeredUpdateSignalFor) {
+            _registeredUpdateSignalFor = tile_id
+            app.registerBackendSignal(tile_id, "info.main.update-tile.finished", function(args) {
+                root.settings = args[2]  // 0=signal, 1=tile_id, 2+=args
+            })
+        }
     }
 }

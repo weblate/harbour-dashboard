@@ -77,7 +77,6 @@ ApplicationWindow {
     signal tilesLoaded(var tiles)
     signal tileAdded(var tile_type, var size, var settings, var tile_id, var sequence)
 
-
     // -------------------------------------------------------------------------
     // BACKEND/DATABASE INTERACTION FUNCTIONS
 
@@ -138,6 +137,12 @@ ApplicationWindow {
     function removeTile(tile_id) {
         py.call("meteo.remove_tile", [tile_id], function() {
             console.log("tile removed:", tile_id)
+        })
+    }
+
+    function updateTile(tile_id, settings) {
+        py.call("meteo.update_tile", [tile_id, settings], function() {
+            console.log("tile updated:", tile_id, JSON.stringify(settings))
         })
     }
 

@@ -35,10 +35,10 @@ ForecastTileBase {
         height: parent.height - Theme.paddingLarge - Theme.paddingLarge - label.height
         width: height
 
-        timeFormat: settings['time_format']
-        timezone: settings['timezone']
-        utcOffsetSeconds: settings['utc_offset_seconds']
-        clockFace: settings['clock_face']
+        timeFormat: defaultFor(settings['time_format'], 'local')
+        timezone: defaultFor(settings['timezone'], '')
+        utcOffsetSeconds: defaultFor(settings['utc_offset_seconds'], 0)
+        clockFace: defaultFor(settings['clock_face'], 'plain')
     }
 
     Label {
