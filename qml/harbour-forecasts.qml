@@ -26,7 +26,7 @@ ApplicationWindow {
     _defaultPageOrientations: Orientation.All
 
     initialPage: Component {
-        MainPage {}
+        LandingPage {}
     }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 
@@ -39,6 +39,7 @@ ApplicationWindow {
     property string rainUnitShort: "mm"
     property string windUnit: "km/h"
 
+    property bool fatalOccurred: false
     property bool haveWallClock: wallClock != null
     property QtObject wallClock
 
@@ -51,12 +52,29 @@ ApplicationWindow {
     //     text: qsTr("Database Maintenance")
     //     hintText: qsTr("Please be patient and allow up to 30 seconds for this.")
     // }
-    //
-    // MaintenanceOverlay {
-    //     id: disableAppOverlay
-    //     text: qsTr("Currently unusable")
-    //     hintText: qsTr("This app is currently unusable, due to a change at the data provider's side.")
-    // }
+
+    // -------------------------------------------------------------------------
+    // NAVIGATION FUNCTIONS
+
+    function showFatalError(message) {
+        fatalOccurred = true
+        pageStack.completeAnimation() // abort any running animation
+
+        // We don't clear the stack to keep transition animations
+        // clean. FatalErrorPage will block any further navigation.
+        pageStack.push(Qt.resolvedUrl("pages/FatalErrorPage.qml"), {
+                           errorMessage: message
+                       })
+    }
+
+    function showMainPage(operationType) {
+        if (fatalOccurred) return
+
+        pageStack.replaceAbove(null, Qt.resolvedUrl("pages/MainPage.qml"), {},
+                               operationType !== undefined ? operationType :
+                                                             PageStackAction.Immediate)
+    }
+
 
     // -------------------------------------------------------------------------
     // BACKEND/DATABASE STATUS SIGNALS
@@ -67,6 +85,22 @@ ApplicationWindow {
 
     // -------------------------------------------------------------------------
     // BACKEND/DATABASE INTERACTION FUNCTIONS
+
+    // Register a Qt signal that will be emitted when the backend sends a notification.
+    // The backend must identify the target in its first argument. The second argument
+    // must be a Python dictionary / JS object that holds all additional data.
+    //
+    // The Qt signal will only be emitted if the backend signal is directed at all
+    // tiles ("*") or the tile with the correct identifier.
+    //
+    // Use this method to communicate with providers from inside Tile implementations.
+    function registerProviderSignal(tileId, providerSignal, localSignal) {
+        py.setHandler(providerSignal, function(remoteTileId, data){
+            if (remoteTileId === tileId || remoteTileId === "*") {
+                localSignal(tileId, data)
+            }
+        })
+    }
 
     function loadTiles() {
         py.call("meteo.get_tiles", [], function(tiles) {
@@ -112,14 +146,28 @@ ApplicationWindow {
         id: py
         property bool ready: false
 
-        onReceived: console.log(JSON.stringify(data))
         onError: console.error(traceback)
         onReadyChanged: initReady += 1
+        onReceived: {
+            if (/^fatal\./.test(data[0])) {
+                console.error("[FATAL] unexpected error:", JSON.stringify(data))
+                showFatalError(qsTr("An unrecoverable error occurred."))
+            } else if (/^warning./.test(data[0])) {
+                console.warn("[WARNING] unexpected warning:", JSON.stringify(data))
+            } else {
+                console.log(JSON.stringify(data))
+            }
+        }
 
         Component.onCompleted: {
             // Define signal callbacks
             setHandler('info.main.add-tile.finished', function(tile_type, size, settings, tile_id, sequence){
                 tileAdded(tile_type, size, settings, tile_id, sequence)
+            })
+
+            setHandler('fatal.local-data.inaccessible', function(kind, directory, error){
+                console.error("[FATAL] backend location inaccessible:", kind, directory, error)
+                showFatalError(qsTr("A backend database is inaccessible."))
             })
 
             // Add the directory of this .qml file to the search path
@@ -137,8 +185,7 @@ ApplicationWindow {
                                             String(StandardPaths.cache).replace('.cache', '.config'))
                                 ready = true
                             } else {
-                                // TODO improve error reporting
-                                console.log('[FATAL] failed to initialize backend')
+                                showFatalError(qsTr("Failed to initialize the backend."))
                             }
                         })
             })
@@ -159,14 +206,5 @@ ApplicationWindow {
                 enabled: Qt.application.active
                 updateFrequency: WallClock.Minute
             }".arg("Nemo.Time"), app, 'WallClock')
-
-        // TODO implement a way to detect API breakage and enable the overlay automatically
-        // disableAppOverlay.state = "visible";
-
-        // if (Storage.dbNeedsMaintenance()) {
-        //     maintenanceOverlay.state = "visible";
-        //     Storage.doDatabaseMaintenance();
-        //     maintenanceOverlay.state = "invisible";
-        // }
     }
 }

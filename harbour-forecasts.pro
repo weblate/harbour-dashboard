@@ -23,8 +23,11 @@ SOURCES += src/harbour-forecasts.cpp
 DISTFILES += \
     qml/harbour-forecasts.qml \
     qml/pages/MainPage.qml \
+    qml/pages/FatalErrorPage.qml \
+    qml/pages/LandingPage.qml \
     qml/pages/AboutPage.qml \
     qml/components/DescriptionLabel.qml \
+    qml/components/BlockingInfoPageBase.qml \
     \
     qml/tiles/base/ForecastTileBase.qml \
     qml/tiles/base/DetailsPageBase.qml \

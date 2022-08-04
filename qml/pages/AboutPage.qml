@@ -68,6 +68,14 @@ AboutPageBase {
             homepage: "https://asciich.ch/wordpress/koordinatenumrechner-schweiz-international/"
         },
         Attribution {
+            name: "Whisperfish"
+            entries: ["2016-2022 Ruben De Smet and contributors"]
+            description: qsTr("Some modules have been adapted for use in this app.")
+            licenses: License { spdxId: "AGPL-3.0-or-later" }
+            sources: "https://gitlab.com/whisperfish/whisperfish"
+            homepage: "https://forum.sailfishos.org/t/whisperfish-the-unofficial-sailfishos-signal-client/3337"
+        },
+        Attribution {
             name: "PyOtherSide"
             entries: ["2011, 2013-2020 Thomas Perl"]
             licenses: License { spdxId: "ISC" }

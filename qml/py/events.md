@@ -6,10 +6,8 @@
 
 | Event                | Description                                              | Arguments |
 |----------------------|----------------------------------------------------------|-----------|
-| fatal.local-data.inaccessible | | |
-| fatal.local-cache.inaccessible | | |
+| fatal.local-data.inaccessible | | directory_type, path, error_message |
 | fatal.local-data.database-broken | | |
-| fatal.local-cache.database-broken | | |
 
 ### Class: error
 

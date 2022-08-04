@@ -270,12 +270,13 @@ class Meteo:
                 log(f"preparing local {k} path in '{v}'")
                 v.mkdir(parents=True, exist_ok=True)
             except (FileExistsError, PermissionError) as e:
-                signal_send(f'fatal.local-{k}.inaccessible', v, e)
+                signal_send(f'fatal.local-data.inaccessible', k, str(v), str(e))
                 return
 
             # set base paths for all provider classes derived from Provider
             setattr(provider_base.Provider, f'{k}_dir', v)
 
+        # TODO catch FileBroken exceptions
         self._data_db = self.DataDb(self._data_path, 'meteo_data', signal_send, log)
         self._cache_db = self.CacheDb(self._cache_path, 'meteo_cache', signal_send, log)
         self._config_db = self.ConfigDb(self._config_path, 'meteo_config', signal_send, log)
