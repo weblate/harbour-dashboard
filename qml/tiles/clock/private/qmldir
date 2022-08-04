@@ -1,0 +1,5 @@
+module private
+# This file is part of Forecasts for SailfishOS.
+# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-FileCopyrightText: 2022  Mirian Margiani
+singleton TimezoneInfo 1.0 TimezoneInfo.qml
