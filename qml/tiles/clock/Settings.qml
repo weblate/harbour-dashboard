@@ -40,7 +40,7 @@ SettingsDialogBase {
             height: width
             clockFace: clockFaceCombo.currentItem.value
             utcOffsetSeconds: (timePicker.hour * 60 * 60 + timePicker.minute * 60) * (utcMinusSwitch.checked ? -1 : 1)
-            timezone: ""
+            timezone: defaultFor(settings['timezone'], '')
             timeFormat: {
                 if (localTimeSwitch.checked) "local"
                 else if (offsetSwitch.checked) "offset"
@@ -97,7 +97,7 @@ SettingsDialogBase {
     ComboBox {
         id: clockFaceCombo
         label: qsTr("Clock face")
-        currentIndex: -1
+        currentIndex: 0
 
         menu: ContextMenu {
             MenuItem { property string value: "plain"; text: qsTr("without numbers") }
