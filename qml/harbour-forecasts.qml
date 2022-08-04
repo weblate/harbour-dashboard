@@ -90,16 +90,36 @@ ApplicationWindow {
     // The backend must identify the target in its first argument. The second argument
     // must be a Python dictionary / JS object that holds all additional data.
     //
-    // The Qt signal will only be emitted if the backend signal is directed at all
-    // tiles ("*") or the tile with the correct identifier.
+    // The Qt signal will receive a list of [signal_name, tile_id, remaining_args...]. It will
+    // only be emitted if the backend signal is directed at a tile with a matching identifier.
     //
     // Use this method to communicate with providers from inside Tile implementations.
-    function registerProviderSignal(tileId, providerSignal, localSignal) {
-        py.setHandler(providerSignal, function(remoteTileId, data){
-            if (remoteTileId === tileId || remoteTileId === "*") {
-                localSignal(tileId, data)
-            }
-        })
+    //
+    // IMPORTANT NOTE: it is not possible to register additional handlers for which there
+    //     is already a specific handler defined with setHandler(...).
+    //
+    // IMPORTANT NOTE: only one local signal can be connected to a specific remote signal
+    //     for each tile.
+    property var _signalHandlerRegistry: ({})
+
+    function registerBackendSignal(tileId, backendSignal, localSignal) {
+        if (!_signalHandlerRegistry.hasOwnProperty(backendSignal)) {
+            _signalHandlerRegistry[backendSignal] = {}
+        }
+        _signalHandlerRegistry[backendSignal][tileId] = localSignal
+        console.log("registered backend signal handler for", backendSignal,
+                    "at", tileId)
+    }
+
+    function unregisterBackendSignal(tileId, backendSignal) {
+        if (   _signalHandlerRegistry.hasOwnProperty(backendSignal)
+            && _signalHandlerRegistry[backendSignal].hasOwnProperty(tileId)) {
+                console.log("unregistered backend signal handler for", backendSignal, "at", tileId)
+                delete _signalHandlerRegistry[backendSignal][tileId]
+        } else {
+            console.warn("cannot unregistered backend signal handler for", backendSignal,
+                         "at", tileId, "because it is not registered")
+        }
     }
 
     function loadTiles() {
@@ -156,6 +176,13 @@ ApplicationWindow {
                 console.warn("[WARNING] unexpected warning:", JSON.stringify(data))
             } else {
                 console.log(JSON.stringify(data))
+            }
+
+            if (_signalHandlerRegistry.hasOwnProperty(data[0])) {
+                if (_signalHandlerRegistry[data[0]].hasOwnProperty(data[1])) {
+                    console.log("calling registered handler for", data[0], "at", data[1])
+                    _signalHandlerRegistry[data[0]][data[1]](data)
+                }
             }
         }
 
