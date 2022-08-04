@@ -17,9 +17,12 @@ ForecastTileBase {
     // TODO improve the layout...
     // TODO define different layouts for different sizes
 
+    settingsDialog: Qt.resolvedUrl("Settings.qml")
+    detailsPage: Qt.resolvedUrl("Details.qml")
+
     size: "small"
     allowResize: true  // not yet implemented
-    allowConfig: false  // not yet implemented
+    allowConfig: true
 
     AnalogClock {
         id: clock

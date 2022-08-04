@@ -24,8 +24,11 @@ DISTFILES += \
     qml/harbour-forecasts.qml \
     qml/pages/MainPage.qml \
     qml/pages/AboutPage.qml \
+    qml/components/DescriptionLabel.qml \
     \
     qml/tiles/base/ForecastTileBase.qml \
+    qml/tiles/base/DetailsPageBase.qml \
+    qml/tiles/base/SettingsDialogBase.qml \
     qml/tiles/base/private/TileBase.qml \
     qml/tiles/base/private/TileActionButton.qml \
     qml/tiles/common/AddMoreTile.qml \
@@ -33,6 +36,8 @@ DISTFILES += \
     qml/tiles/common/private/icon-l-warning.png \
     qml/tiles/spacer/Tile.qml \
     qml/tiles/clock/Tile.qml \
+    qml/tiles/clock/Details.qml \
+    qml/tiles/clock/Settings.qml \
     qml/tiles/clock/private/AnalogClock.qml \
     qml/tiles/clock/private/clock-face-num-arabic.png \
     qml/tiles/clock/private/clock-face-num-roman.png \
