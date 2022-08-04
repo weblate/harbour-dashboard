@@ -229,7 +229,7 @@ Page {
         target: app
 
         onInitReadyChanged: {
-            if (app.initReady == 2) {
+            if (app.initReady === 2) {
                 // both the backend and the main page are ready
                 app.loadTiles()
             }
@@ -243,6 +243,9 @@ Page {
 
             console.log("all tiles loaded")
             initReady += 1
+
+            // DEBUG
+            // tilesModel.get(0).item.requestConfig()
         }
 
         onTileAdded: {

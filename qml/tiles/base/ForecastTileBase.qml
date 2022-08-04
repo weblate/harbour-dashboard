@@ -25,6 +25,9 @@ TileBase {
 
     // must be redefined by the tile implementation
     objectName: "ForecastTileBase"
+    property string settingsDialog: "" // Qt.resolvedUrl("Settings.qml")
+    property string detailsPage: "" // Qt.resolvedUrl("Details.qml")
+    property bool showDetailsOnClick: detailsPage != ""
 
     // may have to be changed by the tile implementation
     size: "small"  // default size: small, medium, large
@@ -51,6 +54,31 @@ TileBase {
             visible: root.allowRemove
             text: qsTr("Remove")
             onDelayedClick: root.requestRemoval()
+        }
+    }
+
+    onClicked: {
+        if ((!editing || enabledWhileEditing) && showDetailsOnClick && detailsPage != "") {
+            pageStack.push(detailsPage, {
+                'settings': Qt.binding(function(){ return settings }),
+                'debug': Qt.binding(function(){ return debug }),
+                'tile_id': Qt.binding(function(){ return tile_id })
+            })
+        }
+    }
+
+    onRequestConfig: {
+        if (settingsDialog !== "" && allowConfig) {
+            var dialog = pageStack.push(settingsDialog, {
+                'settings': Qt.binding(function(){ return settings }),
+                'debug': Qt.binding(function(){ return debug }),
+                'tile_id': Qt.binding(function(){ return tile_id })
+            })
+            dialog.accepted.connect(function() {
+                // TODO save changed settings to the database
+                // TODO don't simply assign the new object as it may miss unchanged keys
+                settings = dialog.updatedSettings
+            })
         }
     }
 

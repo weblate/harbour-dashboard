@@ -79,7 +79,7 @@ ListItem {
         removed(objectIndex)
     }
 
-    default property alias _contents: contentItem.children
+    default property alias _contents: contentItem.data
 
     Item {
         id: sizeState
