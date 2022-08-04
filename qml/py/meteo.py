@@ -585,6 +585,8 @@ def add_tile(tile_type: str, size: str, settings: dict) -> None:
             return
 
     METEO.config_db.con.commit()
+
+    # NOTE: the 'sequence' value is not an index and there may be gaps in the counting
     signal_send('info.main.add-tile.finished', tile_type, size, settings, tile_id, sequence)
 
 

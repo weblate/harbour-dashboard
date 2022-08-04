@@ -250,9 +250,11 @@ Page {
         }
 
         onTileAdded: {
+            // arguments: tile_type, size, settings, tile_id, sequence
             console.log("new tile notification received:", tile_id, tile_type, size, sequence, JSON.stringify(settings))
-            // tile_type, size, settings, tile_id, sequence
-            tilesModel.insertTile(tile_type, size, settings, sequence)
+
+            // insert the new tile at the end but right before the addMoreTile
+            tilesModel.insertTile(tile_type, size, settings, tilesModel.count - 1)
         }
     }
 }
