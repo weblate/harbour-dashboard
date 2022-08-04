@@ -11,6 +11,14 @@ Dialog {
     id: root
     allowedOrientations: Orientation.All
 
+    function defaultFor(what, fallback) {
+        return (what === '' || typeof what === 'undefined' || what === null) ? fallback : what
+    }
+
+    function defaultOrNullFor(what, fallback) {
+        return (what === '' || typeof what === 'undefined') ? fallback : what
+    }
+
     // must be defined by the implementation
     property var bakeSettings: function() { // function to update the updatedSettings object
         // Note: this function should not save anything to the database yet.

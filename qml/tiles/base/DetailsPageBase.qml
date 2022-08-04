@@ -15,6 +15,14 @@ Page {
     property var settings: ({})  // implementation specific settings passed from/to the database
     property bool debug: false  // bind to global debug toggle
 
+    function defaultFor(what, fallback) {
+        return (what === '' || typeof what === 'undefined' || what === null) ? fallback : what
+    }
+
+    function defaultOrNullFor(what, fallback) {
+        return (what === '' || typeof what === 'undefined') ? fallback : what
+    }
+
     // Implementations must define their own page container,
     // as not all pages require a pulley menu or a flickable.
     //
