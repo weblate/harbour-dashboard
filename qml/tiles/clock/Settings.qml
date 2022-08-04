@@ -152,7 +152,7 @@ SettingsDialogBase {
                 timezoneSwitch.checked = false
                 offsetSwitch.checked = false
             } else if (!offsetSwitch.checked && !timezoneSwitch.checked) {
-                checked = true
+                checked = true  // prevent user from unchecking all
             }
         }
     }
@@ -167,8 +167,8 @@ SettingsDialogBase {
             if (checked) {
                 localTimeSwitch.checked = false
                 offsetSwitch.checked = false
-            } else if (!offsetSwitch.checked) {
-                localTimeSwitch.checked = true
+            } else if (!offsetSwitch.checked && !localTimeSwitch.checked) {
+                checked = true  // prevent user from unchecking all
             }
         }
     }
@@ -206,8 +206,8 @@ SettingsDialogBase {
             if (checked) {
                 timezoneSwitch.checked = false
                 localTimeSwitch.checked = false
-            } else if (!timezoneSwitch.checked) {
-                localTimeSwitch.checked = true
+            } else if (!timezoneSwitch.checked && !localTimeSwitch.checked) {
+                checked = true  // prevent user from unchecking all
             }
         }
     }
