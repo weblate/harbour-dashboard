@@ -27,7 +27,7 @@ SilicaItem {
     property var _timezoneInfo: null
     onTimezoneChanged: _timezoneInfo = (timezone !== "" ? TimezoneInfo.findTimezoneInfo(timezone) : null)
 
-    property int _timezoneOffsetSeconds: {
+    readonly property int _timezoneOffsetSeconds: {
         if (timezoneInfo !== null) {
             var offset = String(timezoneInfo.currentOffset).replace('UTC', '')
             offset = offset.split(':')
@@ -36,8 +36,9 @@ SilicaItem {
             return 0
         }
     }
+
     property date _currentLocalTime: wallClock.time
-    property string _conversionOffset: {
+    readonly property string _conversionOffset: {
         // This abomination creates an offset relative to the local time,
         // so that when JS converts the UTC date back to the local timezone,
         // we actually get the desired remote time.
@@ -70,12 +71,37 @@ SilicaItem {
             Math.floor(((remoteOffset - localOffset) / 60) % 60)
         ]
 
-        return (conv[0] < 0 ? '+' : '-')
+        return (conv[0] < 0 ? '+' : '-')  // signs must be switched because *hrmpf*
                 + zeroPad(Math.abs(conv[0])) + ":"
                 + zeroPad(Math.abs(conv[1]))
     }
 
-    property date convertedTime: new Date(
+    readonly property string formattedRelativeOffset: (numericRelativeOffset > 0 ? "+" : "-")
+                                                        + "%1:%2".arg(Math.abs(Math.floor(numericRelativeOffset / 60))).arg(
+                                                          zeroPad(Math.abs(numericRelativeOffset % 60)))  // offset relative to local time
+    readonly property int numericRelativeOffset: (Number(_conversionOffset.split(':')[0]) >= 0 ? -1 : 1)
+                                                    * (Math.abs(Number(_conversionOffset.split(':')[0])) * 60
+                                                    + Number(_conversionOffset.split(':')[1]))  // in minutes
+    readonly property string formattedRelativeOffsetNoSign: formattedRelativeOffset.slice(1)
+
+    readonly property string formattedUtcOffset: {
+        if (timeFormat == 'timezone') {
+            (_timezoneOffsetSeconds > 0 ? "+" : "-")
+                    + String(Math.abs(Math.floor(_timezoneOffsetSeconds / 60 / 60))) + ":"
+                    + zeroPad(Math.abs(Math.floor(_timezoneOffsetSeconds / 60) % 60))
+        } else if (timeFormat == 'offset') {
+            (utcOffsetSeconds > 0 ? "+" : "-")
+                    + String(Math.abs(Math.floor(utcOffsetSeconds / 60 / 60))) + ":"
+                    + zeroPad(Math.abs(Math.floor(utcOffsetSeconds / 60) % 60))
+        } else {
+            ((_currentLocalTime.getTimezoneOffset() * (-1)) > 0 ? "+" : "-")
+                    + String(Math.abs(Math.floor(_currentLocalTime.getTimezoneOffset() / 60 * (-1)))) + ":"
+                    + zeroPad(Math.abs(Math.floor((_currentLocalTime.getTimezoneOffset() * (-1)) % 60)))
+        }
+    }
+    readonly property string formattedUtcOffsetNoSign: formattedUtcOffset.slice(1)
+
+    readonly property date convertedTime: new Date(
         // Use this time object as if it were in local time. For example, print it
         // with convertedTime.toLocaleString(Qt.locale(), app.timeFormat).
         // Use getHours() and related methods to extract details. The getUTC...() methods
