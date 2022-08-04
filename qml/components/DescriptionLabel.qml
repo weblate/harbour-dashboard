@@ -19,8 +19,8 @@ SilicaItem {
     property alias descriptionFont: bottomLabel.font
     property alias horizontalAlignment: topLabel.horizontalAlignment
 
-    property Label _topLabel: topLabel
-    property Label _bottomLabel: bottomLabel
+    readonly property alias topLabelItem: topLabel
+    readonly property alias bottomLabelItem: bottomLabel
 
     implicitWidth: Math.max(topLabel.implicitWidth, bottomLabel.implicitWidth)
     height: childrenRect.height

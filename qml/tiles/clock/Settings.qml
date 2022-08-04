@@ -100,7 +100,7 @@ SettingsDialogBase {
             onEditingFinished: {  // intercept when the user actually edits the text field manually
                 var text = labelField.text
 
-                if (text === clock.timezoneInfo.city) {
+                if (clock.timezoneInfo && text === clock.timezoneInfo.city) {
                     return
                 } else if (text === '' && !timezoneSwitch.checked) {
                     // restore the binding when the user manually clears the field

@@ -67,6 +67,7 @@ Dialog {
     onDone: {
         if (result == DialogResult.Accepted) {
             console.log("saving settings for tile", tile_id, "with initial settings", JSON.stringify(settings))
+            updatedSettings = {}
             bakeSettings()
         } else if (result == DialogResult.Rejected) {
             updatedSettings = {}

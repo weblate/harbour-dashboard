@@ -213,6 +213,7 @@ Page {
         }
 
         AddMoreTile {
+            id: addMoreTile
             visible: editing
             debug: root.debug
             bindEditingTarget: flow

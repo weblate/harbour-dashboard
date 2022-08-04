@@ -27,6 +27,7 @@ DISTFILES += \
     qml/pages/MaintenancePage.qml \
     qml/pages/LandingPage.qml \
     qml/pages/AboutPage.qml \
+    qml/pages/NewTileDialog.qml \
     qml/components/DescriptionLabel.qml \
     qml/components/BlockingInfoPageBase.qml \
     \

@@ -561,19 +561,28 @@ def add_tile(tile_type: str, size: str, settings: dict) -> None:
 
         if not all([x in provided_keys for x in required_keys]):
             signal_send('warning.main.add-tile.settings-key-missing', tile_type, size, settings, required_keys)
-            signal_send('warning.main.add-tile.failed')
-            METEO.config_db.con.rollback()
-            return
+
+            # # don't fret yet - maybe the missing keys are optional
+            # signal_send('warning.main.add-tile.failed')
+            # METEO.config_db.con.rollback()
+            # return
+
+        filtered_keys = [x for x in required_keys if x in provided_keys]
 
         # TODO is this dangerous? Rationale: the names come directly from the
         #      database so they should be safe to use.
-        columns_string = ', '.join(required_keys)
-        placeholder_string = ', '.join(['?'] * len(required_keys))
-        sorted_values = tuple([settings[x] for x in required_keys])
+        columns_string = ', '.join(filtered_keys)
+        placeholder_string = ', '.join(['?'] * len(filtered_keys))
+        sorted_values = tuple([settings[x] for x in filtered_keys])
 
-        METEO.config_db.con.execute(f"""
-            INSERT INTO {tile_type}_details ({columns_string}) VALUES ({placeholder_string});
-        """, sorted_values)
+        try:
+            METEO.config_db.con.execute(f"""
+                INSERT INTO {tile_type}_details ({columns_string}) VALUES ({placeholder_string});
+            """, sorted_values)
+        except:
+            signal_send('warning.main.add-tile.failed')
+            METEO.config_db.con.rollback()
+            return
 
     METEO.config_db.con.commit()
     signal_send('info.main.add-tile.finished', tile_type, size, settings, tile_id, sequence)

@@ -105,9 +105,11 @@ ForecastTileBase {
         }
         description: {
             if (clock.numericRelativeOffset < 0) {
-                qsTr("%1 hours slower than local time").arg(clock.formattedRelativeOffsetNoSign)
+                qsTr("%1 hour(s) behind local time", "",
+                     Math.ceil(clock.numericRelativeOffset / 60)).arg(clock.formattedRelativeOffsetNoSign)
             } else if (clock.numericRelativeOffset > 0) {
-                qsTr("%1 hours faster than local time").arg(clock.formattedRelativeOffsetNoSign)
+                qsTr("%1 hour(s) ahead of local time", "",
+                     Math.ceil(clock.numericRelativeOffset / 60)).arg(clock.formattedRelativeOffsetNoSign)
             } else {
                 ""
             }
