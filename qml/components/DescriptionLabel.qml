@@ -37,6 +37,9 @@ SilicaItem {
         color: highlighted ? palette.highlightColor : palette.primaryColor
         wrapMode: Text.Wrap
         maximumLineCount: 2
+
+        visible: !!text
+        height: visible ? implicitHeight : 0
     }
 
     Label {

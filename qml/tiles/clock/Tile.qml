@@ -57,7 +57,7 @@ ForecastTileBase {
 
         label: clock.convertedTimeString
         description: {
-            if (extraInfoLabel.visible) {
+            if (size == 'large') {
                 if (settings['label'] || clock.timeFormat == 'local') {
                     qsTr("UTC %1", "time offset like 'UTC -11:00'").arg(clock.formattedUtcOffset)
                 } else {
@@ -93,25 +93,42 @@ ForecastTileBase {
     C.DescriptionLabel {
         id: extraInfoLabel
         visible: false
+        inverted: false
 
         label: {
-            if (settings['label']) {
-                settings['label']
-            } else if (clock.timeFormat == 'local') {
-                qsTr("local time")
+            if (size == 'large') {
+                if (settings['label']) {
+                    settings['label']
+                } else if (clock.timeFormat == 'local') {
+                    qsTr("local time")
+                } else {
+                    qsTr("UTC %1", "time offset like 'UTC -11:00'").arg(clock.formattedUtcOffset)
+                }
             } else {
-                qsTr("UTC %1", "time offset like 'UTC -11:00'").arg(clock.formattedUtcOffset)
+                ""
             }
         }
         description: {
-            if (clock.numericRelativeOffset < 0) {
-                qsTr("%1 hour(s) behind local time", "",
-                     Math.ceil(clock.numericRelativeOffset / 60)).arg(clock.formattedRelativeOffsetNoSign)
-            } else if (clock.numericRelativeOffset > 0) {
-                qsTr("%1 hour(s) ahead of local time", "",
-                     Math.ceil(clock.numericRelativeOffset / 60)).arg(clock.formattedRelativeOffsetNoSign)
+            if (size == 'large') {
+                if (clock.numericRelativeOffset < 0) {
+                    qsTr("%1 hour(s) behind local time", "",
+                         Math.ceil(clock.numericRelativeOffset / 60)).arg(clock.formattedRelativeOffsetNoSign)
+                } else if (clock.numericRelativeOffset > 0) {
+                    qsTr("%1 hour(s) ahead of local time", "",
+                         Math.ceil(clock.numericRelativeOffset / 60)).arg(clock.formattedRelativeOffsetNoSign)
+                } else {
+                    ""
+                }
             } else {
-                ""
+                if (clock.numericRelativeOffset < 0) {
+                    qsTr("%1h behind", "shortened form of '%1 hour(s) behind local time'",
+                         Math.ceil(clock.numericRelativeOffset / 60)).arg(clock.formattedRelativeOffsetNoSign)
+                } else if (clock.numericRelativeOffset > 0) {
+                    qsTr("%1h ahead", "shortened form of '%1 hour(s) ahead of local time'",
+                         Math.ceil(clock.numericRelativeOffset / 60)).arg(clock.formattedRelativeOffsetNoSign)
+                } else {
+                    ""
+                }
             }
         }
 
@@ -164,9 +181,17 @@ ForecastTileBase {
                     target: clockLabel
                     anchors {
                         rightMargin: Theme.paddingLarge
+                        // can't use parent.height because it changes when the context menu is openend
+                        verticalCenterOffset: - ((clock.height + extraInfoLabel.height) / 2 - clock.height / 2)
                     }
                     horizontalAlignment: Text.AlignLeft
                     width: parent.width / 2 - Theme.paddingMedium - Theme.paddingLarge
+                }
+
+                PropertyChanges {
+                    target: extraInfoLabel
+                    visible: true
+                    inverted: true
                 }
             },
             State {
