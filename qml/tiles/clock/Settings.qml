@@ -14,7 +14,11 @@ import "../../components" as C
 SettingsDialogBase {
     id: root
 
-    canAccept: true
+    canAccept: {
+        if (timezoneSwitch.checked && clock.timezone == "") false
+        else true
+    }
+
     bakeSettings: function() {
         updatedSettings['time_format'] = clock.timeFormat
 
@@ -28,7 +32,11 @@ SettingsDialogBase {
         updatedSettings['clock_face'] = clock.clockFace
     }
 
-    property string _initialTimeFormat: defaultFor(settings['time_format'], 'local')
+    property string _initialTimeFormat: defaultFor(settings['time_format'], 'timezone')
+
+
+    // -------------------------------------------------------------------------
+    // CLOCK PREVIEW
 
     Row {
         anchors.horizontalCenter: parent.horizontalCenter
@@ -72,19 +80,25 @@ SettingsDialogBase {
         }
     }
 
-    Item {
-        width: parent.width
+    C.VerticalSpacing {
         height: Theme.paddingLarge
     }
 
+
+    // -------------------------------------------------------------------------
+    // LABEL AND LOOK
+
     TextField {
         id: labelField
+        width: parent.width
+
+        // some cities that are shown as example names
         property var cities: [qsTr("Tokyo, Japan"), qsTr("Nuuk, Greenland"),
             qsTr("Yangon, Myanmar"), qsTr("Lubumbashi, DR Congo"),
             qsTr("Belém, Brazil"), qsTr("Paris, France")]
 
-        width: parent.width
-        focus: !settings['label']  // only force focus for new clocks
+        // users probably want to select a time zone first before naming the clock
+        focus: false
 
         // We break the binding if the user changes the text manually.
         // Otherwise, the field will be set to the currently selected city/timezone automatically.
@@ -140,6 +154,13 @@ SettingsDialogBase {
         }
     }
 
+
+    // -------------------------------------------------------------------------
+    // TIME FORMAT CONFIGURATION
+
+
+    // ---------- LOCAL TIME
+
     TextSwitch {
         id: localTimeSwitch
         text: qsTr("Local time")
@@ -156,6 +177,9 @@ SettingsDialogBase {
             }
         }
     }
+
+
+    // ---------- TIME ZONE
 
     TextSwitch {
         id: timezoneSwitch
@@ -175,6 +199,7 @@ SettingsDialogBase {
 
     ValueButton {
         id: timezoneComboButton
+        visible: enabled
         enabled: timezoneSwitch.checked
         label: qsTr("Time zone")
         value: clock.timezone === ""
@@ -195,6 +220,9 @@ SettingsDialogBase {
         }
     }
 
+
+    // ---------- CUSTOM TIME OFFSET
+
     TextSwitch {
         id: offsetSwitch
         text: qsTr("Custom time offset")
@@ -214,6 +242,7 @@ SettingsDialogBase {
 
     TextSwitch {
         id: utcPlusSwitch
+        visible: enabled
         enabled: offsetSwitch.checked
         text: qsTr("UTC + %1").arg(timePicker.timeText)
         description: qsTr("Positive offsets show time zones east of UTC/GMT (Greenwich, UK).")
@@ -230,6 +259,7 @@ SettingsDialogBase {
 
     TextSwitch {
         id: utcMinusSwitch
+        visible: enabled
         enabled: offsetSwitch.checked
         text: qsTr("UTC - %1").arg(timePicker.timeText)
         description: qsTr("Negative offsets show time zones west of UTC/GMT (Greenwich, UK).")
@@ -244,13 +274,14 @@ SettingsDialogBase {
         }
     }
 
-    Item {
-        width: parent.width
+    C.VerticalSpacing {
+        visible: offsetSwitch.checked
         height: Theme.paddingLarge
     }
 
     TimePicker {
         id: timePicker
+        visible: enabled
         enabled: offsetSwitch.checked
         opacity: enabled ? 1.0 : Theme.opacityLow
         anchors.horizontalCenter: parent.horizontalCenter
@@ -270,8 +301,8 @@ SettingsDialogBase {
         }
     }
 
-    Item {
-        width: parent.width
+
+    C.VerticalSpacing {
         height: Theme.horizontalPageMargin
     }
 }
