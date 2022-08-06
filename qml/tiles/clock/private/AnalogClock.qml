@@ -84,6 +84,15 @@ SilicaItem {
                                                     + Number(_conversionOffset.split(':')[1]))  // in minutes
     readonly property string formattedRelativeOffsetNoSign: formattedRelativeOffset.slice(1)
 
+    readonly property int numericUtcOffset: { // in minutes
+        if (timeFormat == 'timezone') {
+            Math.round(_timezoneOffsetSeconds / 60)
+        } else if (timeFormat == 'offset') {
+            Math.round(utcOffsetSeconds / 60)
+        } else {
+            (_currentLocalTime.getTimezoneOffset() * (-1))
+        }
+    }
     readonly property string formattedUtcOffset: {
         if (timeFormat == 'timezone') {
             (_timezoneOffsetSeconds > 0 ? "+" : "-")

@@ -30,6 +30,8 @@ DetailsPageBase {
             spacing: Theme.paddingLarge
 
             PageHeader {
+                id: pageHeader
+
                 property string _primary: defaultFor(settings['label'], "")
                 property string _secondary: {
                     if (clock.numericRelativeOffset < 0) {
@@ -86,6 +88,8 @@ DetailsPageBase {
                 }
 
                 Column {
+                    id: detailsColumn
+
                     anchors {
                         top: digitalClock.bottom
                         topMargin: Theme.paddingLarge
@@ -113,9 +117,9 @@ DetailsPageBase {
                     }
 
                     DetailItem {
-                        visible: clock.utcOffsetSeconds != 0
+                        visible: clock.numericUtcOffset != 0
                         label: qsTr("offset from UTC")
-                        value: qsTr("%1 hour(s)", "", Math.ceil((clock.utcOffsetSeconds / 60) % 60)).arg(clock.formattedUtcOffset)
+                        value: qsTr("%1 hour(s)", "", Math.ceil((clock.numericUtcOffset) % 60)).arg(clock.formattedUtcOffset)
                     }
 
                     DetailItem {
@@ -149,14 +153,41 @@ DetailsPageBase {
                 target: clock
                 anchors {
                     left: parent.left
-                    verticalCenter: parent.verticalCenter
                     top: parent.top
+                    horizontalCenter: undefined
                 }
             }
 
             PropertyChanges {
                 target: clock
-                anchors.topMargin: 10//(Screen.width - clock.height) / 2
+                anchors {
+                    leftMargin: Theme.horizontalPageMargin
+                    topMargin: (Screen.width - clock.height) / 2 - pageHeader.height
+                }
+            }
+
+            AnchorChanges {
+                target: digitalClock
+                anchors {
+                    horizontalCenter: clock.right
+                    top: clock.top
+                }
+            }
+
+            PropertyChanges {
+                target: digitalClock
+                anchors {
+                    horizontalCenterOffset: (Screen.height - clock.width - Theme.horizontalPageMargin) / 2
+                    topMargin: (root.height - pageHeader.height - digitalClock.height - detailsColumn.height) / 2
+                }
+            }
+
+            AnchorChanges {
+                target: detailsColumn
+                anchors {
+                    left: clock.right
+                    right: parent.right
+                }
             }
         }
     ]

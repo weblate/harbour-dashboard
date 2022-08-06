@@ -25,7 +25,7 @@ TileBase {
     // MAY HAVE TO BE CHANGED BY TILE IMPLEMENTATIONS
 
     size: "small"                     // default tile size: small, medium, large
-    property string detailsPage: enableDefaultDetailsPage   // effective url to the details page, if supported
+    property string detailsPage: allowDetails   // effective url to the details page, if supported
                                  ? Qt.resolvedUrl("Details.qml") : ""
     property string settingsDialog: allowConfig             // effective url to the settings page, if supported
                                     ? Qt.resolvedUrl("Settings.qml") : ""
