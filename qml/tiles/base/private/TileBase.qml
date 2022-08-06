@@ -44,6 +44,7 @@ ListItem {
     property bool allowRemove: true
     property bool allowMove: true
     property bool allowConfig: true
+    property bool allowRefresh: false
     property bool showBackground: true
     property bool enabledWhileEditing: false
 
@@ -59,6 +60,7 @@ ListItem {
     signal removed(var index)
     signal requestConfig
     signal requestMove(var from, var to)
+    signal requestRefresh
 
     function requestRemoval() {
         // We have to create the remorse timer manually. See

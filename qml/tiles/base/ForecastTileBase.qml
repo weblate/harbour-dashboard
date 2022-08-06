@@ -39,6 +39,7 @@ TileBase {
 
     // may have to be changed by the tile implementation
     size: "small"  // default size: small, medium, large
+    allowRefresh: false // requires specific support by the tile implementation
     allowResize: false // requires specific support by the tile implementation
     allowConfig: false // requires specific support by the tile implementation
 
@@ -51,6 +52,12 @@ TileBase {
 
     // the default context menu should not be changed by tile implementations
     menu: ContextMenu {
+        MenuItem {
+            visible: root.allowRefresh
+            text: qsTr("Refresh")
+            onClicked: root.requestRefresh()
+        }
+
         MenuItem {
             visible: root.allowConfig
             text: qsTr("Configure")
