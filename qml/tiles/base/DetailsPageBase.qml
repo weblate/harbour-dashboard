@@ -11,15 +11,20 @@ Page {
     id: root
     allowedOrientations: Orientation.All
 
-    property int tile_id: -1  // database identifier
-    property var settings: ({})  // implementation specific settings passed from/to the database
-    property bool debug: false  // bind to global debug toggle
+    // -------------------------------------------------------------------------
+    // MUST BE CONFIGURED BY IMPLEMENTATIONS
 
-    property bool allowRefresh: tile && tile.allowRefresh
-    property bool allowConfig: tile && tile.allowConfig
+    property int tile_id: -1        // database identifier
+    property var settings: ({})     // implementation specific settings passed from/to the database
+    property bool debug: false      // bind to global debug toggle
+
+    property bool allowRefresh: tile && tile.allowRefresh   // whether the tile supports refreshing
+    property bool allowConfig: tile && tile.allowConfig     // whether the tile supports configuration
 
     property ForecastTileBase tile: null  // bind to the tile instance that this details page belongs to
-    property alias defaultPulleyMenu: defaultPulleyMenuComponent  // ...
+
+    // -------------------------------------------------------------------------
+    // HELPER FUNCTIONS
 
     function defaultFor(what, fallback) {
         return (what === '' || typeof what === 'undefined' || what === null) ? fallback : what
@@ -28,6 +33,17 @@ Page {
     function defaultOrNullFor(what, fallback) {
         return (what === '' || typeof what === 'undefined') ? fallback : what
     }
+
+    // -------------------------------------------------------------------------
+    // DEFAULT PULL DOWN MENU
+    //
+    // The menu allows to configure and refresh the tile if either of
+    // these actions is enabled (cf. allowRefresh and allowConfig).
+    // If neither is allowed, the pulley menu will be hidden.
+    //
+    // Enable the menu by adding it to a custom flickable, e.g. a SilicaFlickable:
+    //    pullDownMenu: root.defaultPulleyMenu.createObject(flickable)
+    property alias defaultPulleyMenu: defaultPulleyMenuComponent
 
     Component {
         id: defaultPulleyMenuComponent
@@ -48,6 +64,9 @@ Page {
             }
         }
     }
+
+    // -------------------------------------------------------------------------
+    // IMPLEMENTATION
 
     // Implementations must define their own page container,
     // as not all pages require a pulley menu or a flickable.

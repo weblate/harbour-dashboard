@@ -12,6 +12,27 @@ import "private"
 TileBase {
     id: root
 
+    // -------------------------------------------------------------------------
+    // MUST BE CONFIGURED BY TILE IMPLEMENTATIONS
+
+    objectName: "ForecastTileBase"                          // object name identifying the class of this tile, e.g. "weather:<provider>"
+    allowConfig: false                // requires specific support by the tile implementation: Settings.qml
+    property bool allowDetails: false // requires specific support by the tile implementation: Details.qml
+    allowRefresh: false               // requires specific support by the tile implementation
+    allowResize: false                // requires specific support by the tile implementation
+
+    // -------------------------------------------------------------------------
+    // MAY HAVE TO BE CHANGED BY TILE IMPLEMENTATIONS
+
+    size: "small"                     // default tile size: small, medium, large
+    property string detailsPage: enableDefaultDetailsPage   // effective url to the details page, if supported
+                                 ? Qt.resolvedUrl("Details.qml") : ""
+    property string settingsDialog: allowConfig             // effective url to the settings page, if supported
+                                    ? Qt.resolvedUrl("Settings.qml") : ""
+
+    // -------------------------------------------------------------------------
+    // HELPER FUNCTIONS
+
     function defaultFor(what, fallback) {
         return (what === '' || typeof what === 'undefined' || what === null) ? fallback : what
     }
@@ -20,33 +41,30 @@ TileBase {
         return (what === '' || typeof what === 'undefined') ? fallback : what
     }
 
-    // must be provided by the container (main page)
-    debug: false  // bind to global debug toggle
-    bindEditingTarget: null  // item or QtObject containing bindEditingProperty
-    bindEditingProperty: "editing"  // boolean property indicating edit mode
-    dragProxyTarget: null  // Image{} outside of the tile container used for showing preview while dragging
-    objectIndex: -1 // explicit binding to attached property <loader>.ObjectModel.index
-    property ObjectModel tilesViewModel: null  // container holding tile instances
-    property var settings: ({})  // implementation specific settings passed from/to the database
+    // -------------------------------------------------------------------------
+    // MUST BE CONFIGURED BY THE TILE CONTAINER (MAIN PAGE)
+    // Implementations should not touch these settings.
 
-    property int tile_id: -1  // database identifier
+    debug: false                                // bind to global debug toggle
+    bindEditingTarget: null                     // item or QtObject containing bindEditingProperty
+    bindEditingProperty: "editing"              // boolean property indicating edit mode
+    dragProxyTarget: null                       // Image{} outside of the tile container used for showing preview while dragging
+    objectIndex: -1                             // explicit binding to attached property <loader>.ObjectModel.index
+    property ObjectModel tilesViewModel: null   // container holding tile instances
 
-    // must be redefined by the tile implementation
-    objectName: "ForecastTileBase"
-    property string settingsDialog: "" // Qt.resolvedUrl("Settings.qml")
-    property string detailsPage: "" // Qt.resolvedUrl("Details.qml")
+    property int tile_id: -1                    // database identifier
+    property var settings: ({})                 // implementation specific settings passed from/to the database
 
-    // may have to be changed by the tile implementation
-    size: "small"  // default size: small, medium, large
-    allowRefresh: false // requires specific support by the tile implementation
-    allowResize: false // requires specific support by the tile implementation
-    allowConfig: false // requires specific support by the tile implementation
+    // -------------------------------------------------------------------------
+    // SHOULD NOT HAVE TO BE CHANGED BY TILE IMPLEMENTATIONS
 
-    // should be fine like this for most use cases
     allowMove: true
     allowRemove: true
     cancelEditOnClick: false
     property bool showDetailsOnClick: detailsPage != ""
+
+    // -------------------------------------------------------------------------
+    // INTERNAL IMPLEMENTATION
 
     property int _registeredUpdateSignalForTileId: -1
 
