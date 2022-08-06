@@ -35,7 +35,6 @@ TileBase {
     objectName: "ForecastTileBase"
     property string settingsDialog: "" // Qt.resolvedUrl("Settings.qml")
     property string detailsPage: "" // Qt.resolvedUrl("Details.qml")
-    property bool showDetailsOnClick: detailsPage != ""
 
     // may have to be changed by the tile implementation
     size: "small"  // default size: small, medium, large
@@ -47,8 +46,9 @@ TileBase {
     allowMove: true
     allowRemove: true
     cancelEditOnClick: false
+    property bool showDetailsOnClick: detailsPage != ""
 
-    property int _registeredUpdateSignalFor: -1
+    property int _registeredUpdateSignalForTileId: -1
 
     // the default context menu should not be changed by tile implementations
     menu: ContextMenu {
@@ -93,9 +93,9 @@ TileBase {
     }
 
     onTile_idChanged: {
-        if (tile_id < 0 || tile_id == _registeredUpdateSignalFor) return
+        if (tile_id < 0 || tile_id == _registeredUpdateSignalForTileId) return
         console.log("got a new tile_id", tile_id)
-        _registeredUpdateSignalFor = tile_id
+        _registeredUpdateSignalForTileId = tile_id
 
         app.registerBackendSignal(tile_id, "info.main.update-tile.finished", function(args) {
             root.settings = args[2]  // 0=signal, 1=tile_id, 2+=args
@@ -117,8 +117,8 @@ TileBase {
     }
 
     Component.onCompleted: {
-        if (tile_id >= 0 && tile_id != _registeredUpdateSignalFor) {
-            _registeredUpdateSignalFor = tile_id
+        if (tile_id >= 0 && tile_id != _registeredUpdateSignalForTileId) {
+            _registeredUpdateSignalForTileId = tile_id
             app.registerBackendSignal(tile_id, "info.main.update-tile.finished", function(args) {
                 root.settings = args[2]  // 0=signal, 1=tile_id, 2+=args
             })
