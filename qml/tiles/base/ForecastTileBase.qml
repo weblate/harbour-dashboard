@@ -64,13 +64,8 @@ TileBase {
             onClicked: root.requestConfig()
         }
         MenuItem {
-            text: qsTr("Arrange tiles")
+            text: qsTr("Manage tiles")
             onDelayedClick: bindEditingTarget.edit()
-        }
-        MenuItem {
-            visible: root.allowRemove
-            text: qsTr("Remove")
-            onDelayedClick: root.requestRemoval()
         }
     }
 
