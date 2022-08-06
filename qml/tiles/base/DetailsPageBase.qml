@@ -15,6 +15,11 @@ Page {
     property var settings: ({})  // implementation specific settings passed from/to the database
     property bool debug: false  // bind to global debug toggle
 
+    property bool allowRefresh: tile && tile.allowRefresh
+    property bool allowConfig: tile && tile.allowConfig
+
+    property ForecastTileBase tile: null  // bind to the tile instance that this details page belongs to
+
     function defaultFor(what, fallback) {
         return (what === '' || typeof what === 'undefined' || what === null) ? fallback : what
     }

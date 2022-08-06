@@ -72,6 +72,7 @@ TileBase {
     onClicked: {
         if ((!editing || enabledWhileEditing) && showDetailsOnClick && detailsPage != "") {
             pageStack.push(detailsPage, {
+                'tile': root,
                 'settings': Qt.binding(function(){ return settings }),
                 'debug': Qt.binding(function(){ return debug }),
                 'tile_id': Qt.binding(function(){ return tile_id })
