@@ -20,6 +20,7 @@ DetailsPageBase {
         anchors.fill: parent
         flickableDirection: Flickable.VerticalFlick
         contentHeight: Math.max(column.height, root.height)
+        pullDownMenu: root.defaultPulleyMenu.createObject(flickable)
 
         VerticalScrollDecorator { flickable: flick }
 

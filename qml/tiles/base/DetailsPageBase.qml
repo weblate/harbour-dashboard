@@ -19,6 +19,7 @@ Page {
     property bool allowConfig: tile && tile.allowConfig
 
     property ForecastTileBase tile: null  // bind to the tile instance that this details page belongs to
+    property alias defaultPulleyMenu: defaultPulleyMenuComponent  // ...
 
     function defaultFor(what, fallback) {
         return (what === '' || typeof what === 'undefined' || what === null) ? fallback : what
@@ -26,6 +27,26 @@ Page {
 
     function defaultOrNullFor(what, fallback) {
         return (what === '' || typeof what === 'undefined') ? fallback : what
+    }
+
+    Component {
+        id: defaultPulleyMenuComponent
+
+        PullDownMenu {
+            visible: allowRefresh || allowConfig
+
+            MenuItem {
+                visible: root.allowConfig
+                text: qsTr("Configure")
+                onClicked: root.tile.requestConfig()
+            }
+
+            MenuItem {
+                visible: root.allowRefresh
+                text: qsTr("Refresh")
+                onClicked: root.tile.requestRefresh()
+            }
+        }
     }
 
     // Implementations must define their own page container,
