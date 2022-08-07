@@ -62,6 +62,19 @@ class Provider:
     def config_path(self):
         return self.config_dir / self.handle
 
+    def call_command(self, command, tile_id, sequence, data) -> None:
+        """ Execute a command from the frontend.
+
+            Results are passed back to the frontend using signals.
+
+            Implementations must include the 'tile_id' and 'sequence' arguments
+            as the first (tile_id) and second (sequence) argument of the signal.
+
+            Which signals are sent and how they are handled is completely up to
+            the provider-specific backend and frontend implementations.
+        """
+        raise NotImplementedError()
+
     def refresh(self, ident: str, force: bool) -> None:
         """ Refresh forecast for a given location.
             Implementations must call self._pre_refresh() before doing anything else.

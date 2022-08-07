@@ -80,6 +80,32 @@ ApplicationWindow {
     // -------------------------------------------------------------------------
     // BACKEND/DATABASE INTERACTION FUNCTIONS
 
+    // ---------- SIGNAL HANDLING and PROVIDER INTERACTION
+    // Functions in this section are most important for tile implementations.
+
+    // Send a command that will be handled by a data provider.
+    //
+    // Register a callback using registerBackendSignal(...) to receive the results
+    // of the command.
+    //
+    // 'tileId' and 'sequence' will be used to identify the caller. The results should
+    // contain a 'sequence' field as well. This allows to discern the results of multiple
+    // calls, e.g. when live-updating a model.
+    //
+    // Pass any data arguments that are required for the command as an object / dict in
+    // the 'data' field.
+    //
+    // ARGUMENTS:
+    // provider: str | command: str | tileId: int | sequence: int | data: object
+    //
+    function sendProviderCommand(provider, command, tileId, sequence, data) {
+        py.call("meteo.send_provider_command", [command, provider, tileId, sequence, data], function(){
+            console.log("backend called for provider '%1': '%2' (tile: %3, seq: %4) -- %5".arg(
+                            provider).arg(command).arg(tileId).arg(sequence).arg(JSON.stringify(data)))
+        })
+    }
+
+
     // Register a Qt signal that will be emitted when the backend sends a notification.
     // The backend must identify the target in its first argument. The second argument
     // must be a Python dictionary / JS object that holds all additional data.
@@ -94,6 +120,10 @@ ApplicationWindow {
     //
     // IMPORTANT NOTE: only one local signal can be connected to a specific remote signal
     //     for each tile.
+    //
+    // ARGUMENTS:
+    // tileId: int | backendSignal: str | localSignal: function
+    //
     property var _signalHandlerRegistry: ({})
 
     function registerBackendSignal(tileId, backendSignal, localSignal) {
@@ -105,6 +135,14 @@ ApplicationWindow {
                     "at", tileId)
     }
 
+    // Unregister a Qt signal that has previously been registered using registerBackendSignal(...).
+    //
+    // It is important to unsubscribe from any signals that are no longer needed.
+    // This makes sure no functions are called in invalid contexts.
+    //
+    // ARGUMENTS:
+    // tileId: int | backendSignal: str
+    //
     function unregisterBackendSignal(tileId, backendSignal) {
         if (   _signalHandlerRegistry.hasOwnProperty(backendSignal)
             && _signalHandlerRegistry[backendSignal].hasOwnProperty(tileId)) {
@@ -115,6 +153,9 @@ ApplicationWindow {
                          "at", tileId, "because it is not registered")
         }
     }
+
+
+    // ---------- DIRECT BACKEND COMMANDS
 
     function loadTiles() {
         py.call("meteo.get_tiles", [], function(tiles) {

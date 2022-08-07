@@ -305,6 +305,10 @@ class Meteo:
 
         return self._config_db
 
+    @property
+    def providers(self) -> Dict[str, provider_base.Provider]:
+        return self._providers
+
     def refresh(self, provider: str, ident: str, force: bool) -> None:
         if provider in self._broken_providers:
             signal_send('error.refresh.broken-provider', provider, ident, force)
@@ -398,6 +402,27 @@ def initialize(data_path, cache_path, config_path):
         return True
 
     return False
+
+
+def send_provider_command(command: str, provider: str, tile_id: int, sequence: int, data: dict) -> None:
+    """
+    Send a command to a provider.
+
+    This function simply relays the command to the provider specified in the
+    'provider' argument. All remaining arguments will be passed on.
+    """
+    if not _check_init():
+        return
+
+    signal_send('info.main.provider-command.started', tile_id, command, provider, sequence, data)
+
+    if provider not in METEO.providers:
+        signal_send('error.main.provider-command.unknown-provider', provider, command, tile_id, sequence, data)
+        return
+
+    METEO.providers[provider].call_command(command, tile_id, sequence, data)
+
+    signal_send('info.main.provider-command.finished', tile_id, command, provider, sequence, data)
 
 
 def run_database_maintenance(caller: str) -> None:

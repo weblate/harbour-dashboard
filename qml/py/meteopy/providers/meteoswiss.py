@@ -98,6 +98,9 @@ class Provider(ProviderBase):
 
         self._setup()
 
+    def call_command(self, command, tile_id, sequence, data) -> None:
+        self._signal_send('provider.mch.test', tile_id, sequence, command, data)
+
     def refresh(self, ident: str, force: bool) -> None:
         self._pre_refresh(ident, force)
         self._signal_send('info.refresh.started', ident, force)
