@@ -333,11 +333,15 @@ class Meteo:
                 signal_send('warning.providers.broken', f'{i}: {e}')
 
     def _handle_provider_signal(self, event, *args):
-        if event == 'meteo.store-cache':
-            log(f'[not implemented] storing cache from [{args[0]}]:', *args[1:], scope='meteo')
+        if event.startswith('meteo.'):
+            log(f'[not implemented] meteo command from [{args[0]}]: {event}', *args[1:], scope='meteo')
             # TODO implement
+        elif event.startswith('provider.'):
+            # drop the provider handle as it is an internal, provider-specific signal
+            signal_send(event, *args[1:])
         else:
-            signal_send(event, *args)
+            # push the provider handle to the end of the arguments list for regular signals
+            signal_send(event, *args[1:], *args[0])
 
     def _backup_file(self, filepath):
         filepath = Path(filepath)
