@@ -14,6 +14,7 @@ SilicaItem {
     property alias description: bottomLabel.text
     property bool inverted: false
     property alias truncationMode: topLabel.truncationMode
+    property alias maximumLineCount: topLabel.maximumLineCount
 
     property alias labelFont: topLabel.font
     property alias descriptionFont: bottomLabel.font
@@ -37,6 +38,7 @@ SilicaItem {
         color: highlighted ? palette.highlightColor : palette.primaryColor
         wrapMode: Text.Wrap
         maximumLineCount: 2
+        truncationMode: TruncationMode.Fade
 
         visible: !!text
         height: visible ? implicitHeight : 0
@@ -54,10 +56,10 @@ SilicaItem {
 
         font.pixelSize: Theme.fontSizeSmall
         color: highlighted ? palette.secondaryHighlightColor : palette.secondaryColor
-        truncationMode: root.truncationMode
+        // truncationMode: root.truncationMode
         height: visible ? implicitHeight : 0
         wrapMode: Text.Wrap
-        maximumLineCount: 2
+        maximumLineCount: root.maximumLineCount
         horizontalAlignment: topLabel.horizontalAlignment
     }
 
