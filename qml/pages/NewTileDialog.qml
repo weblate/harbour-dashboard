@@ -27,7 +27,7 @@ Dialog {
 
         ListElement {
             title: qsTr("World clock")
-            description: qsTr("Add a clock showing local time or the current time in any time zone.")
+            description: qsTr("Clock showing local time or the current time in any time zone.")
             icon: "image://theme/icon-l-clock"
 
             type: "clock"
@@ -38,7 +38,7 @@ Dialog {
 
         ListElement {
             title: qsTr("Weather forecast")
-            description: qsTr("Add a weather forecast showing graphs for the next few days.")
+            description: qsTr("Weather forecast showing graphs for the next few days.")
             icon: "image://theme/icon-l-weather-d400"
 
             type: "weather"
@@ -49,7 +49,7 @@ Dialog {
 
         ListElement {
             title: qsTr("Pollen forecast")
-            description: qsTr("Add a forecast showing the intensity of pollen and other allergens.")
+            description: qsTr("Forecast showing the intensity of pollen and other allergens.")
             icon: "image://theme/icon-l-diagnostic"
 
             type: "pollen"
@@ -60,7 +60,7 @@ Dialog {
 
         ListElement {
             title: qsTr("Natural hazards")
-            description: qsTr("Add a list of current official warnings due to natural hazards.")
+            description: qsTr("List of current official warnings due to natural hazards.")
             icon: "image://theme/icon-l-attention"
 
             type: "hazards"
@@ -71,7 +71,7 @@ Dialog {
 
         ListElement {
             title: qsTr("Sun times")
-            description: qsTr("Add current times of sunrise and nightfall.")
+            description: qsTr("Current times of sunrise and nightfall.")
             icon: "image://theme/icon-l-timer"
 
             type: "suntimes"
@@ -82,7 +82,7 @@ Dialog {
 
         ListElement {
             title: qsTr("Spacer")
-            description: qsTr("Add an empty tile for spacing.")
+            description: qsTr("Empty tile for spacing.")
             icon: "image://theme/icon-l-dismiss"
 
             type: "spacer"
@@ -138,8 +138,7 @@ Dialog {
                             'acceptDestinationAction': PageStackAction.Pop
                         })
                         settingsDialog.accepted.connect(function() {
-                            console.log("ADDING NEW TILE")
-                            console.log("ADDING TYPE", model.type)
+                            console.log("adding new tile of type", model.type)
                             app.addTile(model.type, 'small', settingsDialog.updatedSettings)
                         })
                     } else {
@@ -202,12 +201,14 @@ Dialog {
                     description: model.description
 
                     width: 1 // why is this necessary?!!
-                    labelFont.pixelSize: Theme.fontSizeLarge
                     anchors {
                         left: iconBackground.right; leftMargin: Theme.paddingMedium
                         right: parent.right; rightMargin: Theme.horizontalPageMargin
                         verticalCenter: parent.verticalCenter
                     }
+
+                    labelFont.pixelSize: Theme.fontSizeMedium
+                    descriptionFont.pixelSize: Theme.fontSizeSmall
 
                     topLabelItem.wrapMode: Text.Wrap
                     topLabelItem.maximumLineCount: 1
