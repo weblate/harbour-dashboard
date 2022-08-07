@@ -44,7 +44,7 @@ Dialog {
             type: "weather"
             requiresProvider: true
             requiresConfig: true
-            implemented: false
+            implemented: true
         }
 
         ListElement {
