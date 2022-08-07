@@ -46,6 +46,7 @@ Page {
             }
 
             MenuItem {
+                // TODO enable only if there are tiles that support refreshing
                 visible: tilesModel.count > 1
                 text: qsTr("Refresh")
                 onClicked: {

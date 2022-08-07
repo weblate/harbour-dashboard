@@ -21,6 +21,10 @@ Dialog {
     ListModel {
         id: tileTypesModel
 
+        // TODO move this list in a separate file
+        // TODO maybe load tile definitions from JSON?
+        // TODO remove or polish descriptions; they are mostly not necessary at all
+
         ListElement {
             title: qsTr("World clock")
             description: qsTr("Add a clock showing local time or the current time in any time zone.")
