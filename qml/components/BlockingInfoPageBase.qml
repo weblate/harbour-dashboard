@@ -1,7 +1,7 @@
 /*
- * This file is part of Whisperfish.
+ * This file has been adapted from Whisperfish for use in Forecasts for SailfishOS.
  * SPDX-License-Identifier: AGPL-3.0-or-later
- * SPDX-FileCopyrightText: 2021  Mirian Margiani
+ * SPDX-FileCopyrightText: 2021, 2022  Mirian Margiani
  */
 
 import QtQuick 2.2
@@ -18,9 +18,10 @@ Page {
     property string pageTitle: ""  // optional
     property bool busy: false  // if true: dim the icon and show a spinner
 
-    //: default title of full-screen info pages (below the icon)
-    //% "Whisperfish"
-    property string mainTitle: qsTrId("whisperfish-info-page-default-title")
+    //@@: default title of full-screen info pages (below the icon)
+    //@@% "Whisperfish"
+    //@@property string mainTitle: qsTrId("whisperfish-info-page-default-title")
+    property string mainTitle: ""  // required
 
     property string mainDescription: ""  // should be set; below the main title
     property string detailedDescription: ""  // optional details below all content
