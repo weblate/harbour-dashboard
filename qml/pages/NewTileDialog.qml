@@ -120,10 +120,20 @@ Dialog {
                     if (model.requiresProvider) {
                         // Open the provider selection page for a new tile of type <type>.
                         // Configuring and actually saving the new tile is handled there.
+
                         // TODO implement
-                        app.showFatalError("Adding tiles with providers is not yet implemented.")
-                        console.error("adding tiles that require a provider is not yet implemented")
-                        root.accept()
+
+                        if (model.type === 'weather') {
+                            // DEBUG
+                            app.addTile(model.type, 'small', {
+                                'provider_id': 'mch',
+                                'location_id': '400100'
+                            })
+                        } else {
+                            app.showFatalError("Adding tiles with providers is not yet implemented.")
+                            console.error("adding tiles that require a provider is not yet implemented")
+                            root.accept()
+                        }
                     } else if (model.requiresConfig) {
                         // Open the correct settings dialog to configure a new tile.
                         // This loads the "generic" settings dialog which is expected at
