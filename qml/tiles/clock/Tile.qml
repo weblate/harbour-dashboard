@@ -54,6 +54,7 @@ ForecastTileBase {
     C.DescriptionLabel {
         id: clockLabel
         inverted: true
+        maximumLineCount: 1
 
         label: clock.convertedTimeString
         description: {
@@ -94,6 +95,7 @@ ForecastTileBase {
         id: extraInfoLabel
         visible: false
         inverted: false
+        maximumLineCount: 2
 
         label: {
             if (size == 'large') {
@@ -113,9 +115,15 @@ ForecastTileBase {
                 if (clock.numericRelativeOffset < 0) {
                     qsTr("%1 hour(s) behind local time", "",
                          Math.ceil(clock.numericRelativeOffset / 60)).arg(clock.formattedRelativeOffsetNoSign)
+                    + "\x9C"
+                    + qsTr("%1h behind", "shortened form of '%1 hour(s) behind local time'",
+                           Math.ceil(clock.numericRelativeOffset / 60)).arg(clock.formattedRelativeOffsetNoSign)
                 } else if (clock.numericRelativeOffset > 0) {
                     qsTr("%1 hour(s) ahead of local time", "",
                          Math.ceil(clock.numericRelativeOffset / 60)).arg(clock.formattedRelativeOffsetNoSign)
+                    + "\x9C"
+                    + qsTr("%1h ahead", "shortened form of '%1 hour(s) ahead of local time'",
+                           Math.ceil(clock.numericRelativeOffset / 60)).arg(clock.formattedRelativeOffsetNoSign)
                 } else {
                     ""
                 }
