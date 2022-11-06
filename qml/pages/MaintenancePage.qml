@@ -1,59 +1,164 @@
 /*
- * This file has been adapted from Whisperfish for use in Forecasts for SailfishOS.
+ * This file is part of Forecasts for SailfishOS.
  * SPDX-License-Identifier: AGPL-3.0-or-later
- * SPDX-FileCopyrightText: 2021, 2022  Mirian Margiani
+ * SPDX-FileCopyrightText: 2021-2022  Mirian Margiani
  */
 
 import QtQuick 2.2
 import Sailfish.Silica 1.0
 import "../components"
 
-BlockingInfoPageBase {
+Page {
     id: root
     objectName: "MaintenancePage"
 
     signal finished
+    onFinished: state = "done"
 
-    busy: true
-    mainTitle: qsTr("Database maintenance", "maintenance page title")
-    mainDescription: qsTr("Connecting to the backend...")
+    property alias _statusText: statusLabel.text
 
-    detailedDescription: qsTr("Please be patient and allow up to 30 seconds for this.")
-    iconSource: ""  // "image://theme/icon-l-date"
-    pageTitle: ""
+    // block any navigation
+    backNavigation: false
+    forwardNavigation: false
+    showNavigationIndicator: false
 
-    Timer {
-        id: minimumRunTimer
-        running: true
+    SilicaFlickable {
+        id: flick
+        anchors.fill: parent
 
-        // Database maintenance is only performed once every few months.
-        // It should be fine to let the user wait a few seconds to let
-        // them see what's going on, and to prevent the page from flickering.
-        interval: 5000
+        Column {
+            id: column
+            readonly property bool _portrait: root.isPortrait
+
+            y: Math.round(_portrait ? Screen.height/4 : Screen.width/4)
+            spacing: Theme.paddingLarge
+            width: parent.width
+
+            BusyIndicator {
+                id: busyIndicator
+                opacity: running ? 1.0 : 0.0
+                Behavior on opacity { FadeAnimator { duration: 400 } }
+                running: true
+                size: BusyIndicatorSize.Large
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            InfoLabel {
+                id: titleLabel
+                text: qsTr("Maintenance")
+            }
+        }
+
+        HighlightImage {
+            id: checkmark
+            anchors {
+                top: column.top
+                horizontalCenter: column.horizontalCenter
+            }
+
+            width: busyIndicator.width
+            height: width
+            source: "image://theme/icon-l-acknowledge"
+
+            opacity: busyIndicator.running ? 0.0 : 1.0
+            Behavior on opacity { FadeAnimator { duration: 400 } }
+        }
+
+        Text {
+            id: statusLabel
+            anchors.top: column.bottom
+
+            x: 3 * Theme.horizontalPageMargin
+            width: parent.width - 2*x
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.Wrap
+            color: Theme.secondaryHighlightColor
+            opacity: Theme.opacityHigh
+
+            font {
+                pixelSize: Theme.fontSizeLarge
+                family: Theme.fontFamilyHeading
+            }
+        }
+
+        Text {
+            id: hintLabel
+            anchors {
+                top: statusLabel.bottom
+                topMargin: Theme.paddingLarge
+            }
+
+            x: 2 * Theme.horizontalPageMargin
+            width: parent.width - 2*x
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.Wrap
+            color: Theme.secondaryHighlightColor
+            font.pixelSize: Theme.fontSizeMedium
+
+            opacity: Theme.opacityHigh
+            Behavior on opacity { FadeAnimator { duration: 400 } }
+
+            text: qsTr("Please be patient and allow up to 30 seconds for this.")
+        }
+
+        PulleyAnimationHint {
+            flickable: flick
+            width: parent.width - 2 * Theme.paddingLarge
+            height: flickable ? flickable.height - 2 * Theme.paddingLarge : 0
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: - (__silica_applicationwindow_instance._rotatingItem.height/3 - height/2) + Theme.paddingLarge
+        }
+
+        PullDownMenu {
+            id: pulley
+            enabled: false
+            opacity: enabled ? 1.0 : 0.0
+            Behavior on opacity { FadeAnimator { duration: 400 } }
+
+            MenuItem {
+                text: qsTr("Close")
+                onClicked: pageStack.pop()
+            }
+        }
     }
+
+    states: [
+        State {
+            name: "done"
+            PropertyChanges {
+                target: busyIndicator
+                running: false
+            }
+            PropertyChanges {
+                target: hintLabel
+                text: qsTr("Pull down to close this overlay.")
+            }
+            PropertyChanges {
+                target: pulley
+                enabled: true
+            }
+        }
+    ]
 
     Component.onCompleted: {
         console.log("running database maintenance")
 
         app.registerBackendSignal(objectName, "info.main.database-maintenance.started", function(){
-            mainDescription = qsTr("Connected to the backend")
+            _statusText = qsTr("Connected to the backend")
         })
         app.registerBackendSignal(objectName, "info.main.database-maintenance.status", function(args){
             if (args[2] === "clean-cache") {
-                mainDescription = qsTr('Cleaning caches for "%1"...').arg(args[3])
+                _statusText = qsTr('Cleaning caches for “%1”...').arg(args[3])
             } else if (args[2] === "vacuum") {
-                mainDescription = qsTr('Compressing databases for "%1"...').arg(args[3])
+                _statusText = qsTr('Compressing databases for “%1”...').arg(args[3])
             }
         })
         app.registerBackendSignal(objectName, "info.main.database-maintenance.finished", function(){
-            mainDescription = qsTr("Maintenance is complete")
+            _statusText = qsTr("Maintenance is complete")
             app.unregisterBackendSignal(objectName, "info.main.database-maintenance.started")
             app.unregisterBackendSignal(objectName, "info.main.database-maintenance.status")
             app.unregisterBackendSignal(objectName, "info.main.database-maintenance.finished")
-
-            if (minimumRunTimer.running) {
-                minimumRunTimer.triggered.connect(function(){ root.finished() })
-            }
+            root.finished()
         })
 
         app.runDatabaseMaintenance(objectName)

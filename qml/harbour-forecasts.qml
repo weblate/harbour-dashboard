@@ -231,7 +231,6 @@ ApplicationWindow {
 
             var maintenancePage = pageStack.push(Qt.resolvedUrl("pages/MaintenancePage.qml"))
             maintenancePage.finished.connect(function(){
-                pageStack.pop()
                 config.lastMaintenance = (new Date()).toISOString()
             })
         }
