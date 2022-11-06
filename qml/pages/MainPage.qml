@@ -29,28 +29,34 @@ Page {
 
         pullDownMenu: PullDownMenu {
             flickable: flickable
-            enabled: opacity > 0.0
-            opacity: flow.editing ? 0.0 : 1.0
-
-            Behavior on opacity { FadeAnimation { } }
 
             MenuItem {
                 text: qsTr("About")
                 onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
+                visible: !flow.editing
             }
 
             MenuItem {
                 text: qsTr("Manage tiles")
-                // onClicked: flow.edit()
                 onDelayedClick: flow.edit()
+                visible: !flow.editing
             }
 
             MenuItem {
                 // TODO enable only if there are tiles that support refreshing
-                visible: tilesModel.count > 1
+                visible: tilesModel.count > 1 && !flow.editing
                 text: qsTr("Refresh")
                 onClicked: {
                     // meteoApp.refreshData(undefined, false);
+                }
+            }
+
+            MenuItem {
+                text: qsTr("Add a tile")
+                visible: flow.editing
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("NewTileDialog.qml"),
+                                   {'returnToPage': pageStack.currentPage})
                 }
             }
         }
