@@ -20,7 +20,18 @@ DetailsPageBase {
         anchors.fill: parent
         flickableDirection: Flickable.VerticalFlick
         contentHeight: Math.max(column.height, root.height)
+
         pullDownMenu: root.defaultPulleyMenu.createObject(flickable)
+
+        MenuItem {
+            parent: flickable.pullDownMenu._contentColumn
+            visible: clock.numericRelativeOffset != 0
+            text: qsTr("Preview time shift")
+            onClicked: pageStack.push("private/TimeShiftPreviewPage.qml", {
+                                          'pageHeaderItem': pageHeader,
+                                          'detailsItem': root,
+                                      })
+        }
 
         VerticalScrollDecorator { flickable: flick }
 

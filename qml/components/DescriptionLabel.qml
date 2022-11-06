@@ -4,7 +4,7 @@
  * SPDX-FileCopyrightText: 2018-2020, 2022  Mirian Margiani
  */
 
-import QtQuick 2.0
+import QtQuick 2.6
 import Sailfish.Silica 1.0
 
 SilicaItem {
@@ -22,6 +22,9 @@ SilicaItem {
 
     readonly property alias topLabelItem: topLabel
     readonly property alias bottomLabelItem: bottomLabel
+
+    property alias topLabelColor: topLabel.color
+    property alias bottomLabelColor: bottomLabel.color
 
     implicitWidth: Math.max(topLabel.implicitWidth, bottomLabel.implicitWidth)
     height: childrenRect.height
@@ -41,7 +44,13 @@ SilicaItem {
         truncationMode: TruncationMode.Fade
 
         visible: !!text
-        height: visible ? implicitHeight : 0
+        height: visible ? (topMetrics.width > width ? 2 * topMetrics.height : topMetrics.height) : 0
+
+        TextMetrics {
+            id: topMetrics
+            text: topLabel.text
+            font.pixelSize: topLabel.font.pixelSize
+        }
     }
 
     Label {
