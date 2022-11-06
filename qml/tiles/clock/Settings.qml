@@ -86,78 +86,11 @@ SettingsDialogBase {
 
 
     // -------------------------------------------------------------------------
-    // LABEL AND LOOK
-
-    TextField {
-        id: labelField
-        width: parent.width
-
-        // some cities that are shown as example names
-        property var cities: [qsTr("Tokyo, Japan"), qsTr("Nuuk, Greenland"),
-            qsTr("Yangon, Myanmar"), qsTr("Lubumbashi, DR Congo"),
-            qsTr("Belém, Brazil"), qsTr("Paris, France")]
-
-        // users probably want to select a time zone first before naming the clock
-        focus: false
-
-        // We break the binding if the user changes the text manually.
-        // Otherwise, the field will be set to the currently selected city/timezone automatically.
-        text: !!settings['label'] ? settings['label'] : (timezoneSwitch.checked && clock.timezoneInfo ? clock.timezoneInfo.city : '')
-
-        placeholderText: qsTr("e.g. %1").arg(cities[Math.floor(Math.random() * cities.length)])
-        label: qsTr("Clock label (optional)")
-        hideLabelOnEmptyField: false
-
-        Connections {
-            target: labelField._editor
-
-            onEditingFinished: {  // intercept when the user actually edits the text field manually
-                var text = labelField.text
-
-                if (clock.timezoneInfo && text === clock.timezoneInfo.city) {
-                    return
-                } else if (text === '' && !timezoneSwitch.checked) {
-                    // restore the binding when the user manually clears the field
-                    labelField.text = Qt.binding(function(){ return timezoneSwitch.checked && clock.timezoneInfo ? clock.timezoneInfo.city : '' })
-                } else if (timezoneSwitch.checked && clock.timezoneInfo && text !== clock.timezoneInfo.city) {
-                    labelField.text = labelField.text  // break the binding
-                } else if (!timezoneSwitch.checked && text !== '') {
-                    labelField.text = labelField.text  // break the binding
-                }
-            }
-        }
-    }
-
-    ComboBox {
-        id: clockFaceCombo
-        label: qsTr("Clock face")
-        currentIndex: 0
-
-        menu: ContextMenu {
-            MenuItem { property string value: "plain"; text: qsTr("without numbers") }
-            MenuItem { property string value: "arabic"; text: qsTr("Arabic numbers (European)") }
-            MenuItem { property string value: "roman"; text: qsTr("Roman numbers") }
-        }
-
-        Component.onCompleted: {
-            if (defaultFor(settings['clock_face'], false)) {
-                for (var i = 0; i < menu.children.length; i++) {
-                    var child = menu.children[i]
-
-                    if (child && child.visible && child.hasOwnProperty("value")
-                            && child.value === settings['clock_face']) {
-                        currentIndex = i
-                        break
-                    }
-                }
-            }
-        }
-    }
-
-
-    // -------------------------------------------------------------------------
     // TIME FORMAT CONFIGURATION
 
+    SectionHeader {
+        text: qsTr("Time format")
+    }
 
     // ---------- LOCAL TIME
 
@@ -298,6 +231,80 @@ SettingsDialogBase {
 
             label: (utcMinusSwitch.checked ? qsTr("- %1") : qsTr("+ %1")).arg(timePicker.timeText)
             description: clock.convertedTime.toLocaleString(Qt.locale(), app.timeFormat)
+        }
+    }
+
+
+    // -------------------------------------------------------------------------
+    // LABEL AND LOOK
+
+    SectionHeader {
+        text: qsTr("Appearance")
+    }
+
+    TextField {
+        id: labelField
+        width: parent.width
+
+        // some cities that are shown as example names
+        property var cities: [qsTr("Tokyo, Japan"), qsTr("Nuuk, Greenland"),
+            qsTr("Yangon, Myanmar"), qsTr("Lubumbashi, DR Congo"),
+            qsTr("Belém, Brazil"), qsTr("Paris, France")]
+
+        // users probably want to select a time zone first before naming the clock
+        focus: false
+
+        // We break the binding if the user changes the text manually.
+        // Otherwise, the field will be set to the currently selected city/timezone automatically.
+        text: !!settings['label'] ? settings['label'] : (timezoneSwitch.checked && clock.timezoneInfo ? clock.timezoneInfo.city : '')
+
+        placeholderText: qsTr("e.g. %1").arg(cities[Math.floor(Math.random() * cities.length)])
+        label: qsTr("Clock label (optional)")
+        hideLabelOnEmptyField: false
+
+        Connections {
+            target: labelField._editor
+
+            onEditingFinished: {  // intercept when the user actually edits the text field manually
+                var text = labelField.text
+
+                if (clock.timezoneInfo && text === clock.timezoneInfo.city) {
+                    return
+                } else if (text === '' && !timezoneSwitch.checked) {
+                    // restore the binding when the user manually clears the field
+                    labelField.text = Qt.binding(function(){ return timezoneSwitch.checked && clock.timezoneInfo ? clock.timezoneInfo.city : '' })
+                } else if (timezoneSwitch.checked && clock.timezoneInfo && text !== clock.timezoneInfo.city) {
+                    labelField.text = labelField.text  // break the binding
+                } else if (!timezoneSwitch.checked && text !== '') {
+                    labelField.text = labelField.text  // break the binding
+                }
+            }
+        }
+    }
+
+    ComboBox {
+        id: clockFaceCombo
+        label: qsTr("Clock face")
+        currentIndex: 0
+
+        menu: ContextMenu {
+            MenuItem { property string value: "plain"; text: qsTr("without numbers") }
+            MenuItem { property string value: "arabic"; text: qsTr("Arabic numbers (European)") }
+            MenuItem { property string value: "roman"; text: qsTr("Roman numbers") }
+        }
+
+        Component.onCompleted: {
+            if (defaultFor(settings['clock_face'], false)) {
+                for (var i = 0; i < menu.children.length; i++) {
+                    var child = menu.children[i]
+
+                    if (child && child.visible && child.hasOwnProperty("value")
+                            && child.value === settings['clock_face']) {
+                        currentIndex = i
+                        break
+                    }
+                }
+            }
         }
     }
 
