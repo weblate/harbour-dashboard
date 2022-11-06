@@ -32,7 +32,7 @@ SettingsDialogBase {
         updatedSettings['clock_face'] = clock.clockFace
     }
 
-    property string _initialTimeFormat: defaultFor(settings['time_format'], 'timezone')
+    property string _initialTimeFormat: defaultFor(settings['time_format'], 'local')
 
 
     // -------------------------------------------------------------------------
@@ -140,7 +140,7 @@ SettingsDialogBase {
                : qsTr("%1, %2 (%3)").arg(clock.timezoneInfo.city).arg(
                      clock.timezoneInfo.country).arg(clock.timezoneInfo.offsetWithDstOffset)
 
-        onClicked: {
+        function pick() {
             // This uses the unstable/non-public API Sailfish.Timezone.
             // We cannot import the module directly due to Harbour restrictions
             // but we can simply push the page and hope for the best.
@@ -151,6 +151,9 @@ SettingsDialogBase {
                 pageStack.pop()
             })
         }
+
+        onClicked: pick()
+        onEnabledChanged: if (enabled) pick()
     }
 
 
