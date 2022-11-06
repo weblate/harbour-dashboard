@@ -18,6 +18,17 @@ SilicaItem {
     readonly property bool haveWallClock: wallClock != null
     property var wallClock: null
 
+    // Set this to a time object in your local time zone to calculate
+    // an arbitrary time in the remote time zone.
+    // Set this property to 'null' to use the current wallclock time.
+    //
+    // NOTE: You can set this to a time in the remote time zone and
+    // use the 'reverseConvertedTime' property to convert a remote
+    // time back to local time. However, the clock will then show
+    // an invalid time, and all other calculated properties will
+    // contain invalid values.
+    property var manualBaseTime: null
+
     property string clockFace: "plain"
     property string timeFormat: "local"
     property string timezone: ""
@@ -37,7 +48,7 @@ SilicaItem {
         }
     }
 
-    property date _currentLocalTime: wallClock.time
+    property date _currentLocalTime: (manualBaseTime !== null) ? manualBaseTime : wallClock.time
     readonly property string _conversionOffset: {
         // This abomination creates an offset relative to the local time,
         // so that when JS converts the UTC date back to the local timezone,
@@ -123,6 +134,27 @@ SilicaItem {
         zeroPad(_currentLocalTime.getUTCSeconds()) + _conversionOffset
     )
 
+    readonly property date reverseConvertedTime: new Date(
+        // Use this time object to convert a remote time back to local time.
+        // The remote time must be set through 'manualBaseTime'.
+        //
+        // Use getHours() and related methods to extract details. The getUTC...() methods
+        // will return skewed values.
+        //
+        // IMPORTANT: remember that all other properties will now contain
+        // completely unusable values, and the visual clock will be wrong.
+        // To use the clock normally, make sure 'manualBaseTime' always contains
+        // time in your local time zone (or is set to 'null').
+        zeroPad(_currentLocalTime.getUTCFullYear()) + "-" +
+        zeroPad(_currentLocalTime.getUTCMonth()+1) + "-" +  // months are 0-11 in JS
+        zeroPad(_currentLocalTime.getUTCDate()) + "T" +
+        zeroPad(_currentLocalTime.getUTCHours()) + ":" +
+        zeroPad(_currentLocalTime.getUTCMinutes()) + ":" +
+        zeroPad(_currentLocalTime.getUTCSeconds()) +
+        (_conversionOffset[0] === '+' ? '-' : '+') +
+        _conversionOffset.slice(1)
+    )
+
     property real _hoursAngle: (convertedTime.getHours() + convertedTime.getMinutes() / 60) * 30 % 360
     property real _minutesAngle: convertedTime.getMinutes() * 6 % 360
 
@@ -138,7 +170,7 @@ SilicaItem {
         id: background
         anchors.fill: parent
         source: "clock-face-" + clockFace + ".png"
-        color: highlighted ? Theme.highlightColor : Theme.primaryColor
+        color: parent.highlighted ? Theme.highlightColor : Theme.primaryColor
         fillMode: Image.PreserveAspectFit
 
         onStatusChanged: {
