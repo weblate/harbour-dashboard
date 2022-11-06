@@ -30,6 +30,7 @@ DISTFILES += \
     qml/pages/NewTileDialog.qml \
     qml/components/DescriptionLabel.qml \
     qml/components/BlockingInfoPageBase.qml \
+    qml/components/TileLoader.qml \
     \
     qml/tiles/base/ForecastTileBase.qml \
     qml/tiles/base/DetailsPageBase.qml \

@@ -5,6 +5,7 @@
  */
 
 import QtQuick 2.6
+import QtQml.Models 2.2
 import Sailfish.Silica 1.0
 import Nemo.Configuration 1.0
 // import Nemo.Notifications 1.0
@@ -29,6 +30,7 @@ ApplicationWindow {
         MainPage {}
     }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
+    property ObjectModel _coverTilesModel: ObjectModel {}
 
     property string dateTimeFormat: qsTr("d MMM yyyy '('hh':'mm')'")
     property string timeFormat: qsTr("hh':'mm")
@@ -213,6 +215,7 @@ ApplicationWindow {
         id: config
         path: "/apps/harbour-forecasts"
         property string lastMaintenance: "2000-01-01"
+        property int currentCoverIndex: 0
     }
 
     function _checkMaintenance() {

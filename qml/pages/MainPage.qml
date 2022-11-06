@@ -149,45 +149,9 @@ Page {
 
     Component {
         id: tileComponent
-
-        Loader {
-            id: loader
-            asynchronous: false
-            source: ""
-
-            onStatusChanged: {
-                if (status == Loader.Error) {
-                    setSource('../tiles/common/BrokenTile.qml', defaultProperties)
-                    // console.error("failed to show tile:", JSON.stringify(defaultProperties))
-                }
-            }
-
-            property var defaultProperties: ({
-                'debug': Qt.binding(function(){ return root.debug }),
-                'bindEditingTarget': flow,
-                'bindEditingProperty': 'editing',
-                'dragProxyTarget': floatingTile,
-                'objectIndex': Qt.binding(function(){ return loader.ObjectModel.index }),
-                'tilesViewModel': tilesModel
-            })
-
-            function load(tile_type, size, settings) {
-                settings['tile_type'] = tile_type
-                defaultProperties['tile_id'] = settings['tile_id']
-                defaultProperties['size'] = size
-                defaultProperties['settings'] = settings
-
-                var source = "../tiles/%1/Tile.qml"
-
-                if (settings.hasOwnProperty('provider_id')) {
-                    source = source.arg(tile_type + '/' + settings.provider_id)
-                } else {
-                    source = source.arg(tile_type)
-                }
-
-                loader.setSource(source, defaultProperties)
-                console.log("loading tile id", defaultProperties['tile_id'], "(", tile_type, ") using", source, JSON.stringify(settings))
-            }
+        TileLoader {
+            tilesViewModel: null
+            debug: root.debug
         }
     }
 
@@ -207,16 +171,16 @@ Page {
     ObjectModel {
         id: tilesModel
 
-        function loadTile(tile_type, size, settings) {
-            var item = tileComponent.createObject(tilesModel)
-            tilesModel.insert(tilesModel.count-1, item)
-            item.load(tile_type, size, settings)
+        function loadTile(parentModel, tile_type, size, settings, hideBackground) {
+            var item = tileComponent.createObject(parentModel, { 'tilesViewModel': parentModel })
+            parentModel.insert(Math.max(0, parentModel.count-1), item)
+            item.load(tile_type, size, settings, hideBackground)
         }
 
-        function insertTile(tile_type, size, settings, index) {
-            var item = tileComponent.createObject(tilesModel)
-            tilesModel.insert(index, item)
-            item.load(tile_type, size, settings)
+        function insertTile(parentModel, tile_type, size, settings, index, hideBackground) {
+            var item = tileComponent.createObject(parentModel, { 'tilesViewModel': parentModel })
+            parentModel.insert(Math.max(0, index), item)
+            item.load(tile_type, size, settings, hideBackground)
         }
 
         AddMoreTile {
@@ -246,7 +210,8 @@ Page {
         onTilesLoaded: {
             for (var i in tiles) {
                 console.log("- tile:", tiles[i].tile_id, tiles[i].tile_type, JSON.stringify(tiles[i].settings))
-                tilesModel.loadTile(tiles[i].tile_type, tiles[i].size, tiles[i].settings)
+                tilesModel.loadTile(tilesModel, tiles[i].tile_type, tiles[i].size, tiles[i].settings)
+                tilesModel.loadTile(_coverTilesModel, tiles[i].tile_type, 'small', tiles[i].settings, true)
             }
 
             console.log("all tiles loaded")
@@ -254,6 +219,8 @@ Page {
 
             // DEBUG
             // tilesModel.get(0).item.requestConfig()
+            // addMoreTile.clicked(null)
+            // tilesModel.get(0).item.clicked(null)
         }
 
         onTileAdded: {
@@ -261,7 +228,8 @@ Page {
             console.log("new tile notification received:", tile_id, tile_type, size, sequence, JSON.stringify(settings))
 
             // insert the new tile at the end but right before the addMoreTile
-            tilesModel.insertTile(tile_type, size, settings, tilesModel.count - 1)
+            tilesModel.insertTile(tilesModel, tile_type, size, settings, tilesModel.count - 1)
+            tilesModel.insertTile(_coverTilesModel, tile_type, 'small', settings, _coverTilesModel.count - 1, true)
         }
     }
 }
