@@ -43,13 +43,21 @@ Page {
     //
     // Enable the menu by adding it to a custom flickable, e.g. a SilicaFlickable:
     //    pullDownMenu: root.defaultPulleyMenu.createObject(flickable)
+    //
+    // To add custom entries to the pulley menu, simply parent them to the
+    // actual pulley menu object. The MenuItem{} can be declared anywhere in the file.
+    // Here, "flickable" refers to the ID of the main flickable that holds the pulley menu.
+    //     MenuItem {
+    //         parent: flickable.pullDownMenu._contentColumn
+    //         text: "Menu item"
+    //     }
     property alias defaultPulleyMenu: defaultPulleyMenuComponent
 
     Component {
         id: defaultPulleyMenuComponent
 
         PullDownMenu {
-            visible: allowRefresh || allowConfig
+            visible: allowRefresh || allowConfig || _content.length > 2
 
             MenuItem {
                 visible: root.allowConfig
