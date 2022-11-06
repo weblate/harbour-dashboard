@@ -38,8 +38,22 @@ SettingsDialogBase {
     // -------------------------------------------------------------------------
     // CLOCK PREVIEW
 
+    ListItem {
+        width: parent.width
+        contentHeight: Math.max(clock.height, timesColumn.height) + 2*Theme.paddingMedium
+        onClicked: openMenu()
+
+        menu: ContextMenu {
+            MenuItem { text: qsTr("without numbers"); onClicked: clockFaceCombo.currentIndex = 0; }
+            MenuItem { text: qsTr("Arabic numbers (European)"); onClicked: clockFaceCombo.currentIndex = 1; }
+            MenuItem { text: qsTr("Roman numbers"); onClicked: clockFaceCombo.currentIndex = 2; }
+        }
+
     Row {
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            verticalCenter: parent.verticalCenter
+        }
         spacing: Theme.paddingLarge
 
         AnalogClock {
@@ -55,6 +69,7 @@ SettingsDialogBase {
                 else if (timezoneSwitch.checked) "timezone"
             }
         }
+
 
         Column {
             id: timesColumn
@@ -79,9 +94,10 @@ SettingsDialogBase {
             }
         }
     }
+    }
 
     C.VerticalSpacing {
-        height: Theme.paddingLarge
+        height: Math.max(Theme.paddingLarge - 2*Theme.paddingMedium, 0)
     }
 
 
