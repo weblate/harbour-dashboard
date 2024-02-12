@@ -362,19 +362,19 @@ var Chart = function(canvas, context) {
             ctx.textAlign = "right";
             ctx.textBaseline = "middle";
 
-            for (var j=0; j<calculatedScale.steps; j++) {
+            for (var j=0; j<calculatedScale.steps + 1; j++) {
                 ctx.beginPath();
-                ctx.moveTo(yAxisLeftPosX-3,xAxisPosY - ((j+1) * scaleHop));
+                ctx.moveTo(yAxisLeftPosX-3,xAxisPosY - ((j) * scaleHop));
                 if (config.scaleShowGridLines) {
                     ctx.lineWidth = config.scaleGridLineWidth;
                     ctx.strokeStyle = config.scaleGridLineColor;
-                    ctx.lineTo(yAxisLeftPosX + xAxisLength + 5,xAxisPosY - ((j+1) * scaleHop));
+                    ctx.lineTo(yAxisLeftPosX + xAxisLength + 5,xAxisPosY - ((j) * scaleHop));
                 } else {
-                    ctx.lineTo(yAxisLeftPosX-0.5,xAxisPosY - ((j+1) * scaleHop));
+                    ctx.lineTo(yAxisLeftPosX-0.5,xAxisPosY - ((j) * scaleHop));
                 }
                 ctx.stroke();
                 if (config.scaleShowLabels) {
-                    ctx.fillText(calculatedScale.labels[j],yAxisLeftPosX-8,xAxisPosY - ((j+1) * scaleHop));
+                    ctx.fillText(calculatedScale.labels[j],yAxisLeftPosX-8,xAxisPosY - ((j) * scaleHop));
                 }
             }
 
@@ -582,7 +582,6 @@ var Chart = function(canvas, context) {
         }
 
         function drawScale() {
-
             ctx.lineWidth = config.scaleLineWidth;
             ctx.strokeStyle = config.scaleLineColor;
 
@@ -841,7 +840,7 @@ var Chart = function(canvas, context) {
 
     function populateLabels(labelTemplateString, labels, numberOfSteps, graphMin, stepValue) {
         if (labelTemplateString) {
-            for (var i = 1; i < numberOfSteps + 1; i++) {
+            for (var i = 0; i < numberOfSteps + 1; i++) {
                 labels.push(tmpl(labelTemplateString, {value: (graphMin + (stepValue * i)).toFixed(getDecimalPlaces(stepValue))}));
             }
         }
