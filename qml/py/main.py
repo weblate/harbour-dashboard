@@ -20,11 +20,11 @@ _KNOWN_TILE_SIZES = {
     'large': 2,
 }
 
-METEO = None
+MAIN = None
 INITIALIZED = False
 
 
-class Meteo:
+class Dashboard:
     class DataDb(DatabaseBase):
         """
         Data database.
@@ -158,9 +158,9 @@ def _check_init() -> bool:
     """
 
     global INITIALIZED
-    global METEO
+    global MAIN
 
-    if not INITIALIZED or not METEO.ready:
+    if not INITIALIZED or not MAIN.ready:
         signal_send('bug.main.not-initialized')  # TODO add more info for debugging
         return False
 
@@ -170,18 +170,18 @@ def _check_init() -> bool:
 # ------------------------------------------------------------------------------
 # Public API:
 #
-# Public API is not encapsulated in the Meteo class because pyotherside can only
+# Public API is not encapsulated in the Dashboard class because pyotherside can only
 # be used with simple stand-alone functions.
 #
 # All functions are *only* safe to use after initialize(...) has been called.
 
 def initialize(data_path, cache_path, config_path):
-    global METEO
+    global MAIN
     global INITIALIZED
 
-    METEO = Meteo(data_path, cache_path, config_path)
+    MAIN = Dashboard(data_path, cache_path, config_path)
 
-    if METEO.ready:
+    if MAIN.ready:
         INITIALIZED = True
         return True
 
@@ -202,7 +202,7 @@ def run_database_maintenance(caller: str) -> None:
     signal_send('info.main.database-maintenance.started', caller)
 
     for kind in ["data", "cache", "config"]:
-        db = getattr(METEO, f"{kind}_db", None)
+        db = getattr(MAIN, f"{kind}_db", None)
 
         if db:
             signal_send('info.main.database-maintenance.status', caller, 'vacuum', "main-" + kind)
@@ -228,8 +228,8 @@ def get_tiles() -> List[Tuple[str, Dict[str, Any]]]:
 
     signal_send('info.main.load-tiles.started')
 
-    METEO.config_db.cur.execute("""SELECT * FROM tiles ORDER BY sequence ASC; """)
-    rows = METEO.config_db.cur.fetchall()
+    MAIN.config_db.cur.execute("""SELECT * FROM tiles ORDER BY sequence ASC; """)
+    rows = MAIN.config_db.cur.fetchall()
     model = []
 
     for row in rows:
@@ -280,11 +280,11 @@ def remove_tile(tile_id: int) -> None:
 
     signal_send('info.main.remove-tile.started', tile_id)
 
-    METEO.config_db.con.execute("""
+    MAIN.config_db.con.execute("""
         DELETE FROM tiles WHERE tile_id = ?;
     """, (tile_id, ))
 
-    METEO.config_db.con.commit()
+    MAIN.config_db.con.commit()
     signal_send('info.main.remove-tile.finished', tile_id)
 
 
@@ -305,15 +305,15 @@ def add_tile(tile_type: str, size: str, settings: dict) -> None:
     if size not in _KNOWN_TILE_SIZES.keys():
         signal_send('warning.main.add-tile.unknown-tile-size', tile_type, size, settings)
         signal_send('warning.main.add-tile.failed')
-        METEO.config_db.con.rollback()
+        MAIN.config_db.con.rollback()
         return
 
-    tile_id = METEO.config_db.con.execute("""
+    tile_id = MAIN.config_db.con.execute("""
         SELECT tile_id FROM tiles ORDER BY tile_id DESC LIMIT 1;
     """).fetchone()
     tile_id = int(tile_id['tile_id']) + 1 if tile_id else 0
 
-    sequence = METEO.config_db.con.execute("""
+    sequence = MAIN.config_db.con.execute("""
         SELECT sequence FROM tiles ORDER BY sequence DESC LIMIT 1;
     """).fetchone()
     sequence = int(sequence['sequence']) + 1 if sequence else 0
@@ -321,12 +321,12 @@ def add_tile(tile_type: str, size: str, settings: dict) -> None:
     # the settings dict must always contain the tile ID
     settings['tile_id'] = tile_id
 
-    METEO.config_db.con.execute("""
+    MAIN.config_db.con.execute("""
         INSERT INTO tiles (tile_id, sequence, size, tile_type, settings_json)
         VALUES (?, ?, ?, ?, ?);
     """, (tile_id, sequence, _KNOWN_TILE_SIZES[size], tile_type, json.dumps(settings)))
 
-    METEO.config_db.con.commit()
+    MAIN.config_db.con.commit()
 
     # NOTE: the 'sequence' value is not an index and there may be gaps in the counting
     signal_send('info.main.add-tile.finished', tile_type, size, settings, tile_id, sequence)
@@ -346,14 +346,14 @@ def resize_tile(tile_id: int, size: str) -> None:
     if size not in _KNOWN_TILE_SIZES.keys():
         signal_send('warning.main.resize-tile.unknown-tile-size', tile_id, size)
         signal_send('warning.main.resize-tile.failed')
-        METEO.config_db.con.rollback()
+        MAIN.config_db.con.rollback()
         return
 
-    METEO.config_db.con.execute("""
+    MAIN.config_db.con.execute("""
         UPDATE tiles SET size = ? WHERE tile_id = ?;
     """, (_KNOWN_TILE_SIZES[size], tile_id))
 
-    METEO.config_db.con.commit()
+    MAIN.config_db.con.commit()
     signal_send('info.main.resize-tile.finished', tile_id, size)
 
 
@@ -369,10 +369,10 @@ def update_tile(tile_id: int, settings: dict) -> None:
 
     signal_send('info.main.update-tile.started', tile_id, settings)
 
-    METEO.config_db.con.execute("""
+    MAIN.config_db.con.execute("""
         UPDATE tiles SET settings_json = ? WHERE tile_id = ?;
     """, (json.dumps(settings), tile_id))
-    METEO.config_db.con.commit()
+    MAIN.config_db.con.commit()
 
     signal_send('info.main.update-tile.finished', tile_id, settings)
 
@@ -388,8 +388,8 @@ def move_tile(tile_id: int, from_index: int, to_index: int) -> None:
 
     signal_send('info.main.move-tile.started', tile_id, from_index, to_index)
 
-    METEO.config_db.cur.execute("""SELECT tile_id FROM tiles ORDER BY sequence ASC; """)
-    rows = METEO.config_db.cur.fetchall()
+    MAIN.config_db.cur.execute("""SELECT tile_id FROM tiles ORDER BY sequence ASC; """)
+    rows = MAIN.config_db.cur.fetchall()
     old_sequence = []
 
     for row in rows:
@@ -400,7 +400,7 @@ def move_tile(tile_id: int, from_index: int, to_index: int) -> None:
     if tile_id not in old_sequence:
         signal_send('warning.main.move-tile.tile-not-found', tile_id, from_index, to_index)
         signal_send('warning.main.move-tile.failed')
-        METEO.config_db.con.rollback()
+        MAIN.config_db.con.rollback()
         return
 
     if from_index > old_count or to_index > old_count:
@@ -422,20 +422,20 @@ def move_tile(tile_id: int, from_index: int, to_index: int) -> None:
     # on the sequence column while moving.
 
     for i, tile in enumerate(old_sequence):
-        METEO.config_db.con.execute("""
+        MAIN.config_db.con.execute("""
             UPDATE tiles SET sequence = ? WHERE tile_id = ?;
         """, (i + old_count + 1, tile))
 
         signal_send('MOVE', tile, i, i + old_count + 1)
 
     for i, tile in enumerate(new_sequence):
-        METEO.config_db.con.execute("""
+        MAIN.config_db.con.execute("""
             UPDATE tiles SET sequence = ? WHERE tile_id = ?;
         """, (i, tile))
 
         signal_send('MOVE-2', tile, i)
 
-    METEO.config_db.con.commit()
+    MAIN.config_db.con.commit()
     signal_send('info.main.move-tile.finished', tile_id, from_index, to_index)
 
 
@@ -448,7 +448,7 @@ def get_tile_data(tile_id: int, key: str) -> str:
 
     signal_send('info.main.tile-data.get.started', tile_id, key)
 
-    row = METEO.data_db.con.execute("""
+    row = MAIN.data_db.con.execute("""
         SELECT value FROM keyvalue WHERE tile_id = ?, key = ? LIMIT 1;
     """, (tile_id, key)).fetchone()
 
@@ -466,15 +466,15 @@ def set_tile_data(tile_id: int, key: str, data: str) -> None:
     signal_send('info.main.tile-data.set.started', tile_id, key, data)
 
     if data is None:
-        METEO.data_db.con.execute("""
+        MAIN.data_db.con.execute("""
             DELETE FROM keyvalue WHERE tile_id = ?, key = ?;
         """, (tile_id, key))
     else:
-        METEO.data_db.con.execute("""
+        MAIN.data_db.con.execute("""
             INSERT OR REPLACE INTO keyvalue(tile_id, key, value) VALUES (?, ?, ?);
         """, (tile_id, key, str(data)))
 
-    METEO.data_db.con.commit()
+    MAIN.data_db.con.commit()
 
     signal_send('info.main.tile-data.set.finished', tile_id, key, data)
 
