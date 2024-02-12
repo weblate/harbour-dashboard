@@ -73,6 +73,10 @@
         <source>Various meteorological forecasts from different providers.</source>
         <translation>Various meteorological forecasts from different providers.</translation>
     </message>
+    <message>
+        <source>Some modules have been adapted for use in this app.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BrokenTile</name>
@@ -93,6 +97,98 @@
     <message>
         <source>Today</source>
         <translation>Today</translation>
+    </message>
+</context>
+<context>
+    <name>Details</name>
+    <message numerus="yes">
+        <source>%1h behind</source>
+        <comment>shortened form of &apos;%1 hour(s) behind local time&apos;</comment>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%1h ahead</source>
+        <comment>shortened form of &apos;%1 hour(s) ahead of local time&apos;</comment>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>local time zone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>time zone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>local time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>offset from UTC</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 hour(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>offset from local time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 hour(s) behind local time</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 hour(s) ahead of local time</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Preview time shift</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DetailsPageBase</name>
+    <message>
+        <source>Configure</source>
+        <translation type="unfinished">Configure</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished">Refresh</translation>
+    </message>
+</context>
+<context>
+    <name>FatalErrorPage</name>
+    <message>
+        <source>Error</source>
+        <comment>fatal error message page title</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please restart the app. If the problem persists and appears to be a flaw in this app, please report the issue.</source>
+        <comment>generic hint on what to do after a fatal error occurred(error message will be shown separately)</comment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -236,12 +332,12 @@
         <translation>Configure</translation>
     </message>
     <message>
-        <source>Arrange tiles</source>
-        <translation>Arrange tiles</translation>
+        <source>Refresh</source>
+        <translation type="unfinished">Refresh</translation>
     </message>
     <message>
-        <source>Remove</source>
-        <translation>Remove</translation>
+        <source>Manage tiles</source>
+        <translation type="unfinished">Manage tiles</translation>
     </message>
 </context>
 <context>
@@ -284,6 +380,110 @@
     <message>
         <source>Add a tile</source>
         <translation>Add a tile</translation>
+    </message>
+</context>
+<context>
+    <name>MaintenancePage</name>
+    <message>
+        <source>Please be patient and allow up to 30 seconds for this.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connected to the backend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maintenance is complete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maintenance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pull down to close this overlay.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cleaning caches for “%1”...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compressing databases for “%1”...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Metadata</name>
+    <message>
+        <source>World clock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clock showing local time or the current time in any time zone.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Spacer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Empty tile for spacing.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weather forecast (MeteoSwiss)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weather forecast for Switzerland provided by the Swiss Meteorological Institute.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weather forecast (Yr.no)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weather forecast for the world provided by the Norwegian Meteorological Institute.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Day times</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current times of sunrise and sunset.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MetadataBase</name>
+    <message>
+        <source>Unimplemented tile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This tile has no description.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NewTileDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a tile type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -449,6 +649,212 @@
     </message>
 </context>
 <context>
+    <name>Settings</name>
+    <message>
+        <source>Local time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom time offset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clock time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Current time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tokyo, Japan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nuuk, Greenland</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yangon, Myanmar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lubumbashi, DR Congo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Belém, Brazil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Paris, France</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>e.g. %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clock label (optional)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clock face</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>without numbers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Roman numbers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Arabic numbers (European)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The clock will always show the current local time, using the same time zone as the system.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time zone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The clock will show the time in a specific time zone.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a time zone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1, %2 (%3)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The clock will show the time shifted from UTC. This is independent of the local time zone.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UTC + %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Positive offsets show time zones east of UTC/GMT (Greenwich, UK).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UTC - %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Negative offsets show time zones west of UTC/GMT (Greenwich, UK).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>- %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>+ %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Appearance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Location details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Latitude</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Longitude</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Find a location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter details manually</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 °N</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 °S</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 °E</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 °W</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A short nickname for this location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished">Description</translation>
+    </message>
+    <message>
+        <source>The full address or other details about the location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&gt; 0 is North, &lt; 0 is South</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&gt; 0 is East, &lt; 0 is West</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Timezone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Local timezone for this location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lookup timezone</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SettingsDialogBase</name>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SunTimesItem</name>
     <message>
         <source>%1: %2</source>
@@ -489,6 +895,116 @@
         <source>Placeholder</source>
         <translation>Placeholder</translation>
     </message>
+    <message>
+        <source>UTC %1</source>
+        <comment>time offset like &apos;UTC -11:00&apos;</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>local time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 hour(s) behind local time</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 hour(s) ahead of local time</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%1h behind</source>
+        <comment>shortened form of &apos;%1 hour(s) behind local time&apos;</comment>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%1h ahead</source>
+        <comment>shortened form of &apos;%1 hour(s) ahead of local time&apos;</comment>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Weather (Yr.no)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dawn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>noon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>golden</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dusk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sunset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>zenith</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sunrise</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TimeShiftPreviewPage</name>
+    <message>
+        <source>Reset to current time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calculate local time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calculate remote time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Local time</source>
+        <comment>as in &apos;here, versus over there&apos;</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calculated local time</source>
+        <comment>as in &apos;here, versus over there&apos;</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calculated remote time</source>
+        <comment>as in &apos;over there, versus here&apos;</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remote time</source>
+        <comment>as in &apos;over there, versus here&apos;</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>harbour-forecasts</name>
@@ -503,6 +1019,18 @@
     <message>
         <source>hh&apos;:&apos;mm</source>
         <translation>hh&apos;:&apos;mm</translation>
+    </message>
+    <message>
+        <source>A backend database is inaccessible.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to initialize the backend.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An unrecoverable error occurred.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
