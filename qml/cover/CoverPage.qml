@@ -31,12 +31,15 @@ CoverBackground {
             top: parent.top
             left: parent.left
             right: parent.right
+            bottom: parent.bottom
+
+            topMargin: -Theme.horizontalPageMargin
         }
 
         model: app._coverTilesModel
         currentIndex: config.currentCoverIndex
         itemWidth: parent.width
-        itemHeight: parent.height - Theme.horizontalPageMargin
+        itemHeight: parent.height //- Theme.horizontalPageMargin
 
         onCurrentIndexChanged: {
             config.currentCoverIndex = currentIndex
