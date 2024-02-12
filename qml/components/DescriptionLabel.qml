@@ -23,8 +23,12 @@ SilicaItem {
     readonly property alias topLabelItem: topLabel
     readonly property alias bottomLabelItem: bottomLabel
 
+    property bool preferHighlightColors: false
     property alias topLabelColor: topLabel.color
     property alias bottomLabelColor: bottomLabel.color
+
+    property alias topLabelPalette: topLabel.palette
+    property alias bottomLabelPalette: bottomLabel.palette
 
     implicitWidth: Math.max(topLabel.implicitWidth, bottomLabel.implicitWidth)
     height: childrenRect.height
@@ -38,7 +42,7 @@ SilicaItem {
         }
 
         font.pixelSize: Theme.fontSizeMedium
-        color: highlighted ? palette.highlightColor : palette.primaryColor
+        color: (highlighted || preferHighlightColors) ? palette.highlightColor : palette.primaryColor
         wrapMode: Text.Wrap
         maximumLineCount: 2
         truncationMode: TruncationMode.Fade
@@ -64,7 +68,7 @@ SilicaItem {
         }
 
         font.pixelSize: Theme.fontSizeSmall
-        color: highlighted ? palette.secondaryHighlightColor : palette.secondaryColor
+        color: (highlighted || preferHighlightColors) ? palette.secondaryHighlightColor : palette.secondaryColor
         // truncationMode: root.truncationMode
         height: visible ? implicitHeight : 0
         wrapMode: Text.Wrap
