@@ -241,7 +241,7 @@ ApplicationWindow {
     // ---------- DIRECT BACKEND COMMANDS
 
     function loadTiles() {
-        py.call("meteo.get_tiles", [], function(tiles) {
+        py.call("main.get_tiles", [], function(tiles) {
             // TODO DEBUG tiles are loaded asynchronously now,
             // using the info.main.add-tile.finished signal
 //            if (tiles.constructor === Array) {
@@ -255,37 +255,37 @@ ApplicationWindow {
     }
 
     function addTile(tile_type, size, settings) {
-        py.call("meteo.add_tile", [tile_type, size, settings], function() {
+        py.call("main.add_tile", [tile_type, size, settings], function() {
             console.log("tile addded:", tile_type, ", size", size, JSON.stringify(settings))
         })
     }
 
     function removeTile(tile_id) {
-        py.call("meteo.remove_tile", [tile_id], function() {
+        py.call("main.remove_tile", [tile_id], function() {
             console.log("tile removed:", tile_id)
         })
     }
 
     function updateTile(tile_id, settings) {
-        py.call("meteo.update_tile", [tile_id, settings], function() {
+        py.call("main.update_tile", [tile_id, settings], function() {
             console.log("tile updated:", tile_id, JSON.stringify(settings))
         })
     }
 
     function resizeTile(tile_id, size) {
-        py.call("meteo.resize_tile", [tile_id, size], function() {
+        py.call("main.resize_tile", [tile_id, size], function() {
             console.log("tile size changed:", tile_id, size)
         })
     }
 
     function moveTile(tile_id, from, to) {
-        py.call("meteo.move_tile", [tile_id, from, to], function() {
+        py.call("main.move_tile", [tile_id, from, to], function() {
             console.log("tile moved:", tile_id, from, to)
         })
     }
 
     function runDatabaseMaintenance(caller) {
-        py.call("meteo.run_database_maintenance", [caller], function() {
+        py.call("main.run_database_maintenance", [caller], function() {
             console.log("database maintenance started by", caller, "is done")
         })
     }
@@ -390,9 +390,9 @@ ApplicationWindow {
             addImportPath(Qt.resolvedUrl('./py'))
             addImportPath(Qt.resolvedUrl('./py/libs'))
 
-            importModule("meteo", function() {
-                console.log("meteo.py loaded")
-                py.call("meteo.initialize",
+            importModule("main", function() {
+                console.log("Python backend loaded")
+                py.call("main.initialize",
                         [StandardPaths.data, StandardPaths.cache, String(StandardPaths.cache).replace('.cache', '.config')],
                         function(success) {
                             if (success) {
