@@ -2,7 +2,7 @@
  * This file is part of QChart.js, adapted for Forecasts.
  * SPDX-License-Identifier: MIT
  * SPDX-FileCopyrightText: 2014  Julien Wintz
- * SPDX-FileCopyrightText: 2018-2019, 2022  Mirian Margiani
+ * SPDX-FileCopyrightText: 2018-2019, 2022-2024  Mirian Margiani
  */
 
 // QChart.js ---
@@ -25,8 +25,10 @@
 // - allow setting a minimum value in line graphs
 // - remove all chart types except line and bar
 // - use computed fixed width for y scale
+// - print label for bottom end of y scale
 // - align line chart dots and bar chart bars
 // - add config option to draw a vertical indicator line based on the current time
+// - add config option to draw a vertical indicator line at a custom position (0.0 - 1.0)
 // - use 'scaleOverlay' option to draw only the vertical scale
 // - add option to line graph to only fill difference between second and third dataset
 // - support setting colors when building the graph instead of inside the datasets
