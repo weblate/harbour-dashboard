@@ -35,19 +35,23 @@ DISTFILES += \
     qml/tiles/base/ForecastTileBase.qml \
     qml/tiles/base/DetailsPageBase.qml \
     qml/tiles/base/SettingsDialogBase.qml \
+    qml/tiles/base/MetadataBase.qml \
     qml/tiles/base/private/TileBase.qml \
     qml/tiles/base/private/TileActionButton.qml \
     qml/tiles/common/AddMoreTile.qml \
     qml/tiles/common/BrokenTile.qml \
     qml/tiles/common/private/icon-l-warning.png \
     qml/tiles/spacer/Tile.qml \
+    qml/tiles/spacer/Metadata.qml \
     qml/tiles/clock/Tile.qml \
+    qml/tiles/clock/Metadata.qml \
     qml/tiles/clock/Details.qml \
     qml/tiles/clock/Settings.qml \
     qml/tiles/clock/private/AnalogClock.qml \
     qml/tiles/clock/private/clock-face-num-arabic.png \
     qml/tiles/clock/private/clock-face-num-roman.png \
     qml/tiles/clock/private/clock-face-plain.png \
+    qml/tiles/tiles.json \
     \
     qml/py/meteo.py \
     qml/py/meteopy/util.py \

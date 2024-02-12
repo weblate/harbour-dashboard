@@ -280,6 +280,8 @@ ApplicationWindow {
 
             // Add the directory of this .qml file to the search path
             addImportPath(Qt.resolvedUrl('./py'))
+            addImportPath(Qt.resolvedUrl('./py/libs'))
+
             importModule("meteo", function() {
                 console.log("meteo.py loaded")
                 py.call("meteo.initialize",
