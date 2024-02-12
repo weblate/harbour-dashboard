@@ -1,0 +1,16 @@
+# - falls Code von Captain's Log verwendet wird -> dokumentieren
+# x verschiedene Provider unterstützen, aber erstmal nur MeteoSchweiz
+# x als erstes die Ort-Datenkbank herunterladen: https://s3-eu-central-1.amazonaws.com/app-prod-static-fra.meteoswiss-app.ch/v1/db.sqlite
+# x Datenbank für Orte anlegen
+# x Ordner für Cache anlegen
+# x Datenbank für Wetter-Cache anlegen
+# - mit einem Image-Provider (s. pyotherside) Wetter-Icons entweder aus dem Cache laden oder fehlende herunterladen:
+#       https://www.meteoschweiz.admin.ch/etc.clientlibs/internet/clientlibs/meteoswiss/resources/assets/images/icons/meteo/weather-symbols/42.svg
+# - Daten herunterladen: https://app-prod-ws.meteoswiss-app.ch/v1/plzDetail?plz= id
+#       ('id' ist die ID eines Ortes aus der Datenbank; eine Anfrage pro Ort)
+# - immer Header nicht vergessen:
+#       - Accept-Language = de, fr, it, en   <-- abhängig von App-Sprache, Fallback ist Englisch
+#       - User-Agent = MeteoSwissApp-2.3.3-Android  --> 2.16-Android
+
+# - Übersetzungen laden: https://www.meteoschweiz.admin.ch/etc.clientlibs/internet/clientlibs/meteoswiss/clientlibs/lang/de.min.js <-- de, fr, it, en
+#   -> vorher? -> in Kataloge integrieren?
