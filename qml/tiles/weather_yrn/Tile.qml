@@ -11,7 +11,7 @@ import "../base"
 
 ForecastTileBase {
     id: root
-    objectName: "spacer"
+    objectName: "weather_yrn"
 
     size: "small"
     allowResize: true
@@ -35,6 +35,6 @@ ForecastTileBase {
         horizontalAlignment: Text.AlignHCenter
         wrapMode: Text.Wrap
         color: highlighted ? palette.secondaryHighlightColor : palette.secondaryColor
-        text: qsTr("Placeholder")
+        text: qsTr("Weather (Yr.no)")
     }
 }

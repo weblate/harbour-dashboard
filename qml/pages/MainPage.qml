@@ -120,20 +120,19 @@ Page {
                 //      qml/
                 //          tiles/
                 //              base/
-                //                  ForecastTileBase.qml        -- all tiles should derive from this component
+                //                  ForecastTileBase.qml    -- all tiles must derive from this component
+                //                  MetadataBase.qml        -- all metadata components must derive from this
+                //                  SettingsDialogBase.qml  -- all settings dialogs must derive from this
                 //                  private/
                 //
-                //              <tile-type>/                    -- all tiles of type <tile-type>, e.g. "weather"
-                //                  private/
-                //                  optional: Tile.qml          -- provider-independent implementation of the tile
-                //                  optional: Settings.qml      -- provider-independent settings page for this tile
-                //
-                //                  <provider>/                 -- specific implementation of the tile for <provider>, e.g. "mch"
-                //                      private/
-                //                      Tile.qml                -- provider-dependent implementation of the tile,
-                //                                                 could be based on <tile-type>/Tile.qml
-                //                      Settings.qml            -- provider-specific settings page,
-                //                                                 could be based on <tile-type>/Settings.qml
+                //              <tile-type>/                -- all tiles of type <tile-type>, e.g. "clock"
+                //                  private/                -- optional private implementation details
+                //                  Tile.qml                -- implementation of the tile,
+                //                                             must be based on ../base/ForecastTileBase.qml
+                //                  Metadata.qml            -- tile metadata,
+                //                                             must be based on ../base/MetadataBase.qml
+                //                  Settings.qml            -- settings page,
+                //                                             must be based on ../base/SettingsDialogBase.qml
 
                 property bool editing: false
 

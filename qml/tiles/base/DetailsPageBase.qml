@@ -14,6 +14,7 @@ Page {
     // -------------------------------------------------------------------------
     // MUST BE CONFIGURED BY IMPLEMENTATIONS
 
+    objectName: "DetailsPageBase" // object name identifying the class of this tile, e.g. "weather_<provider>"
     property int tile_id: -1        // database identifier
     property var settings: ({})     // implementation specific settings passed from/to the database
     property bool debug: false      // bind to global debug toggle
@@ -22,6 +23,12 @@ Page {
     property bool allowConfig: tile && tile.allowConfig     // whether the tile supports configuration
 
     property ForecastTileBase tile: null  // bind to the tile instance that this details page belongs to
+
+    readonly property MetadataBase metadata: {
+        var comp = Qt.createComponent(
+            Qt.resolvedUrl("../%1/Metadata.qml".arg(objectName)))
+        return comp.createObject(root)
+    }
 
     // -------------------------------------------------------------------------
     // HELPER FUNCTIONS
@@ -32,6 +39,15 @@ Page {
 
     function defaultOrNullFor(what, fallback) {
         return (what === '' || typeof what === 'undefined') ? fallback : what
+    }
+
+    function sendProviderCommand(command, data, sequence, callback) {
+        metadata.sendProviderCommand(tile_id, command, data, sequence, callback)
+    }
+
+    // handler signature: function(event: str, sequence: int, data: dict)
+    function connectProviderSignal(event, handler, sequence_or_oneshot) {
+        metadata.connectProviderSignal(tile_id, event, handler, sequence_or_oneshot)
     }
 
     // -------------------------------------------------------------------------

@@ -1,18 +1,17 @@
 #
 # This file is part of Forecasts for SailfishOS.
-# SPDX-FileCopyrightText: 2022 Mirian Margiani
+# SPDX-FileCopyrightText: 2022-2024 Mirian Margiani
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
 from typing import Dict, List, Any, Tuple
 from pathlib import Path
+import json
 
-from meteopy.providers import provider_base
-import importlib
-
-from meteopy.util import log
-from meteopy.util import signal_send
-from meteopy.util import DatabaseBase
+from dashboard import provider
+from dashboard.util import log
+from dashboard.util import signal_send
+from dashboard.util import DatabaseBase
 
 
 # - falls Code von Captain's Log verwendet wird -> dokumentieren
@@ -32,26 +31,6 @@ from meteopy.util import DatabaseBase
 # - Übersetzungen laden: https://www.meteoschweiz.admin.ch/etc.clientlibs/internet/clientlibs/meteoswiss/clientlibs/lang/de.min.js <-- de, fr, it, en
 #   -> vorher? -> in Kataloge integrieren?
 
-
-_PROVIDERS_REGISTRY = [
-    'meteoswiss',
-    'yrno',
-    'dwd',
-]
-
-_KNOWN_TILE_TYPES = [
-    'spacer',
-    'weather',
-    'pollen',
-    'clock',
-]
-
-_KNOWN_TILES_WITHOUT_DETAILS = [
-    # simple tile types that do *not* need a
-    # separate settings table ("<type>_details")
-    'spacer',
-]
-
 _KNOWN_TILE_SIZES = {
     'small': 0,
     'medium': 1,
@@ -67,15 +46,24 @@ class Meteo:
         """
         Data database.
 
-        This database is intended to be used for storing user-generated data.
-        User-generated configuration goes into the config database.
+        This database provides a key-value storage for all tiles. Each tile can
+        only access and change its own data.
         """
+        HANDLE = 'main_data'
 
         def _setup(self):
             pass
 
         def _upgrade_schema(self, from_version):
             if from_version == '0':
+                self.cur.execute("""
+                    CREATE TABLE IF NOT EXISTS keyvalue (
+                        tile_id INTEGER NOT NULL,
+                        key TEXT NOT NULL,
+                        value TEXT NOT NULL
+                    );""")
+                return '1'
+            elif from_version == '1':
                 raise self.UpToDate
 
             raise self.InvalidVersion
@@ -84,11 +72,13 @@ class Meteo:
         """
         Configuration database.
 
-        The config database contains all user-generated, provider-indepentend
+        The config database contains all user-generated, provider-independent
         configuration. Configuration that is only relevant for certain providers
         must be handled by the provider implementation. Other data has to be
         stored in the cache database or the data database.
         """
+        HANDLE = 'main_config'
+
         def _setup(self):
             pass
 
@@ -103,147 +93,23 @@ class Meteo:
                 #       _KNOWN_TILE_SIZES. There are only 3 sizes of tiles but this
                 #       could change in the future.
                 # - tile_type: string identifier of the data type
-                #       Must be one of the strings defined in _KNOWN_TILE_TYPES.
-                #
                 #       The tile type defines which tile implementation will be loaded.
                 #       Tile implementations must handle missing capabilities / missing
                 #       data. For example, some providers may not provide precipitation
                 #       forecasts, but they are still grouped in the "weather" category.
+                # - settings_json: string defining tile settings
+                #       Settings are stored as an opaque JSON object. They are not
+                #       validated by the backed. Settings are an implementation detail
+                #       of the tile.
                 self.cur.execute("""
-                    CREATE TABLE IF NOT EXISTS mainscreen_tiles(
+                    CREATE TABLE IF NOT EXISTS tiles (
                         tile_id INTEGER NOT NULL PRIMARY KEY,
                         sequence INTEGER NOT NULL UNIQUE,
                         size INTEGER NOT NULL,
-                        tile_type TEXT NOT NULL
-                    );""")
-
-                # Weather forecast tile:
-                # - tile_id: see above
-                # - location_id: provider-dependent location identifier
-                # - provider_id: provider token string
-                #
-                # Actual forecast data is stored in the cache database.
-                #
-                # TODO: decide how to best store additional location details.
-                #       Locations have names and other related information that
-                #       a) might have to be configurable by the user
-                #       b) might change and should therefore be handled by the provider
-                #
-                #       In case of a), it would make sense to store details in the
-                #       settings database (i.e. here). In case of b), it would be
-                #       better to find a way to request these details from the provider.
-                #
-                #       Some details fields:
-                #       - name TEXT NOT NULL,
-                #       - zip INTEGER NOT NULL,
-                #       - regionId TEXT NOT NULL,
-                #       - region TEXT NOT NULL,
-                #       - latitude REAL NOT NULL,
-                #       - longitude REAL NOT NULL,
-                #       - altitude INTEGER NOT NULL
-                #
-                #       The same problem applies to other location-bound forecasts. There
-                #       also might be a lot of duplication if the user has tiles for different
-                #       forecasts but for the same location.
-                self.cur.execute("""
-                    CREATE TABLE IF NOT EXISTS weather_details(
-                        tile_id INTEGER NOT NULL PRIMARY KEY,
-                        location_id TEXT NOT NULL,
-                        provider_id TEXT NOT NULL
-                    );""")
-
-                # Pollen forecast tile:
-                # cf. weather forecast documentation
-                self.cur.execute("""
-                    CREATE TABLE IF NOT EXISTS pollen_details(
-                        tile_id INTEGER NOT NULL PRIMARY KEY,
-                        location_id TEXT NOT NULL,
-                        provider_id TEXT NOT NULL
-                    );""")
-
-                # World clock tile:
-                # - tile_id: see above
-                # - time_format: how to show the time
-                #       A clock can be configured with three mutually exclusive settings:
-                #       1. local: shows the time in the system-defined timezone
-                #       2. offset: shows the time shifted by a specific amount of minutes from UTC
-                #       3. timezone: shows the time in a specific timezone
-                # - utc_offset_seconds: difference to UTC for this clock
-                #       Only used if time_format == offset.
-                #       Negative means west of UTC, positive means east of UTC.
-                # - timezone: timezone name
-                #       Only used if time_format == timezone.
-                # - label: user-defined name of this clock, could e.g. be a city or a timezone
-                # - clock_face: which clock face style to use
-                #       There are different clock faces with numbers in different scripts.
-                #       If the clock face graphic for a certain style is missing, the
-                #       clock will show the plain clock face without numbers.
-                self.cur.execute("""
-                    CREATE TABLE IF NOT EXISTS clock_details(
-                        tile_id INTEGER NOT NULL PRIMARY KEY,
-                        time_format TEXT NOT NULL,
-                        timezone TEXT DEFAULT "",
-                        utc_offset_seconds INTEGER DEFAULT 0,
-                        label TEXT DEFAULT "",
-                        clock_face TEXT DEFAULT "plain"
+                        tile_type TEXT NOT NULL,
+                        settings_json TEXT
                     );""")
                 return '1'
-            elif from_version == '1':
-                raise self.UpToDate
-
-            raise self.InvalidVersion
-
-    class CacheDb(DatabaseBase):
-        """
-        Cache database.
-
-        The cache database stores all automatically accumulated data in a
-        provider-independent form. Data that is only relevant for a certain provider
-        must be stored by the provider.
-
-        TODO: document how data can be stored here by providers using signals.
-        """
-
-        def _setup(self):
-            pass  # no special setup needed
-
-        def _upgrade_schema(self, from_version):
-            if from_version == '0':
-                # Detailed weather forecast data
-                self.cur.execute("""
-                    CREATE TABLE IF NOT EXISTS weather_forecast_data(
-                        timestamp INTEGER NOT NULL,
-                        location_id TEXT NOT NULL,
-                        data_json TEXT NOT NULL,
-                        day_count INTEGER NOT NULL,
-                        day_dates TEXT NOT NULL,
-                        PRIMARY KEY(timestamp, location_id)
-                    );""")
-
-                # Summarised weather forecast data
-                self.cur.execute("""
-                    CREATE TABLE IF NOT EXISTS weather_forecast_overview(
-                        datestring STRING NOT NULL,
-                        location_id TEXT NOT NULL,
-                        symbol INTEGER NOT NULL,
-                        precipitation INTEGER NOT NULL,
-                        temp_max INTEGER NOT NULL,
-                        temp_min INTEGER NOT NULL,
-                        age INTEGER NOT NULL,
-                        PRIMARY KEY(datestring, location_id)
-                    );""")
-
-                # Detailed pollen forecast data
-                self.cur.execute("""
-                    CREATE TABLE IF NOT EXISTS pollen_forecast_data(
-                        timestamp INTEGER NOT NULL,
-                        location_id TEXT NOT NULL,
-                        data_json TEXT NOT NULL,
-                        day_count INTEGER NOT NULL,
-                        day_dates TEXT NOT NULL,
-                        PRIMARY KEY(timestamp, location_id)
-                    );""")
-                return "1"
             elif from_version == '1':
                 raise self.UpToDate
 
@@ -254,8 +120,6 @@ class Meteo:
         self._data_path = Path(data_path)
         self._cache_path = Path(cache_path)
         self._config_path = Path(config_path)
-        self._providers: Dict[str, provider_base.Provider] = {}
-        self._broken_providers: Dict[str, provider_base.Provider] = {}
 
         # TODO test if this actually works - it probably makes it impossible to
         #      complete any transaction because we always re-open the database
@@ -270,98 +134,35 @@ class Meteo:
                 log(f"preparing local {k} path in '{v}'")
                 v.mkdir(parents=True, exist_ok=True)
             except (FileExistsError, PermissionError) as e:
-                signal_send(f'fatal.local-data.inaccessible', k, str(v), str(e))
+                signal_send('fatal.local-data.inaccessible', k, str(v), str(e))
                 return
 
             # set base paths for all provider classes derived from Provider
-            setattr(provider_base.Provider, f'{k}_dir', v)
+            setattr(provider.ProviderBase, f'{k}_dir', v)
+
+        # set base callbacks for all provider classes
+        provider.ProviderBase.signal_callback = signal_send
+        provider.ProviderBase.log_callback = log
 
         # TODO catch FileBroken exceptions
-        self._data_db = self.DataDb(self._data_path, 'meteo_data', signal_send, log)
-        self._cache_db = self.CacheDb(self._cache_path, 'meteo_cache', signal_send, log)
-        self._config_db = self.ConfigDb(self._config_path, 'meteo_config', signal_send, log)
+        self._config_db = self.ConfigDb(self._config_path, signal_send, log)
+        self._data_db = self.DataDb(self._data_path, signal_send, log)
 
-        self._init_providers()
         self.ready = True
-
-    @property
-    def data_db(self):
-        if self.debug_reinit_db:
-            self._data_db = self.DataDb(self._data_path, 'meteo_data', signal_send, log)
-
-        return self._data_db
-
-    @property
-    def cache_db(self):
-        if self.debug_reinit_db:
-            self._cache_db = self.CacheDb(self._cache_path, 'meteo_cache', signal_send, log)
-
-        return self._cache_db
 
     @property
     def config_db(self):
         if self.debug_reinit_db:
-            self._config_db = self.ConfigDb(self._config_path, 'meteo_config', signal_send, log)
+            self._config_db = self.ConfigDb(self._config_path, signal_send, log)
 
         return self._config_db
 
     @property
-    def providers(self) -> Dict[str, provider_base.Provider]:
-        return self._providers
+    def data_db(self):
+        if self.debug_reinit_db:
+            self._data_db = self.DataDb(self._data_path, signal_send, log)
 
-    def refresh(self, provider: str, ident: str, force: bool) -> None:
-        if provider in self._broken_providers:
-            signal_send('error.refresh.broken-provider', provider, ident, force)
-            return
-        elif provider not in self._providers:
-            signal_send('error.refresh.unknown-provider', provider, ident, force)
-            return
-
-        self._providers[provider].refresh(ident, force)
-
-    def _init_providers(self):
-        for i in _PROVIDERS_REGISTRY:
-            try:
-                m = importlib.import_module('meteopy.providers.' + i)
-                m = m.Provider(self._handle_provider_signal, log)
-
-                if m.handle in self._providers:
-                    raise Exception(f'Duplicate provider with handle {m.handle}')
-
-                if not m.ready:
-                    self._broken_providers[m.handle] = m
-                    raise Exception(f'Provider {m.handle} failed to initialize')
-
-                self._providers[m.handle] = m
-            except Exception as e:
-                signal_send('warning.providers.broken', f'{i}: {e}')
-
-    def _handle_provider_signal(self, event, *args):
-        if event.startswith('meteo.'):
-            log(f'[not implemented] meteo command from [{args[0]}]: {event}', *args[1:], scope='meteo')
-            # TODO implement
-        elif event.startswith('provider.'):
-            # drop the provider handle as it is an internal, provider-specific signal
-            signal_send(event, *args[1:])
-        else:
-            # push the provider handle to the end of the arguments list for regular signals
-            signal_send(event, *args[1:], *args[0])
-
-    def _backup_file(self, filepath):
-        filepath = Path(filepath)
-
-        if not filepath.exists():
-            return
-
-        turn = 0
-        while True:
-            try:
-                filepath.rename(str(filepath) + '.bak' + (f'~{turn}~' if turn > 0 else ''))
-                break
-            except FileExistsError:
-                turn += 1
-            except PermissionError as e:
-                signal_send('error.backup.failed', filepath, e)  # TODO handle this...?
+        return self._data_db
 
 
 def _check_init() -> bool:
@@ -404,27 +205,6 @@ def initialize(data_path, cache_path, config_path):
     return False
 
 
-def send_provider_command(command: str, provider: str, tile_id: int, sequence: int, data: dict) -> None:
-    """
-    Send a command to a provider.
-
-    This function simply relays the command to the provider specified in the
-    'provider' argument. All remaining arguments will be passed on.
-    """
-    if not _check_init():
-        return
-
-    signal_send('info.main.provider-command.started', tile_id, command, provider, sequence, data)
-
-    if provider not in METEO.providers:
-        signal_send('error.main.provider-command.unknown-provider', provider, command, tile_id, sequence, data)
-        return
-
-    METEO.providers[provider].call_command(command, tile_id, sequence, data)
-
-    signal_send('info.main.provider-command.finished', tile_id, command, provider, sequence, data)
-
-
 def run_database_maintenance(caller: str) -> None:
     """
     Run regular database maintenance.
@@ -458,14 +238,14 @@ def get_tiles() -> List[Tuple[str, Dict[str, Any]]]:
     Get tiles and settings for the main screen.
 
     Returns a list of tiles. Each tile is a tuple of (tile_type, settings). Settings
-    are specific to each tile type and are documented above (database schema).
+    are specific to each tile type and are part of the tile implementation.
     """
     if not _check_init():
         return []
 
     signal_send('info.main.load-tiles.started')
 
-    METEO.config_db.cur.execute("""SELECT * FROM mainscreen_tiles ORDER BY sequence ASC; """)
+    METEO.config_db.cur.execute("""SELECT * FROM tiles ORDER BY sequence ASC; """)
     rows = METEO.config_db.cur.fetchall()
     model = []
 
@@ -473,23 +253,19 @@ def get_tiles() -> List[Tuple[str, Dict[str, Any]]]:
         size = row['size']
         tile_type = row['tile_type']
         tile_id = row['tile_id']
+        settings_json = row['settings_json']
+        settings_base = {'tile_id': tile_id, 'tile_type': tile_type, 'size': size}
 
         entry = {
             'tile_id': tile_id,
             'sequence': row['sequence'],
             'size': '--- set below ---',
             'tile_type': tile_type,
-            'settings': '--- set below ---',
+            'settings': {
+                **settings_base,
+                **json.loads(settings_json),  # TODO sanity checks
+            },
         }
-
-        if tile_type in _KNOWN_TILES_WITHOUT_DETAILS:
-            entry['settings'] = {'tile_id': tile_id, 'tile_type': tile_type, 'size': size}
-        elif tile_type in _KNOWN_TILE_TYPES:
-            settings_row = METEO.config_db.con.execute(f"SELECT * FROM {tile_type}_details WHERE tile_id = ?", (tile_id, )).fetchone()
-            entry['settings'] = dict(settings_row)
-        else:
-            entry['settings'] = {'tile_id': tile_id, 'tile_type': tile_type, 'size': size}
-            signal_send('warning.main.load-tiles.unknown-tile-type', tile_type, tile_id)
 
         if size in _KNOWN_TILE_SIZES.values():
             size = [k for k, v in _KNOWN_TILE_SIZES.items() if v == size][0]
@@ -498,11 +274,18 @@ def get_tiles() -> List[Tuple[str, Dict[str, Any]]]:
             entry['size'] = 'small'
             signal_send('warning.main.load-tiles.unknown-size', size, tile_type, tile_id)
 
+        # TODO DEBUG load tiles async here vvv
+        signal_send('info.main.add-tile.finished', entry['tile_type'],
+                    entry['size'], entry['settings'],
+                    entry['tile_id'], entry['sequence'])
+        # TODO DEBUG this is to load tiles async ^^^
+
         model.append(entry)
 
     signal_send('info.main.load-tiles.finished')
 
-    return model
+    # return model
+    return []
 
 
 def remove_tile(tile_id: int) -> None:
@@ -514,24 +297,8 @@ def remove_tile(tile_id: int) -> None:
 
     signal_send('info.main.remove-tile.started', tile_id)
 
-    tile_type = METEO.config_db.con.execute("""
-        SELECT tile_type from mainscreen_tiles WHERE tile_id = ? LIMIT 1;
-    """, (tile_id, )).fetchone()
-
-    if tile_type and tile_type['tile_type']:
-        tile_type = tile_type['tile_type']
-
-        if tile_type not in _KNOWN_TILE_TYPES:
-            signal_send('warning.main.remove-tile.unknown-tile-type', tile_type, tile_id)
-        elif tile_type not in _KNOWN_TILES_WITHOUT_DETAILS:
-            METEO.config_db.con.execute(f"""
-                DELETE FROM {tile_type}_details WHERE tile_id = ?;
-            """, (tile_id, ))
-    else:
-        signal_send('warning.main.remove-tile.missing-tile-type', tile_id)
-
     METEO.config_db.con.execute("""
-        DELETE FROM mainscreen_tiles WHERE tile_id = ?;
+        DELETE FROM tiles WHERE tile_id = ?;
     """, (tile_id, ))
 
     METEO.config_db.con.commit()
@@ -542,22 +309,15 @@ def add_tile(tile_type: str, size: str, settings: dict) -> None:
     """
     Save a new tile for the main screen.
 
-    Takes the tile's type, its size, and its settings. Settings are specific to each tile
-    type and are documented above (database schema).
+    Takes the tile's type, its size, and its settings. Settings are specific
+    to each tile type and are part of their implementation.
 
-    The type must be one the items defined in _KNOWN_TILE_TYPES.
     The size must be one of the keys defined in _KNOWN_TILE_SIZES.
     """
     if not _check_init():
         return
 
     signal_send('info.main.add-tile.started', tile_type, size, settings)
-
-    if tile_type not in _KNOWN_TILE_TYPES:
-        signal_send('warning.main.add-tile.unknown-tile-type', tile_type, size, settings)
-        signal_send('warning.main.add-tile.failed')
-        METEO.config_db.con.rollback()
-        return
 
     if size not in _KNOWN_TILE_SIZES.keys():
         signal_send('warning.main.add-tile.unknown-tile-size', tile_type, size, settings)
@@ -566,52 +326,22 @@ def add_tile(tile_type: str, size: str, settings: dict) -> None:
         return
 
     tile_id = METEO.config_db.con.execute("""
-        SELECT tile_id FROM mainscreen_tiles ORDER BY tile_id DESC LIMIT 1;
+        SELECT tile_id FROM tiles ORDER BY tile_id DESC LIMIT 1;
     """).fetchone()
     tile_id = int(tile_id['tile_id']) + 1 if tile_id else 0
 
     sequence = METEO.config_db.con.execute("""
-        SELECT sequence FROM mainscreen_tiles ORDER BY sequence DESC LIMIT 1;
+        SELECT sequence FROM tiles ORDER BY sequence DESC LIMIT 1;
     """).fetchone()
     sequence = int(sequence['sequence']) + 1 if sequence else 0
-
-    METEO.config_db.con.execute("""
-        INSERT INTO mainscreen_tiles (tile_id, sequence, size, tile_type) VALUES (?, ?, ?, ?);
-    """, (tile_id, sequence, _KNOWN_TILE_SIZES[size], tile_type))
 
     # the settings dict must always contain the tile ID
     settings['tile_id'] = tile_id
 
-    if tile_type not in _KNOWN_TILES_WITHOUT_DETAILS:
-        required_keys = METEO.config_db.con.execute(f"SELECT * FROM {tile_type}_details LIMIT 0;")
-        required_keys = [column[0] for column in required_keys.description]
-
-        provided_keys = list(settings.keys())
-
-        if not all([x in provided_keys for x in required_keys]):
-            signal_send('warning.main.add-tile.settings-key-missing', tile_type, size, settings, required_keys)
-
-            # # don't fret yet - maybe the missing keys are optional
-            # signal_send('warning.main.add-tile.failed')
-            # METEO.config_db.con.rollback()
-            # return
-
-        filtered_keys = [x for x in required_keys if x in provided_keys]
-
-        # TODO is this dangerous? Rationale: the names come directly from the
-        #      database so they should be safe to use.
-        columns_string = ', '.join(filtered_keys)
-        placeholder_string = ', '.join(['?'] * len(filtered_keys))
-        sorted_values = tuple([settings[x] for x in filtered_keys])
-
-        try:
-            METEO.config_db.con.execute(f"""
-                INSERT INTO {tile_type}_details ({columns_string}) VALUES ({placeholder_string});
-            """, sorted_values)
-        except:
-            signal_send('warning.main.add-tile.failed')
-            METEO.config_db.con.rollback()
-            return
+    METEO.config_db.con.execute("""
+        INSERT INTO tiles (tile_id, sequence, size, tile_type, settings_json)
+        VALUES (?, ?, ?, ?, ?);
+    """, (tile_id, sequence, _KNOWN_TILE_SIZES[size], tile_type, json.dumps(settings)))
 
     METEO.config_db.con.commit()
 
@@ -637,7 +367,7 @@ def resize_tile(tile_id: int, size: str) -> None:
         return
 
     METEO.config_db.con.execute("""
-        UPDATE mainscreen_tiles SET size = ? WHERE tile_id = ?;
+        UPDATE tiles SET size = ? WHERE tile_id = ?;
     """, (_KNOWN_TILE_SIZES[size], tile_id))
 
     METEO.config_db.con.commit()
@@ -646,12 +376,7 @@ def resize_tile(tile_id: int, size: str) -> None:
 
 def update_tile(tile_id: int, settings: dict) -> None:
     """
-    Update a tile's detailed settings.
-
-    Keys in the settings dict will be updated in the correct details
-    database. Keys that don't match any column name will be ignored.
-    Columns that are not mentioned in the settings dict will be left
-    unchanged.
+    Update a tile's implementation-specific settings.
 
     Use the move_tile(...) and resize_tile(...) functions to update
     general settings.
@@ -661,49 +386,11 @@ def update_tile(tile_id: int, settings: dict) -> None:
 
     signal_send('info.main.update-tile.started', tile_id, settings)
 
-    # - check if the tile exists and find out its type
-    tile_type = METEO.config_db.con.execute("""
-        SELECT tile_type FROM mainscreen_tiles WHERE tile_id = ? LIMIT 1;
-    """, (tile_id, )).fetchone()
-
-    if not tile_type or not tile_type['tile_type']:
-        signal_send('warning.main.update-tile.invalid-tile', tile_id, settings)
-        signal_send('warning.main.update-tile.failed')
-        return
-
-    tile_type = tile_type['tile_type']
-
-    # - check if this type has detailed settings
-    if tile_type in _KNOWN_TILES_WITHOUT_DETAILS:
-        signal_send('warning.main.update-tile.tile-without-settings', tile_id, settings)
-        signal_send('warning.main.update-tile.failed')
-        return
-
-    # - read column names from the settings table
-    valid_keys = METEO.config_db.con.execute(f"SELECT * FROM {tile_type}_details LIMIT 0;")
-    valid_keys = [column[0] for column in valid_keys.description]
-    provided_keys = sorted(list(settings.keys()))
-
-    # - filter the settings dict and remove unknown keys
-    filtered_settings = {k: v for k, v in settings.items() if k in valid_keys}
-    filtered_keys = sorted(list(filtered_settings.keys()))
-
-    if filtered_keys != provided_keys:
-        unknown_keys = [x for x in provided_keys if x not in filtered_keys]
-        signal_send('warning.main.update-tile.unknown-keys', tile_id, settings, unknown_keys)
-
-    # - update the settings table
-    set_string = ', '.join([f'{k} = ?' for k in filtered_keys])
-    sorted_values = tuple([settings[x] for x in filtered_keys] + [tile_id])
-
-    METEO.config_db.con.execute(f"""
-        UPDATE {tile_type}_details SET {set_string} WHERE tile_id = ?;
-    """, sorted_values)
-
-    # - commit changes
+    METEO.config_db.con.execute("""
+        UPDATE tiles SET settings_json = ? WHERE tile_id = ?;
+    """, (json.dumps(settings), tile_id))
     METEO.config_db.con.commit()
 
-    # - notify the frontend
     signal_send('info.main.update-tile.finished', tile_id, settings)
 
 
@@ -718,7 +405,7 @@ def move_tile(tile_id: int, from_index: int, to_index: int) -> None:
 
     signal_send('info.main.move-tile.started', tile_id, from_index, to_index)
 
-    METEO.config_db.cur.execute("""SELECT tile_id FROM mainscreen_tiles ORDER BY sequence ASC; """)
+    METEO.config_db.cur.execute("""SELECT tile_id FROM tiles ORDER BY sequence ASC; """)
     rows = METEO.config_db.cur.fetchall()
     old_sequence = []
 
@@ -753,14 +440,14 @@ def move_tile(tile_id: int, from_index: int, to_index: int) -> None:
 
     for i, tile in enumerate(old_sequence):
         METEO.config_db.con.execute("""
-            UPDATE mainscreen_tiles SET sequence = ? WHERE tile_id = ?;
+            UPDATE tiles SET sequence = ? WHERE tile_id = ?;
         """, (i + old_count + 1, tile))
 
         signal_send('MOVE', tile, i, i + old_count + 1)
 
     for i, tile in enumerate(new_sequence):
         METEO.config_db.con.execute("""
-            UPDATE mainscreen_tiles SET sequence = ? WHERE tile_id = ?;
+            UPDATE tiles SET sequence = ? WHERE tile_id = ?;
         """, (i, tile))
 
         signal_send('MOVE-2', tile, i)
@@ -769,38 +456,54 @@ def move_tile(tile_id: int, from_index: int, to_index: int) -> None:
     signal_send('info.main.move-tile.finished', tile_id, from_index, to_index)
 
 
-# #### ---------------------------------
-# TODO vvvv not final API
-# #### ---------------------------------
-
-
-def get_providers():
-    return []
-
-
-def search_locations(provider, query):
-    return []
-
-
-# #### ---------------------------------
-# TODO ^^^^ not final API
-# #### ---------------------------------
-
-
-def refresh(location: str, force: bool) -> None:
-    if not location:
-        signal_send('bug.refresh.location.empty', location, force)
-        return
-    elif type(location) is not str:
-        signal_send('bug.refresh.location.invalid-type', location, force)
-        return
-    elif '|' not in location:
-        signal_send('bug.refresh.location.invalid-format', location, force)
+def get_tile_data(tile_id: int, key: str) -> str:
+    """
+    Get data for a tile from its key-value store.
+    """
+    if not _check_init() or tile_id < 0:
         return
 
-    provider = location.split('|')[0]
-    ident = '|'.join(location.split('|')[1:])
-    METEO.refresh(provider, ident, force)
+    signal_send('info.main.tile-data.get.started', tile_id, key)
+
+    row = METEO.data_db.con.execute("""
+        SELECT value FROM keyvalue WHERE tile_id = ?, key = ? LIMIT 1;
+    """, (tile_id, key)).fetchone()
+
+    signal_send('info.main.tile-data.get.finished', tile_id, key)
+    return row['value']
+
+
+def set_tile_data(tile_id: int, key: str, data: str) -> None:
+    """
+    Get data for a tile from its key-value store.
+    """
+    if not _check_init() or tile_id < 0:
+        return
+
+    signal_send('info.main.tile-data.set.started', tile_id, key, data)
+
+    if data is None:
+        METEO.data_db.con.execute("""
+            DELETE FROM keyvalue WHERE tile_id = ?, key = ?;
+        """, (tile_id, key))
+    else:
+        METEO.data_db.con.execute("""
+            INSERT OR REPLACE INTO keyvalue(tile_id, key, value) VALUES (?, ?, ?);
+        """, (tile_id, key, str(data)))
+
+    METEO.data_db.con.commit()
+
+    signal_send('info.main.tile-data.set.finished', tile_id, key, data)
+
+
+def get_available_tiles() -> List[str]:
+    """
+    Get a list of available tiles.
+
+    The returned list contains the names of each tile directory. In the future,
+    this could be expanded to support user-provided tiles.
+    """
+    raise NotImplementedError
 
 
 if __name__ == '__main__':
@@ -808,7 +511,6 @@ if __name__ == '__main__':
 
     # TODO remove test lines
     initialize('test-data/data', 'test-data/cache', 'test-data/config')
-    # refresh('mch|400100', True)
 
 else:
     log('running as library')

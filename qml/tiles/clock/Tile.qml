@@ -13,7 +13,7 @@ import "../../components" as C
 
 ForecastTileBase {
     id: root
-    objectName: "ClockTile"
+    objectName: "clock"
 
     settingsDialog: Qt.resolvedUrl("Settings.qml")
     detailsPage: Qt.resolvedUrl("Details.qml")
@@ -55,6 +55,7 @@ ForecastTileBase {
         id: clockLabel
         inverted: true
         maximumLineCount: 1
+        preferHighlightColors: true
 
         label: clock.convertedTimeString
         description: {
@@ -96,6 +97,7 @@ ForecastTileBase {
         visible: false
         inverted: false
         maximumLineCount: 2
+        preferHighlightColors: true
 
         label: {
             if (size == 'large') {

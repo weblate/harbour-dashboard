@@ -51,6 +51,15 @@ DISTFILES += \
     qml/tiles/clock/private/clock-face-num-arabic.png \
     qml/tiles/clock/private/clock-face-num-roman.png \
     qml/tiles/clock/private/clock-face-plain.png \
+    qml/tiles/weather_mch/Tile.qml \
+    qml/tiles/weather_mch/Metadata.qml \
+    qml/tiles/weather_mch/private/weather_mch.py \
+    qml/tiles/weather_yrn/Tile.qml \
+    qml/tiles/weather_yrn/Metadata.qml \
+    qml/tiles/day_times/Tile.qml \
+    qml/tiles/day_times/Metadata.qml \
+    qml/tiles/day_times/Settings.qml \
+    qml/tiles/day_times/private/day_times.py \
     qml/tiles/tiles.json \
     \
     qml/py/meteo.py \
@@ -94,22 +103,22 @@ TRANSLATIONS += \
     translations/harbour-forecasts-it.ts \
     translations/harbour-forecasts-zh_CN.ts
 
-lupdate_only {
-SOURCES += \
-    qml/*.qml \
-    qml/cover/*.qml \
-    qml/pages/*.qml \
-    qml/tiles/*.qml \
-    qml/tiles/base/*.qml \
-    qml/tiles/base/private/*.qml \
-    qml/tiles/clock/*.qml \
-    qml/tiles/clock/private/*.qml \
-    qml/tiles/weather/*.qml \
-    qml/tiles/weather/mch/*.qml \
-    qml/tiles/weather/mch/private/*.qml \
-    qml/pages/components/*.qml \
-    qml/js/*.js
-}
+#lupdate_only {
+#SOURCES += \
+#    qml/*.qml \
+#    qml/cover/*.qml \
+#    qml/pages/*.qml \
+#    qml/tiles/*.qml \
+#    qml/tiles/base/*.qml \
+#    qml/tiles/base/private/*.qml \
+#    qml/tiles/clock/*.qml \
+#    qml/tiles/clock/private/*.qml \
+#    qml/tiles/weather/*.qml \
+#    qml/tiles/weather/mch/*.qml \
+#    qml/tiles/weather/mch/private/*.qml \
+#    qml/pages/components/*.qml \
+#    qml/js/*.js
+#}
 
 QML_IMPORT_PATH += qml/modules
 

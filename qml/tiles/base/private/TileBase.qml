@@ -45,6 +45,7 @@ ListItem {
     property bool allowMove: true
     property bool allowConfig: true
     property bool allowRefresh: false
+    property bool allowDetails: false
     property bool showBackground: true
     property bool enabledWhileEditing: false
 
@@ -54,6 +55,9 @@ ListItem {
     property bool cancelEditOnClick: true
     property string bindEditingProperty: "editing"
     property var bindEditingTarget: null
+
+    // actual implementation of details handling is deferred to ForecastTileBase
+    property bool showDetailsOnClick: false
 
     property bool _showingRemorser: false
 

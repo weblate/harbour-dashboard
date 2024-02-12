@@ -6,12 +6,12 @@
 
 import requests
 import locale
-import json
+# import json
 
-from .provider_base import Capability
-from .provider_base import Provider as ProviderBase
-
-from ..util import DatabaseBase
+# from dashboard.provider import Capability
+from dashboard.provider import ProviderBase
+from dashboard.provider import do_execute_command
+from dashboard.util import DatabaseBase
 
 
 HEADERS = {
@@ -24,6 +24,7 @@ HEADERS = {
 
 
 class _MetadataDb(DatabaseBase):
+    HANDLE = 'metadata'
     URL_DB = 'https://s3-eu-central-1.amazonaws.com/app-prod-static-fra.meteoswiss-app.ch/v1/db.sqlite'
     SUPPORTED_DATA_DB_VERSIONS = ['165']
 
@@ -71,6 +72,8 @@ class _MetadataDb(DatabaseBase):
 
 
 class _CacheDb(DatabaseBase):
+    HANDLE = 'cache'
+
     def _setup(self):
         pass
 
@@ -86,68 +89,71 @@ class _CacheDb(DatabaseBase):
 
 class Provider(ProviderBase):
     name = 'MeteoSwiss'
-    handle = 'mch'
-    capabilities = Capability.ALL
+    handle = 'weather_mch'
+    # capabilities = Capability.ALL
 
     URL_STRINGS = 'https://www.meteoschweiz.admin.ch/etc.clientlibs/internet/clientlibs/meteoswiss/clientlibs/lang/{lang}.min.js'
     URL_ICONS = 'https://www.meteoschweiz.admin.ch/etc.clientlibs/internet/clientlibs/meteoswiss/resources/assets/images/icons/meteo/weather-symbols/{num}.svg'
     URL_FORECAST = 'https://app-prod-ws.meteoswiss-app.ch/v1/plzDetail?plz={ident}'
 
-    def __init__(self, signal_callback, log_callback):
-        super().__init__(signal_callback, log_callback)
-
+    def __init__(self):
+        super().__init__()
         self._setup()
 
-    def call_command(self, command, tile_id, sequence, data) -> None:
+    def _handle_command(self, command: ProviderBase.Command) -> None:
         if command == 'test-command':
-            self._signal_send('provider.mch.test', tile_id, sequence, command, data)
+            # ...do stuff
+            # send result:
+            command.send_result(command.data)
         elif command == 'get-weather':
-            self._signal_send('provider.mch.weather', tile_id, sequence, command, data)
+            # ...do stuff
+            # send result:
+            command.send_result(command.data)
+        elif command == 'refresh':
+            # ...do stuff
+            # send result:
+            command.send_result(command.data)
         else:
-            self._signal_send('warning.unknown-command', tile_id, sequence, command, data)
+            self._handle_unknown_command(command)
 
-    def refresh(self, ident: str, force: bool) -> None:
-        self._pre_refresh(ident, force)
-        self._signal_send('info.refresh.started', ident, force)
-
-        # TODO verify ident in db
-        new_data = {}
-
-        try:
-            r = requests.get(self.URL_FORECAST.format(ident=ident), headers=HEADERS, timeout=1)
-            print(r.headers)
-            print(r.status_code)
-            r.raise_for_status()
-            new_data = r.json()
-
-            with open(self.data_path / 'forecast.json', 'w') as fd:
-                fd.write(json.dumps(new_data, indent=2))
-
-            # TODO analyse reply headers
-
-        except requests.exceptions.RequestException as e:
-            self._signal_send('warning.refresh.download-failed', self._data_db, r.status_code, r.headers, e)
-            return
-        except Exception as e:
-            self._signal_send('warning.refresh.download-failed', self._data_db, e)
-            return
-
-        self._signal_send('meteo.store-cache', ident, new_data)
-        self._signal_send('info.refresh.finished', ident, new_data)
+    # def refresh(self, ident: str, force: bool) -> None:
+    #     self._pre_refresh(ident, force)
+    #     self._signal_send_global('info.refresh.started', ident, force)
+    #
+    #     # TODO verify ident in db
+    #     new_data = {}
+    #
+    #     try:
+    #         r = requests.get(self.URL_FORECAST.format(ident=ident), headers=HEADERS, timeout=1)
+    #         print(r.headers)
+    #         print(r.status_code)
+    #         r.raise_for_status()
+    #         new_data = r.json()
+    #
+    #         with open(self.data_path / 'forecast.json', 'w') as fd:
+    #             fd.write(json.dumps(new_data, indent=2))
+    #
+    #         # TODO analyse reply headers
+    #
+    #     except requests.exceptions.RequestException as e:
+    #         self._signal_send_global('warning.refresh.download-failed', self._data_db, r.status_code, r.headers, e)
+    #         return
+    #     except Exception as e:
+    #         self._signal_send_global('warning.refresh.download-failed', self._data_db, e)
+    #         return
+    #
+    #     self._signal_send_global('meteo.store-cache', ident, new_data)
+    #     self._signal_send_global('info.refresh.finished', ident, new_data)
 
     def _setup(self):
-        # TODO:
-        # - store database in self.cache_path (it's not user generated data)
-        # - add separate cache database for saving timestamps and icon
-        #   description strings
-        # - generalise database initialisation in ProviderBase
-
         try:
-            self._meteo_db = _MetadataDb(self.cache_path, 'metadata', self._signal_send, self._log)
-        except _MetadataDb.InvalidVersion as e:
-            self._signal_send('warning.providers.local-data.invalid', e.path, e.version)
+            self._meteo_db = self.make_cache_database(_MetadataDb)
+            self._cache_db = self.make_cache_database(_CacheDb)
+        except ValueError:
             return
 
-        self._cache_db = _CacheDb(self.cache_path, 'cache', self._signal_send, self._log)
-
         self.ready = True
+
+
+def execute_command(*args, **kwargs) -> None:
+    do_execute_command(*args, **kwargs, provider_class=Provider)

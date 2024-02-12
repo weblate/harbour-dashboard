@@ -18,78 +18,96 @@ Dialog {
 
     canAccept: false
 
+    Component.onCompleted: {
+        var xmlHttp = new XMLHttpRequest()
+
+        // 'false' for synchronous request
+        xmlHttp.open("GET", Qt.resolvedUrl("../tiles/tiles.json"), false);
+        xmlHttp.send(null)
+
+        var tiles = JSON.parse(xmlHttp.responseText)
+
+        console.log(tiles)
+
+        for (var i in tiles) {
+            var comp = Qt.createComponent(
+                Qt.resolvedUrl("../tiles/%1/Metadata.qml".arg(tiles[i])))
+            tileTypesModel.append(comp.createObject(null))
+        }
+    }
+
     ListModel {
         id: tileTypesModel
 
-        // TODO move this list in a separate file
-        // TODO maybe load tile definitions from JSON?
-        // TODO remove or polish descriptions; they are mostly not necessary at all
+//        // TODO move this list in a separate file
+//        // TODO maybe load tile definitions from JSON?
+//        // TODO remove or polish descriptions; they are mostly not necessary at all
 
-        ListElement {
-            title: qsTr("World clock")
-            description: qsTr("Clock showing local time or the current time in any time zone.")
-            icon: "image://theme/icon-l-clock"
+//        ListElement {
+//            title: qsTr("World clock")
+//            description: qsTr("Clock showing local time or the current time in any time zone.")
+//            icon: "image://theme/icon-l-clock"
 
-            type: "clock"
-            requiresProvider: false
-            requiresConfig: true
-            implemented: true
-        }
+//            type: "clock"
+//            requiresProvider: false
+//            requiresConfig: true
+//            implemented: true
+//        }
 
-        ListElement {
-            title: qsTr("Weather forecast")
-            description: qsTr("Weather forecast showing graphs for the next few days.")
-            icon: "image://theme/icon-l-weather-d400"
+//        ListElement {
+//            title: qsTr("Weather forecast")
+//            description: qsTr("Weather forecast showing graphs for the next few days.")
+//            icon: "image://theme/icon-l-weather-d400"
 
-            type: "weather"
-            requiresProvider: true
-            requiresConfig: true
-            implemented: true
-        }
+//            type: "weather"
+//            requiresProvider: true
+//            requiresConfig: true
+//            implemented: true
+//        }
 
-        ListElement {
-            title: qsTr("Pollen forecast")
-            description: qsTr("Forecast showing the intensity of pollen and other allergens.")
-            icon: "image://theme/icon-l-diagnostic"
+//        ListElement {
+//            title: qsTr("Pollen forecast")
+//            description: qsTr("Forecast showing the intensity of pollen and other allergens.")
+//            icon: "image://theme/icon-l-diagnostic"
 
-            type: "pollen"
-            requiresProvider: true
-            requiresConfig: true
-            implemented: false
-        }
+//            type: "pollen"
+//            requiresProvider: true
+//            requiresConfig: true
+//            implemented: false
+//        }
 
-        ListElement {
-            title: qsTr("Natural hazards")
-            description: qsTr("List of current official warnings due to natural hazards.")
-            icon: "image://theme/icon-l-attention"
+//        ListElement {
+//            title: qsTr("Natural hazards")
+//            description: qsTr("List of current official warnings due to natural hazards.")
+//            icon: "image://theme/icon-l-attention"
 
-            type: "hazards"
-            requiresProvider: true
-            requiresConfig: true
-            implemented: false
-        }
+//            type: "hazards"
+//            requiresProvider: true
+//            requiresConfig: true
+//            implemented: false
+//        }
 
-        ListElement {
-            title: qsTr("Sun times")
-            description: qsTr("Current times of sunrise and nightfall.")
-            icon: "image://theme/icon-l-timer"
+//        ListElement {
+//            title: qsTr("Sun times")
+//            description: qsTr("Current times of sunrise and nightfall.")
+//            icon: "image://theme/icon-l-timer"
 
-            type: "suntimes"
-            requiresProvider: false
-            requiresConfig: true
-            implemented: false
-        }
+//            type: "suntimes"
+//            requiresProvider: false
+//            requiresConfig: true
+//            implemented: false
+//        }
 
-        ListElement {
-            title: qsTr("Spacer")
-            description: qsTr("Empty tile for spacing.")
-            icon: "image://theme/icon-l-dismiss"
+//        ListElement {
+//            title: qsTr("Spacer")
+//            description: qsTr("Empty tile for spacing.")
+//            icon: "image://theme/icon-l-dismiss"
 
-            type: "spacer"
-            requiresProvider: false
-            requiresConfig: false
-            implemented: true
-        }
+//            type: "spacer"
+//            requiresProvider: false
+//            requiresConfig: false
+//            implemented: true
+//        }
     }
 
     SilicaListView {
@@ -110,14 +128,12 @@ Dialog {
                 id: item
                 contentHeight: Theme.itemSizeExtraLarge
 
-                // hidden: !model.implemented
-                enabled: model.implemented
                 opacity: enabled ? 1.0 : Theme.opacityLow
 
                 onClicked: {
                     canAccept = true
 
-                    if (model.requiresProvider) {
+                    /*if (model.requiresProvider) {
                         // Open the provider selection page for a new tile of type <type>.
                         // Configuring and actually saving the new tile is handled there.
 
@@ -134,13 +150,14 @@ Dialog {
                             console.error("adding tiles that require a provider is not yet implemented")
                             root.accept()
                         }
-                    } else if (model.requiresConfig) {
+                    } else*/ if (model.requiresConfig) {
                         // Open the correct settings dialog to configure a new tile.
                         // This loads the "generic" settings dialog which is expected at
                         // qml/tiles/<type>/Settings.qml. Tiles that require a provider-specific
                         // settings dialog are handled above.
 
                         var settingsDialog = pageStack.push(Qt.resolvedUrl("../tiles/%1/Settings.qml".arg(model.type)), {
+                            'objectName': model.type,
                             'settings': {},
                             'debug': false,
                             'tile_id': -1,
@@ -207,7 +224,7 @@ Dialog {
                 }
 
                 C.DescriptionLabel {
-                    label: model.title
+                    label: model.name
                     description: model.description
 
                     width: 1 // why is this necessary?!!
