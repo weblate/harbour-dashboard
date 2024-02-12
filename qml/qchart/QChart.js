@@ -67,6 +67,7 @@ var Chart = function(canvas, context) {
             scaleGridLineColor: "rgba(0,0,0,.05)",
             scaleGridLineWidth: 1,
             currentHourLine: false,
+            currentHourPosition: null,
             bezierCurve: true,
             pointDot: true,
             pointDotRadius: 4,
@@ -116,6 +117,7 @@ var Chart = function(canvas, context) {
             scaleGridLineColor: "rgba(0,0,0,.05)",
             scaleGridLineWidth: 1,
             currentHourLine: false,
+            currentHourPosition: null,
             barShowStroke: true,
             barStrokeWidth: 2,
             barValueSpacing: 5,
@@ -306,14 +308,23 @@ var Chart = function(canvas, context) {
             }
 
             if (config.currentHourLine && !config.scaleOverlay) {
-                var now = new Date();
-                var hour = now.getHours();
-                hour += now.getMinutes()/60;
+                if (config.currentHourPosition === null) {
+                    var now = new Date();
+                    var hour = now.getHours();
+                    hour += now.getMinutes()/60;
 
-                ctx.beginPath();
-                ctx.moveTo(yAxisLeftPosX + hour*valueHop + valueHop/2,xAxisPosY);
-                ctx.lineTo(yAxisLeftPosX + hour*valueHop + valueHop/2,5);
-                ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(yAxisLeftPosX + hour*valueHop + valueHop/2, xAxisPosY);
+                    ctx.lineTo(yAxisLeftPosX + hour*valueHop + valueHop/2, 5);
+                    ctx.stroke();
+                } else {
+                    var offset = (width - yAxisLeftPosX - valueHop) * config.currentHourPosition
+
+                    ctx.beginPath();
+                    ctx.moveTo(yAxisLeftPosX + valueHop/2 + offset, xAxisPosY);
+                    ctx.lineTo(yAxisLeftPosX + valueHop/2 + offset, 5);
+                    ctx.stroke();
+                }
             }
 
             if (rotateLabels > 0) {
@@ -599,14 +610,23 @@ var Chart = function(canvas, context) {
             }
 
             if (config.currentHourLine && !config.scaleOverlay) {
-                var now = new Date();
-                var hour = now.getHours();
-                hour += now.getMinutes()/60;
+                if (config.currentHourPosition === null) {
+                    var now = new Date();
+                    var hour = now.getHours();
+                    hour += now.getMinutes()/60;
 
-                ctx.beginPath();
-                ctx.moveTo(yAxisLeftPosX + hour*valueHop + valueHop/2, xAxisPosY);
-                ctx.lineTo(yAxisLeftPosX + hour*valueHop + valueHop/2, 5);
-                ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(yAxisLeftPosX + hour*valueHop + valueHop/2, xAxisPosY);
+                    ctx.lineTo(yAxisLeftPosX + hour*valueHop + valueHop/2, 5);
+                    ctx.stroke();
+                } else {
+                    var offset = (width - yAxisLeftPosX - valueHop) * config.currentHourPosition
+
+                    ctx.beginPath();
+                    ctx.moveTo(yAxisLeftPosX + valueHop/2 + offset, xAxisPosY);
+                    ctx.lineTo(yAxisLeftPosX + valueHop/2 + offset, 5);
+                    ctx.stroke();
+                }
             }
 
             if (rotateLabels > 0) {
