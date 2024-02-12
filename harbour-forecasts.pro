@@ -103,23 +103,6 @@ TRANSLATIONS += \
     translations/harbour-forecasts-it.ts \
     translations/harbour-forecasts-zh_CN.ts
 
-#lupdate_only {
-#SOURCES += \
-#    qml/*.qml \
-#    qml/cover/*.qml \
-#    qml/pages/*.qml \
-#    qml/tiles/*.qml \
-#    qml/tiles/base/*.qml \
-#    qml/tiles/base/private/*.qml \
-#    qml/tiles/clock/*.qml \
-#    qml/tiles/clock/private/*.qml \
-#    qml/tiles/weather/*.qml \
-#    qml/tiles/weather/mch/*.qml \
-#    qml/tiles/weather/mch/private/*.qml \
-#    qml/pages/components/*.qml \
-#    qml/js/*.js
-#}
-
 QML_IMPORT_PATH += qml/modules
 
 # Note: version number is configured in yaml
