@@ -64,9 +64,9 @@ DISTFILES += \
     rpm/harbour-forecasts.yaml \
     translations/*.ts \
     \
-    qml/qchart/LICENSE.md \
-    qml/qchart/QChart.js \
-    qml/qchart/QChart.qml \
+    qml/modules/qchart/LICENSE.md \
+    qml/modules/qchart/QChart.js \
+    qml/modules/qchart/QChart.qml \
     \
     qml/js/*.js \
     \
