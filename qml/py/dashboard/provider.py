@@ -14,7 +14,7 @@ _INITIALIZED_PROVIDERS: Dict[str, 'ProviderBase'] = {}
 
 
 def _raise_callback_missing(*args, **kwargs):
-    raise NotImplementedError()
+    raise NotImplementedError("bug: the ProviderBase class callback methods have not been initialized")
 
 
 def do_execute_command(*args, provider_class, **kwargs) -> None:
@@ -25,19 +25,19 @@ def do_execute_command(*args, provider_class, **kwargs) -> None:
 
 
 class ProviderBase:
-    data_dir: Path = Path()
-    cache_dir: Path = Path()
-    config_dir: Path = Path()
+    DATA_DIR: Path = Path()
+    CACHE_DIR: Path = Path()
+    CONFIG_DIR: Path = Path()
 
     signal_callback: Callable = _raise_callback_missing
     log_callback: Callable = _raise_callback_missing
 
-    name: str = ''
+    NAME: str = ''
     handle: str = ''  # must match the module name
     # capabilities: Capability = 0
 
     def __init__(self):
-        self._log(f'initializing provider {self.name} ({self.handle})...')
+        self._log(f'initializing {self}...')
 
         self.ready = False
 
@@ -48,6 +48,9 @@ class ProviderBase:
             except (FileExistsError, PermissionError) as e:
                 self._signal_send_global(f'warning.providers.local-{k}.inaccessible', v, e)
                 return
+
+    def __str__(self):
+        return f"Provider {self.NAME} ({self.HANDLE})"
 
     def make_cache_database(self, db_class):
         return self._make_database(db_class, self.cache_path)
@@ -70,17 +73,17 @@ class ProviderBase:
     @property
     @lru_cache
     def data_path(self):
-        return self.data_dir / self.handle
+        return self.DATA_DIR / self.HANDLE
 
     @property
     @lru_cache
     def cache_path(self):
-        return self.cache_dir / self.handle
+        return self.CACHE_DIR / self.HANDLE
 
     @property
     @lru_cache
     def config_path(self):
-        return self.config_dir / self.handle
+        return self.CONFIG_DIR / self.HANDLE
 
     @dataclass
     class Command:
@@ -142,10 +145,10 @@ class ProviderBase:
         raise NotImplementedError()
 
     def _signal_send(self, event, *args):
-        ProviderBase.signal_callback(f"provider.{self.handle}.{event}@{self.handle}", *args)
+        ProviderBase.signal_callback(f"provider.{self.HANDLE}.{event}@{self.HANDLE}", *args)
 
     def _signal_send_global(self, event, *args):
-        ProviderBase.signal_callback(f"{event}@{self.handle}", *args)
+        ProviderBase.signal_callback(f"{event}@{self.HANDLE}", *args)
 
     def _log(self, *args, scope=''):
         subscope = f':{scope}' if scope else ''

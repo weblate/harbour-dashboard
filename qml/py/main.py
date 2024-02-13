@@ -121,7 +121,7 @@ class Dashboard:
                 return
 
             # set base paths for all provider classes derived from Provider
-            setattr(provider.ProviderBase, f'{k}_dir', v)
+            setattr(provider.ProviderBase, f'{k.upper()}_DIR', v)
 
         # set base callbacks for all provider classes
         provider.ProviderBase.signal_callback = signal_send

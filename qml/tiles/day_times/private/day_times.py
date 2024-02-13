@@ -21,8 +21,8 @@ TIMEZONE_QUERIES = {}
 
 
 class Provider(ProviderBase):
-    name = 'Day Times'
-    handle = 'day_times'
+    NAME = 'Day Times'
+    HANDLE = 'day_times'
 
     def __init__(self):
         super().__init__()

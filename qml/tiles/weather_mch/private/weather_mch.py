@@ -88,9 +88,8 @@ class _CacheDb(DatabaseBase):
 
 
 class Provider(ProviderBase):
-    name = 'MeteoSwiss'
-    handle = 'weather_mch'
-    # capabilities = Capability.ALL
+    NAME = 'MeteoSwiss'
+    HANDLE = 'weather_mch'
 
     URL_STRINGS = 'https://www.meteoschweiz.admin.ch/etc.clientlibs/internet/clientlibs/meteoswiss/clientlibs/lang/{lang}.min.js'
     URL_ICONS = 'https://www.meteoschweiz.admin.ch/etc.clientlibs/internet/clientlibs/meteoswiss/resources/assets/images/icons/meteo/weather-symbols/{num}.svg'
