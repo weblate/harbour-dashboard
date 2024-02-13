@@ -4,7 +4,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-# import enum
 from pathlib import Path
 from functools import lru_cache
 from dataclasses import dataclass
@@ -16,20 +15,6 @@ _INITIALIZED_PROVIDERS: Dict[str, 'ProviderBase'] = {}
 
 def _raise_callback_missing(*args, **kwargs):
     raise NotImplementedError()
-
-
-# class Capability(enum.IntFlag):
-#     SUMMARY_FORECAST = 1
-#     DETAILED_FORECAST = 2
-#     TEMPERATURE = 4
-#     PRECIPITATION = 8
-#     WIND_SPEED = 16
-#     WIND_DIRECTION = 32
-#     POLLEN = 64
-#     DANGERS = 128
-#
-#     ALL = SUMMARY_FORECAST + DETAILED_FORECAST + TEMPERATURE + \
-#         PRECIPITATION + WIND_SPEED + WIND_DIRECTION + POLLEN + DANGERS
 
 
 def do_execute_command(*args, provider_class, **kwargs) -> None:
