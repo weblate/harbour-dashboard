@@ -149,4 +149,4 @@ class ProviderBase:
 
     def _log(self, *args, scope=''):
         subscope = f':{scope}' if scope else ''
-        self.log_callback(*args, scope=f'provider:{self.handle}{subscope}')
+        ProviderBase.log_callback(*args, scope=f'provider:{self.HANDLE}{subscope}')
