@@ -490,18 +490,24 @@ def get_available_tiles() -> List[str]:
 
 
 if __name__ == '__main__':
-    log('running standalone')
+    log('running standalone as script')
 
     # TODO remove test lines
     initialize('test-data/data', 'test-data/cache', 'test-data/config')
 
 else:
     log('running as library')
-    import pyotherside
 
-    def _signal_send_proxy(event, *args):
-        log(f'[{event}]', *args, scope='signal')
-        pyotherside.send(event, *args)
+    try:
+        import pyotherside
 
-    # overwrite the global signal handler
-    signal_send = _signal_send_proxy
+        def _signal_send_proxy(event, *args):
+            log(f'[{event}]', *args, scope='signal')
+            pyotherside.send(event, *args)
+
+        # overwrite the global signal handler
+        signal_send = _signal_send_proxy
+    except ImportError:
+        log('pyotherside is not available, assuming we run standalone')
+        log('setup the main object by running:')
+        log("""main.initialize('test-data/data', 'test-data/cache', 'test-data/config')""")
