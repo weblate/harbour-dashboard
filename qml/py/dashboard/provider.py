@@ -4,10 +4,13 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
+import requests
+import json
+
 from pathlib import Path
 from functools import lru_cache
 from dataclasses import dataclass
-from typing import Callable, Dict
+from typing import Callable, Dict, Iterable, Any
 
 
 _INITIALIZED_PROVIDERS: Dict[str, 'ProviderBase'] = {}
@@ -84,6 +87,57 @@ class ProviderBase:
     @lru_cache
     def config_path(self):
         return self.CONFIG_DIR / self.HANDLE
+
+    @dataclass
+    class RequestResponse:
+        r: requests.Response
+        error: Exception
+
+        @property
+        def ok(self) -> bool:
+            return self.error is None and self.status == 200
+
+        @property
+        def headers(self) -> dict:
+            return self.r.headers
+
+        @property
+        def json(self) -> dict:
+            return dict(self.r.json())
+
+        @property
+        def text(self) -> dict:
+            return self.r.text
+
+        @property
+        def status(self) -> int:
+            return self.r.status_code
+
+    def _fetch(self, command: 'ProviderBase.Command', url: str, params: dict = {},
+               headers: dict = {}, timeout: int = 1) -> ['ProviderBase.RequestResponse', None]:
+        command.log('fetching:', url, 'params:', params, 'timeout:', timeout)
+
+        try:
+            r = requests.get(url, headers=headers, timeout=1, params=params)
+
+            command.log('received headers:\n', json.dumps(dict(r.headers), indent=2))
+            command.log('received status:', r.status_code)
+
+            r.raise_for_status()
+
+            command.log('received data:\n', json.dumps(dict(r.json()), indent=2))
+        except (requests.ConnectionError, requests.ConnectTimeout) as e:
+            # TODO handle broken API and don't retry endlessly
+            self._signal_send('error:web-request-timeout', e)
+            return self.RequestResponse(r, e)
+        except requests.exceptions.RequestException as e:
+            self._signal_send('error:web-request-failed', e)
+            return self.RequestResponse(r, e)
+        except Exception as e:
+            self._signal_send('error:web-request-failed', e)
+            return self.RequestResponse(r, e)
+
+        return self.RequestResponse(r, None)
 
     @dataclass
     class Command:
