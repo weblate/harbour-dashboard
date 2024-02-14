@@ -39,32 +39,6 @@ Dialog {
     ListModel {
         id: tileTypesModel
 
-//        // TODO move this list in a separate file
-//        // TODO maybe load tile definitions from JSON?
-//        // TODO remove or polish descriptions; they are mostly not necessary at all
-
-//        ListElement {
-//            title: qsTr("World clock")
-//            description: qsTr("Clock showing local time or the current time in any time zone.")
-//            icon: "image://theme/icon-l-clock"
-
-//            type: "clock"
-//            requiresProvider: false
-//            requiresConfig: true
-//            implemented: true
-//        }
-
-//        ListElement {
-//            title: qsTr("Weather forecast")
-//            description: qsTr("Weather forecast showing graphs for the next few days.")
-//            icon: "image://theme/icon-l-weather-d400"
-
-//            type: "weather"
-//            requiresProvider: true
-//            requiresConfig: true
-//            implemented: true
-//        }
-
 //        ListElement {
 //            title: qsTr("Pollen forecast")
 //            description: qsTr("Forecast showing the intensity of pollen and other allergens.")
@@ -85,28 +59,6 @@ Dialog {
 //            requiresProvider: true
 //            requiresConfig: true
 //            implemented: false
-//        }
-
-//        ListElement {
-//            title: qsTr("Sun times")
-//            description: qsTr("Current times of sunrise and nightfall.")
-//            icon: "image://theme/icon-l-timer"
-
-//            type: "suntimes"
-//            requiresProvider: false
-//            requiresConfig: true
-//            implemented: false
-//        }
-
-//        ListElement {
-//            title: qsTr("Spacer")
-//            description: qsTr("Empty tile for spacing.")
-//            icon: "image://theme/icon-l-dismiss"
-
-//            type: "spacer"
-//            requiresProvider: false
-//            requiresConfig: false
-//            implemented: true
 //        }
     }
 
@@ -133,24 +85,7 @@ Dialog {
                 onClicked: {
                     canAccept = true
 
-                    /*if (model.requiresProvider) {
-                        // Open the provider selection page for a new tile of type <type>.
-                        // Configuring and actually saving the new tile is handled there.
-
-                        // TODO implement
-
-                        if (model.type === 'weather') {
-                            // DEBUG
-                            app.addTile(model.type, 'small', {
-                                'provider_id': 'mch',
-                                'location_id': '400100'
-                            })
-                        } else {
-                            app.showFatalError("Adding tiles with providers is not yet implemented.")
-                            console.error("adding tiles that require a provider is not yet implemented")
-                            root.accept()
-                        }
-                    } else*/ if (model.requiresConfig) {
+                    if (model.requiresConfig) {
                         // Open the correct settings dialog to configure a new tile.
                         // This loads the "generic" settings dialog which is expected at
                         // qml/tiles/<type>/Settings.qml. Tiles that require a provider-specific
@@ -235,13 +170,13 @@ Dialog {
                     }
 
                     labelFont.pixelSize: Theme.fontSizeMedium
-                    descriptionFont.pixelSize: Theme.fontSizeSmall
+                    descriptionFont.pixelSize: Theme.fontSizeExtraSmall
 
                     topLabelItem.wrapMode: Text.Wrap
                     topLabelItem.maximumLineCount: 1
                     topLabelItem.truncationMode: TruncationMode.Fade
                     bottomLabelItem.wrapMode: Text.Wrap
-                    bottomLabelItem.maximumLineCount: 2
+                    bottomLabelItem.maximumLineCount: 3
                     bottomLabelItem.truncationMode: TruncationMode.Elide
                 }
             }
