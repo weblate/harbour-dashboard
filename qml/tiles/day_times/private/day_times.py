@@ -49,7 +49,7 @@ class Provider(ProviderBase):
                     ]
                 }
 
-                self._signal_send('log.search', locations)
+                command.log(locations)
                 LOCATION_QUERIES[query] = result
                 command.send_result(result)
         elif command == 'lookup-timezone':
@@ -63,7 +63,7 @@ class Provider(ProviderBase):
                     'timezone': tz.raw['timezoneId']
                 }
 
-                self._signal_send('log.tz', tz.raw, tz.pytz_timezone)
+                command.log(tz.raw, tz.pytz_timezone)
                 TIMEZONE_QUERIES[coordinates] = result
                 command.send_result(result)
         elif command == 'get-times':
