@@ -164,15 +164,19 @@ class KeyValueBase(DatabaseBase):
 
         raise self.InvalidVersion
 
-    def get_value(self, key: str, section: int = DEFAULT_SECTION) -> str:
+    def get_value(self, key: str, section: int = DEFAULT_SECTION) -> [str, None]:
         """
         Get data from the key-value store.
 
         All data is stored as string.
         """
         row = self.con.execute("""
-            SELECT value FROM keyvalue WHERE section = ?, key = ? LIMIT 1;
+            SELECT value FROM keyvalue WHERE section = ? AND key = ? LIMIT 1;
         """, (section, key)).fetchone()
+
+        if row is None:
+            return None
+
         return row['value']
 
     def set_value(self, key: str, value: str, section: int = DEFAULT_SECTION, commit: bool = True) -> None:
