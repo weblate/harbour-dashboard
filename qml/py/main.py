@@ -12,6 +12,7 @@ from dashboard import provider
 from dashboard.util import log
 from dashboard.util import signal_send
 from dashboard.util import DatabaseBase
+from dashboard.util import KeyValueBase
 
 
 _KNOWN_TILE_SIZES = {
@@ -25,7 +26,7 @@ INITIALIZED = False
 
 
 class Dashboard:
-    class DataDb(DatabaseBase):
+    class DataDb(KeyValueBase):
         """
         Data database.
 
@@ -33,23 +34,6 @@ class Dashboard:
         only access and change its own data.
         """
         HANDLE = 'main_data'
-
-        def _setup(self):
-            pass
-
-        def _upgrade_schema(self, from_version):
-            if from_version == '0':
-                self.cur.execute("""
-                    CREATE TABLE IF NOT EXISTS keyvalue (
-                        tile_id INTEGER NOT NULL,
-                        key TEXT NOT NULL,
-                        value TEXT NOT NULL
-                    );""")
-                return '1'
-            elif from_version == '1':
-                raise self.UpToDate
-
-            raise self.InvalidVersion
 
     class ConfigDb(DatabaseBase):
         """
@@ -447,13 +431,10 @@ def get_tile_data(tile_id: int, key: str) -> str:
         return
 
     signal_send('info.main.tile-data.get.started', tile_id, key)
-
-    row = MAIN.data_db.con.execute("""
-        SELECT value FROM keyvalue WHERE tile_id = ?, key = ? LIMIT 1;
-    """, (tile_id, key)).fetchone()
-
+    value = MAIN.data_db.get_value(key, tile_id)
     signal_send('info.main.tile-data.get.finished', tile_id, key)
-    return row['value']
+
+    return value
 
 
 def set_tile_data(tile_id: int, key: str, data: str) -> None:
@@ -464,18 +445,7 @@ def set_tile_data(tile_id: int, key: str, data: str) -> None:
         return
 
     signal_send('info.main.tile-data.set.started', tile_id, key, data)
-
-    if data is None:
-        MAIN.data_db.con.execute("""
-            DELETE FROM keyvalue WHERE tile_id = ?, key = ?;
-        """, (tile_id, key))
-    else:
-        MAIN.data_db.con.execute("""
-            INSERT OR REPLACE INTO keyvalue(tile_id, key, value) VALUES (?, ?, ?);
-        """, (tile_id, key, str(data)))
-
-    MAIN.data_db.con.commit()
-
+    MAIN.data_db.set_value(key, data, tile_id)
     signal_send('info.main.tile-data.set.finished', tile_id, key, data)
 
 

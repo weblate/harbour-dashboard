@@ -132,3 +132,64 @@ class DatabaseBase:
     def _log(self, *args, scope=''):
         subscope = f':{scope}' if scope else ''
         self._log_callback(*args, scope=f'database:{self.HANDLE}{subscope}')
+
+
+class KeyValueBase(DatabaseBase):
+    """
+    Data database.
+
+    This database provides a sectioned key-value storage. Keys can repeat in
+    different sections.
+
+    Using sections is optional. If no section is specified, the default
+    section will be used for all keys. Sections are integers.
+    """
+    HANDLE = 'kv-database'
+    DEFAULT_SECTION: int = 0
+
+    def _setup(self):
+        pass
+
+    def _upgrade_schema(self, from_version):
+        if from_version == '0':
+            self.cur.execute("""
+                CREATE TABLE IF NOT EXISTS keyvalue (
+                    section INTEGER NOT NULL,
+                    key TEXT NOT NULL,
+                    value TEXT NOT NULL
+                );""")
+            return '1'
+        elif from_version == '1':
+            raise self.UpToDate
+
+        raise self.InvalidVersion
+
+    def get_value(self, key: str, section: int = DEFAULT_SECTION) -> str:
+        """
+        Get data from the key-value store.
+
+        All data is stored as string.
+        """
+        row = self.con.execute("""
+            SELECT value FROM keyvalue WHERE section = ?, key = ? LIMIT 1;
+        """, (section, key)).fetchone()
+        return row['value']
+
+    def set_value(self, key: str, value: str, section: int = DEFAULT_SECTION, commit: bool = True) -> None:
+        """
+        Set data in the key-value store.
+
+        Values will be forcefully converted to string.
+        The key will be deleted if value is None.
+        """
+        if value is None:
+            self.con.execute("""
+                DELETE FROM keyvalue WHERE section = ?, key = ?;
+            """, (section, key))
+        else:
+            self.con.execute("""
+                INSERT OR REPLACE INTO keyvalue(section, key, value) VALUES (?, ?, ?);
+            """, (section, key, str(value)))
+
+        if commit:
+            self.con.commit()
