@@ -20,7 +20,6 @@ from dashboard.util import DatabaseBase
 from dashboard.util import KeyValueBase
 
 
-
 """
 API:
 
@@ -347,8 +346,6 @@ class Provider(ProviderBase):
     URL_ICONS = 'https://www.meteoschweiz.admin.ch/etc.clientlibs/internet/clientlibs/meteoswiss/resources/assets/images/icons/meteo/weather-symbols/{num}.svg'
     URL_FORECAST = 'https://app-prod-ws.meteoswiss-app.ch/v1/plzDetail?plz={ident}'
 
-    # API_DATETIME_FORMAT = '%a, %d %b %Y %H:%M:%S %Z'
-
     def __init__(self):
         super().__init__()
         self._setup()
@@ -418,11 +415,10 @@ class Provider(ProviderBase):
 
         try:
             downloaded_parsed = dateparser.parse(get_cache('downloaded'))
-            next_refresh_parsed = dateparser.parse(next_refresh)  # datetime.datetime.strptime(next_refresh, self.API_DATETIME_FORMAT)
+            next_refresh_parsed = dateparser.parse(next_refresh)
         except ValueError as e:
             command.log('cache miss: invalid cached timestamp')
-            command.log(f'warning: failed to parse data timestamp "{next_refresh}"'
-                        f'with format "{self.API_DATETIME_FORMAT}", error:', e)
+            command.log(f'warning: failed to parse data timestamp "{next_refresh}", error:', e)
             return None
 
         if now > next_refresh_parsed + datetime.timedelta(minutes=load_level_interval):
