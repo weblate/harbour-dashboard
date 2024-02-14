@@ -186,11 +186,11 @@ class KeyValueBase(DatabaseBase):
         Values will be forcefully converted to string.
         The key will be deleted if value is None.
         """
-        if value is None:
-            self.con.execute("""
-                DELETE FROM keyvalue WHERE section = ?, key = ?;
-            """, (section, key))
-        else:
+        self.con.execute("""
+            DELETE FROM keyvalue WHERE section = ? AND key = ?;
+        """, (section, key))
+
+        if value:
             self.con.execute("""
                 INSERT OR REPLACE INTO keyvalue(section, key, value) VALUES (?, ?, ?);
             """, (section, key, str(value)))
