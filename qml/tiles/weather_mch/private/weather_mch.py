@@ -4,60 +4,143 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-import requests
 import locale
 import re
-# import json
+import json
 import enum
-# from dataclasses import dataclass
+import datetime
 
-# from dashboard.provider import Capability
+from functools import partial
+from random import randrange
+
+from dateutil import parser as dateparser
 from dashboard.provider import ProviderBase
 from dashboard.provider import do_execute_command
 from dashboard.util import DatabaseBase
 from dashboard.util import KeyValueBase
 
 
+
 """
-
 API:
+
 - website:
-      - weather icons: https://www.meteoschweiz.admin.ch/static/resources/weather-symbols/X.svg
-          as of 2024-02-13, there are 42 icons for day and night: X is {1..42} and {101..142}
+    - weather icons: https://www.meteoschweiz.admin.ch/static/resources/weather-symbols/X.svg
+        as of 2024-02-13, there are 42 icons for day and night: X is {1..42} and {101..142}
 
-          was: https://www.meteoschweiz.admin.ch/etc.clientlibs/internet/clientlibs/meteoswiss/resources/assets/images/icons/meteo/weather-symbols/{num}.svg
+        was: https://www.meteoschweiz.admin.ch/etc.clientlibs/internet/clientlibs/meteoswiss/resources/assets/images/icons/meteo/weather-symbols/{num}.svg
 
-      - strings:
-          as of 2024-02-13 no longer available here, must be extracted from the app
-          was: https://www.meteoschweiz.admin.ch/etc.clientlibs/internet/clientlibs/meteoswiss/clientlibs/lang/{lang}.min.js
+    - strings:
+        as of 2024-02-13 no longer available here, must be extracted from the app
+        was: https://www.meteoschweiz.admin.ch/etc.clientlibs/internet/clientlibs/meteoswiss/clientlibs/lang/{lang}.min.js
 
 - App:
-      APKs are available here: https://www.apkmirror.com/apk/bundesamt-fur-meteorologie-und-klimatologie/meteoswiss/meteoswiss-3-0-6-release/
+    APKs are available here: https://www.apkmirror.com/apk/bundesamt-fur-meteorologie-und-klimatologie/meteoswiss/meteoswiss-3-0-6-release/
 
-      - v2.16 / 2.18.1:
-          - UA: MeteoSwissApp-2.16-Android / MeteoSwissApp-2.18.1-Android
-          - database: https://s3-eu-central-1.amazonaws.com/app-prod-static-fra.meteoswiss-app.ch/v1/db.sqlite
+    - v2.16 / 2.18.1:
+        - UA: MeteoSwissApp-2.16-Android / MeteoSwissApp-2.18.1-Android
+        - database: https://s3-eu-central-1.amazonaws.com/app-prod-static-fra.meteoswiss-app.ch/v1/db.sqlite
 
-      - v3.0.6:
-          - UA: MeteoSwissApp-3.0.6-Android
-          - database: https://app-prod-static.meteoswiss-app.ch/v1/db.sqlite
-          - strings:
-               - extract the APK (zip)
-               - extract resources using: jadx resources.arsc
-               - locate resources/resources/res/values{,-de,-fr,-it}/strings.xml
-               - extract weather symbol descriptions:
+    - v3.0.6:
+        - UA: MeteoSwissApp-3.0.6-Android
+        - database: https://app-prod-static.meteoswiss-app.ch/v1/db.sqlite
+        - strings:
+            - extract the APK (zip)
+            - extract resources using: jadx resources.arsc
+            - locate resources/resources/res/values{,-de,-fr,-it}/strings.xml
+            - extract weather symbol descriptions:
 
-                      for i in "" de it fr; do
-                          echo "{" > ${i:-en}.json
-                          echo '    "app-version": "MeteoSwissApp-3.0.6-Android",' >> ${i:-en}.json
-                          hxselect "resources > string[name^='wettersymboltexte']" -s '\n' < resources/resources/res/values${i:+-}$i/strings.xml |\
-                              sed -Ee 's@<string name="wettersymboltexte_([0-9]+)">(.*)</string>@    "\1": "\2",@g' |\
-                              sort -t'"' --key=2n >> ${i:-en}.json
-                          echo "}" >> ${i:-en}.json
-                          mv "${i:-en}.json" "symbols_${i:-en}.json"
-                      done
+                    for i in "" de it fr; do
+                        echo "{" > ${i:-en}.json
+                        echo '    "app-version": "MeteoSwissApp-3.0.6-Android",' >> ${i:-en}.json
+                        hxselect "resources > string[name^='wettersymboltexte']" -s '\n' < resources/resources/res/values${i:+-}$i/strings.xml |\
+                            sed -Ee 's@<string name="wettersymboltexte_([0-9]+)">(.*)</string>@    "\1": "\2",@g' |\
+                            sort -t'"' --key=2n >> ${i:-en}.json
+                        echo "}" >> ${i:-en}.json
+                        mv "${i:-en}.json" "symbols_${i:-en}.json"
+                    done
 
-               - remove the trailing comma in the last line
+            - remove the trailing comma in the last line
+
+        - weather data:
+                                                                           single ID    ID list      ID list
+            call("https://app-prod-ws.meteoswiss-app.ch/v1/plzOverview?plz=300100&small=400100&large=100200")
+            > 200
+            > most of it is empty
+            > ID lists are comma separated: 400100,300100
+
+            call("https://app-prod-ws.meteoswiss-app.ch/v1/plzOverview?plz=300100")
+            > gives 400 client error
+
+            call("https://app-prod-ws.meteoswiss-app.ch/v1/plzOverview?small=400100")
+            > gives 400 client error
+
+            call("https://app-prod-ws.meteoswiss-app.ch/v1/plzOverview?plz=400100&small=400100")
+            > gives 400 client error
+
+            call("https://app-prod-ws.meteoswiss-app.ch/v1/plzOverview?plz=400100&small=400100&large=400100")
+            > 200
+            > with data
+
+            call("https://app-prod-ws.meteoswiss-app.ch/v1/plzOverview?plz=400100&small=&large=")
+            > 200
+            > with data
+
+            call("https://app-prod-ws.meteoswiss-app.ch/v1/plzOverview?plz=&small=400100&large=")
+            > 200
+            > some data
+
+            call("https://app-prod-ws.meteoswiss-app.ch/v1/plzOverview?plz=&small=&large=400100,300100")
+            > 200
+            > week overview + graph; current is empty
+
+            call("https://app-prod-ws.meteoswiss-app.ch/v2/plzDetail?plz=400100")
+            > gives 200
+            > with lots of data
+
+            call("https://app-prod-ws.meteoswiss-app.ch/v2/plzDetail?plz=400100,300100")
+            > gives 500 server error
+
+            call("https://app-prod-ws.meteoswiss-app.ch/v1/vorortdetail?plz=100200")
+            > gives 400 client error
+
+            call("https://app-prod-ws.meteoswiss-app.ch/v1/forecast?plz=300100")
+            > gives 200
+            > but all data fields are empty
+
+            call("https://app-prod-ws.meteoswiss-app.ch/v2/plzDetail?plz=400100")
+            > gives 200
+            > with lots of data
+            >>> best one: ~30kb, week overview, graphs, sunrise, symbols, current weather
+            >>> refreshed every ~10 minutes
+
+
+def call(url):
+    print("CALL --------------------------------------------------------------------")
+    print(url)
+
+    try:
+        r = requests.get(url, headers=HEADERS, timeout=1)
+
+        print("HEADER --------------------------------------------------------------------")
+        print(json.dumps(dict(r.headers), indent=2))
+        print("STATUS --------------------------------------------------------------------")
+        print(r.status_code)
+
+        print("RAISE --------------------------------------------------------------------")
+        r.raise_for_status()
+
+        print("JSON --------------------------------------------------------------------")
+        print(json.dumps(dict(r.json()), indent=2))
+
+    except (requests.ConnectionError, requests.ConnectTimeout) as e:
+        self._signal_send('timeout', e)
+    except requests.exceptions.RequestException as e:
+        self._signal_send('requests exception', e)
+        return
+    except Exception as e:
+        self._signal_send('any exception', e)
+        return
 """
 
 
@@ -113,6 +196,8 @@ class _MetadataDb(DatabaseBase):
             try:
                 r = requests.get(self.URL_DB, headers=HEADERS, timeout=1)
 
+                self._log(json.dumps(dict(r.headers), indent=2))
+                self._log(r.status_code)
                 # >>> print(r.headers)
                 # {
                 #     "x-amz-id-2": "HOG3FIlYQVk1yInMV9HvvZzJcGgvkaK3PPGitN4faV1EsrP9zwZreO1Xmq7l/MCubTkdz5Nw2C4=",
@@ -173,28 +258,6 @@ class _MetadataDb(DatabaseBase):
 
     def get_search_suggestions(self, query: str):
         if re.match('^[0-9]+$', query):
-            """
-            SELECT plz_pk AS plz, name, altitude, ? AS type
-            FROM plz
-            JOIN plz_names ON plz_names.plz = plz.plz_pk
-            WHERE plz_pk LIKE ?
-            LIMIT 50;
-
-            SELECT plz AS zip, kind, primary_name as name, GROUP_CONCAT(name, ', ') AS alt_name, altitude
-            FROM (SELECT plz, name, primary_name, altitude, "Ort" AS kind FROM plz_names
-            JOIN plz ON plz.plz_pk = plz_names.plz
-            WHERE plz_pk LIKE "40%")
-            GROUP BY plz
-
-            SELECT plz AS zip, kind, primary_name as name, GROUP_CONCAT(name, ', ') AS alt_name, altitude
-            FROM (
-                SELECT plz, name, primary_name, altitude, ? AS kind FROM plz_names
-                JOIN plz ON plz.plz_pk = plz_names.plz
-                WHERE plz_pk LIKE ?
-            )
-            GROUP BY plz
-            LIMIT 50;
-            """
             self.cur.execute("""
                 SELECT plz AS key, SUBSTR(plz, 0, 5) as zip, kind, primary_name as name, GROUP_CONCAT(name, ', ') AS alt_name, altitude, x, y
                 FROM (
@@ -206,66 +269,6 @@ class _MetadataDb(DatabaseBase):
                 LIMIT 20;
             """, {'kind': PLACE_TYPE_CITY_STRINGS[LOCALE], 'query': f'{query}%'})
         else:
-            """
-            SELECT plz, name, altitude, ? as type
-            FROM plz_names
-            JOIN plz ON plz.plz_pk = plz_names.plz
-            WHERE name LIKE ?
-            LIMIT 50;
-
-            SELECT plz_pk AS plz, alt_name, primary_name, altitude, ? AS type
-            FROM (
-                SELECT plz AS plz_pk, GROUP_CONCAT(name, ', ') AS alt_name
-                FROM plz_names
-                GROUP BY plz
-            )
-            JOIN plz USING(plz_pk)
-            WHERE primary_name LIKE ?
-            LIMIT 50;
-
-            SELECT plz, GROUP_CONCAT(name, ', ') AS alt_name
-            FROM (SELECT plz, name, altitude, "Ort" as type
-            FROM plz_names
-            JOIN plz ON plz.plz_pk = plz_names.plz
-            WHERE name LIKE "Bas%"
-            LIMIT 50)
-            GROUP BY plz
-
-            SELECT plz AS zip, kind, primary_name as name, GROUP_CONCAT(name, ', ') AS alt_name, altitude
-            FROM (SELECT plz, name, primary_name, altitude, "Ort" AS kind FROM plz_names
-            JOIN plz ON plz.plz_pk = plz_names.plz
-            WHERE name LIKE "Del%" LIMIT 10)
-            GROUP BY plz
-
-            SELECT plz AS zip, kind, primary_name as name, GROUP_CONCAT(name, ', ') AS alt_name, altitude
-            FROM (
-                SELECT plz, name, primary_name, altitude, ? AS kind FROM plz_names
-                JOIN plz ON plz.plz_pk = plz_names.plz
-                WHERE name LIKE ?
-            )
-            GROUP BY plz
-            LIMIT 50;
-
-
-            SELECT poi_pk AS key, '' as zip, type_de as kind, primary_name as name, GROUP_CONCAT(name, ', ') AS alt_name, altitude
-            FROM (
-                SELECT poi_pk, name, primary_name, altitude, type_de FROM poi_names
-                JOIN poi ON poi.poi_pk = poi_names.poi
-                WHERE name LIKE "E%"
-            )
-            GROUP BY poi_pk
-            LIMIT 50;
-
-            SELECT plz AS key, SUBSTR(plz, 0, 5) as zip, kind, primary_name as name, GROUP_CONCAT(name, ', ') AS alt_name, altitude
-            FROM (
-                SELECT plz, name, primary_name, altitude, ? AS kind FROM plz_names
-                JOIN plz ON plz.plz_pk = plz_names.plz
-                WHERE name LIKE ?
-            )
-            GROUP BY plz
-            LIMIT 50;
-            """
-
             lang = f"type_{LOCALE}"
 
             if LOCALE not in ['de', 'it', 'fr', 'en']:
@@ -344,6 +347,8 @@ class Provider(ProviderBase):
     URL_ICONS = 'https://www.meteoschweiz.admin.ch/etc.clientlibs/internet/clientlibs/meteoswiss/resources/assets/images/icons/meteo/weather-symbols/{num}.svg'
     URL_FORECAST = 'https://app-prod-ws.meteoswiss-app.ch/v1/plzDetail?plz={ident}'
 
+    # API_DATETIME_FORMAT = '%a, %d %b %Y %H:%M:%S %Z'
+
     def __init__(self):
         super().__init__()
         self._setup()
@@ -362,18 +367,121 @@ class Provider(ProviderBase):
                 'items': suggestions
             }
 
-            self._signal_send('log.search', suggestions)
+            command.log(suggestions)
             command.send_result(result)
-        elif command == 'get-weather':
-            # ...do stuff
-            # send result:
-            command.send_result(command.data)
+        elif command == 'get-weather-data':
+            if command.tile_id < 0:
+                command.log('warning: cannot fetch weather data without a valid tile ID, got', command.tile_id)
+
+            if cached_data := self._get_cached_weather_data(command):
+                command.log(f'using cached data for {command.data["key"]}')
+                command.send_result(cached_data)
+                return
+
+            command.log(f'no cache for {command.data["key"]}, fetching new data')
+
+            if new_data := self._get_remote_weather_data(command):
+                command.log(f'fetched weather data for {command.data["key"]}')
+                command.send_result(new_data)
+                return
+            else:
+                command.log('failed to fetch updated data, retrying with outdated cache')
+
+            if cached_data := self._get_cached_weather_data(command, allow_outdated=True):
+                command.log(f'falling back to outdated cached data for {command.data["key"]}')
+                command.send_result(cached_data)
+                return
+
+            command.log(f"error: failed to load cache or fetch new data for {command.data['key']}")
         elif command == 'refresh':
             # ...do stuff
             # send result:
             command.send_result(command.data)
         else:
             self._handle_unknown_command(command)
+
+    def _get_cached_weather_data(self, command: ProviderBase.Command, allow_outdated: bool = False) -> [None, dict]:
+        if command.tile_id < 0:
+            command.log('cache miss: invalid tile id', command.tile_id)
+            return None
+
+        get_cache = partial(self._cache_db.get_value, section=CacheSection.TILES + command.tile_id)
+        last_key = get_cache('key')
+
+        if last_key != command.data['key']:
+            command.log(f'cache miss: cached key is {last_key}, expected {command.data["key"]}')
+            return None
+
+        now = datetime.datetime.now(datetime.timezone.utc)
+        next_refresh = get_cache('next-refresh')
+        load_level_interval = randrange(10)
+
+        try:
+            downloaded_parsed = dateparser.parse(get_cache('downloaded'))
+            next_refresh_parsed = dateparser.parse(next_refresh)  # datetime.datetime.strptime(next_refresh, self.API_DATETIME_FORMAT)
+        except ValueError as e:
+            command.log('cache miss: invalid cached timestamp')
+            command.log(f'warning: failed to parse data timestamp "{next_refresh}"'
+                        f'with format "{self.API_DATETIME_FORMAT}", error:', e)
+            return None
+
+        if now > next_refresh_parsed + datetime.timedelta(minutes=load_level_interval):
+            if allow_outdated:
+                command.log('cache hit: using outdated cache is explicitly allowed this time')
+            else:
+                command.log(f'cache miss: cache is outdated, have {now}, next refresh at {next_refresh_parsed} + interval {load_level_interval}')
+                return None
+
+        last_data = get_cache('data')
+
+        if not last_data:
+            command.log('cache miss: cached data is empty')
+            return None
+
+        try:
+            loaded = json.loads(last_data)
+        except json.JSONDecodeError as e:
+            command.log('cache miss: cached data is invalid')
+            command.log(f'warning: failed to decode cached data for {command.data["key"]}, error:', e)
+            return None
+
+        command.log(f'cache hit: returning cached data for {command.data["key"]}')
+        command.log(f'cache hit: downloaded {downloaded_parsed}, valid until {next_refresh_parsed}')
+        return loaded
+
+    def _get_remote_weather_data(self, command: ProviderBase.Command) -> [None, dict]:
+        response = self._fetch(command, "https://app-prod-ws.meteoswiss-app.ch/v2/plzDetail",
+                               params={'plz': command.data['key']}, headers=HEADERS)
+
+        if not response.ok:
+            command.log(f"failed to fetch data for {command.data['key']}, status {response.status}, error:", response.error)
+            return None
+
+        """
+        expected headers:
+        {
+            "Date": "Wed, 14 Feb 2024 13:52:27 GMT",
+            "Content-Type": "application/json",
+            "Transfer-Encoding": "chunked",
+            "Connection": "keep-alive",
+            "Server": "nginx",
+            "Vary": "Accept-Encoding",
+            "x-amz-meta-next-refresh": "Wed, 14 Feb 2024 14:02:30 GMT",
+            "x-amz-meta-best-before": "Wed, 14 Feb 2024 15:52:27 GMT",
+            "x-amz-meta-backoff": "120",
+            "x-amz-meta-minimum-api-version": "32",
+            "Content-Encoding": "gzip"
+        }
+        """
+
+        set_cache = partial(self._cache_db.set_value, section=CacheSection.TILES + command.tile_id)
+        set_cache('key', command.data['key'])
+        set_cache('downloaded', response.headers['Date'])
+        set_cache('next-refresh', response.headers['x-amz-meta-next-refresh'])
+        set_cache('best-before', response.headers['x-amz-meta-best-before'])
+        set_cache('data', response.text)
+
+        return response.json
 
     # def refresh(self, ident: str, force: bool) -> None:
     #     self._pre_refresh(ident, force)
