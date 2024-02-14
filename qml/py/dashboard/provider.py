@@ -92,6 +92,7 @@ class ProviderBase:
         sequence: int
         data: dict
         send_result: Callable[[dict], None]
+        log: Callable[[Iterable[Any]], None]
 
         def __eq__(self, other):
             if isinstance(other, ProviderBase.Command):
@@ -102,7 +103,7 @@ class ProviderBase:
                 return self.command == other
             return False
 
-    def execute_command(self, command, tile_id, sequence, data) -> None:
+    def execute_command(self, command: str, tile_id: int, sequence: int, data: dict) -> None:
         """
         Execute a command from the frontend.
         """
@@ -113,8 +114,11 @@ class ProviderBase:
         def send_result(result: dict) -> None:
             self._signal_send(f'result:{command}', tile_id, sequence, command, result)
 
+        def log(*args) -> None:
+            self._log(*args, scope=f'command:{command}')
+
         self._signal_send_global('info.main.provider-command.started', tile_id, command, sequence, data)
-        self._handle_command(self.Command(command, tile_id, sequence, data, send_result))
+        self._handle_command(self.Command(command, tile_id, sequence, data, send_result, log))
         self._signal_send_global('info.main.provider-command.finished', tile_id, command, sequence, data)
 
     def _handle_command(self, command: 'ProviderBase.Command') -> None:
