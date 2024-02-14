@@ -18,10 +18,10 @@ def _raise_callback_missing(*args, **kwargs):
 
 
 def do_execute_command(*args, provider_class, **kwargs) -> None:
-    if provider_class.handle not in _INITIALIZED_PROVIDERS:
-        _INITIALIZED_PROVIDERS[provider_class.handle] = provider_class()
+    if provider_class.HANDLE not in _INITIALIZED_PROVIDERS:
+        _INITIALIZED_PROVIDERS[provider_class.HANDLE] = provider_class()
 
-    _INITIALIZED_PROVIDERS[provider_class.handle].execute_command(*args, **kwargs)
+    _INITIALIZED_PROVIDERS[provider_class.HANDLE].execute_command(*args, **kwargs)
 
 
 class ProviderBase:
@@ -33,7 +33,7 @@ class ProviderBase:
     log_callback: Callable = _raise_callback_missing
 
     NAME: str = ''
-    handle: str = ''  # must match the module name
+    HANDLE: str = ''  # must match the module name
     # capabilities: Capability = 0
 
     def __init__(self):
