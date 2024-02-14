@@ -11,4 +11,6 @@ MetadataBase {
     name: qsTr("Weather forecast (MeteoSwiss)")
     description: qsTr("Weather forecast for Switzerland provided by the Swiss Meteorological Institute.")
     icon: "image://theme/icon-l-weather-d400"
+    hasProvider: true
+    requiresConfig: true
 }

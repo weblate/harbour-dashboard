@@ -8,7 +8,7 @@ import weather_mch
 def main(base_path):
     dash_main.initialize(f'{base_path}/test-data/data', f'{base_path}/test-data/cache', f'{base_path}/test-data/config')
 
-    weather_mch.execute_command('', 0, 0, {})
+    weather_mch.execute_command('get-search-suggestions', 0, 0, {'query': 'Bal'})
 
 
 if __name__ == '__main__':
