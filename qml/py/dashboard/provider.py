@@ -9,6 +9,7 @@ import json
 
 from pathlib import Path
 from functools import lru_cache
+from functools import partial
 from dataclasses import dataclass
 from typing import Callable, Dict, Iterable, Any
 
@@ -113,19 +114,26 @@ class ProviderBase:
         def status(self) -> int:
             return self.r.status_code
 
-    def _fetch(self, command: 'ProviderBase.Command', url: str, params: dict = {},
-               headers: dict = {}, timeout: int = 1) -> ['ProviderBase.RequestResponse', None]:
-        command.log('fetching:', url, 'params:', params, 'timeout:', timeout)
+    def _fetch(self, url: str, params: dict = {},
+               headers: dict = {}, timeout: int = 1,
+               logger: Callable = None) -> ['ProviderBase.RequestResponse', None]:
+        if logger is None:
+            logger = partial(self._log, scope='web-request')
+
+        logger('fetching:', url, 'params:', params, 'timeout:', timeout)
 
         try:
             r = requests.get(url, headers=headers, timeout=1, params=params)
 
-            command.log('received headers:\n', json.dumps(dict(r.headers), indent=2))
-            command.log('received status:', r.status_code)
+            logger('received headers:\n', json.dumps(dict(r.headers), indent=2))
+            logger('received status:', r.status_code)
 
             r.raise_for_status()
 
-            command.log('received data:\n', json.dumps(dict(r.json()), indent=2))
+            try:
+                logger('received data:\n', json.dumps(dict(r.json()), indent=2))
+            except requests.exceptions.JSONDecodeError:
+                logger('received non-json data')
         except (requests.ConnectionError, requests.ConnectTimeout) as e:
             # TODO handle broken API and don't retry endlessly
             self._signal_send('error:web-request-timeout', e)

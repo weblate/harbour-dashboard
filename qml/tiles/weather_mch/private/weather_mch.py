@@ -10,6 +10,7 @@ import json
 import enum
 import datetime
 
+from pathlib import Path
 from functools import partial
 from random import randrange
 
@@ -176,78 +177,16 @@ class CacheSection(enum.IntEnum):
 class _CacheDb(KeyValueBase):
     HANDLE = 'cache'
 
+    def make_db_path(self, basename: str) -> Path:
+        return self.path / (basename + '.db')
+
 
 class _MetadataDb(DatabaseBase):
     HANDLE = 'metadata'
-    URL_DB = 'https://app-prod-static.meteoswiss-app.ch/v1/db.sqlite'
     SUPPORTED_DATA_DB_VERSIONS = ['165']
 
-    CACHE: _CacheDb = None
-
     def _setup(self):
-        if self.CACHE is None:
-            raise ValueError('bug: cache must be defined before initializing the database')
-
-        if not self._db_path.exists():
-            # download locations database if it does not exists
-            self._signal_send('info.providers.local-data.database-download-started', self._db_path)
-
-            try:
-                r = requests.get(self.URL_DB, headers=HEADERS, timeout=1)
-
-                self._log(json.dumps(dict(r.headers), indent=2))
-                self._log(r.status_code)
-                # >>> print(r.headers)
-                # {
-                #     "x-amz-id-2": "HOG3FIlYQVk1yInMV9HvvZzJcGgvkaK3PPGitN4faV1EsrP9zwZreO1Xmq7l/MCubTkdz5Nw2C4=",
-                #     "x-amz-request-id": "4E4H2KWBGQ9B2W75",
-                #     "Date": "Tue, 13 Feb 2024 14:28:21 GMT",
-                #     "Last-Modified": "Fri, 15 Dec 2023 15:27:26 GMT",
-                #     "ETag": "\"bd86233b3f95e7e2d121ff56fe2fb847\"",
-                #     "x-amz-server-side-encryption": "AES256",
-                #     "x-amz-meta-minimum-api-version": "32",
-                #     "x-amz-meta-best-before": "Sat, 14 Dec 2024 15:27:25 GMT",
-                #     "Content-Encoding": "gzip",
-                #     "x-amz-meta-backoff": "21600",
-                #     "Expires": "Fri, 15 Dec 2023 21:27:25 GMT",
-                #     "x-amz-version-id": "hMKD0xgZ1mxqnu09GbLXrz5NsaqKGikZ",
-                #     "x-amz-meta-next-refresh": "Fri, 15 Dec 2023 21:27:25 GMT",
-                #     "Accept-Ranges": "bytes",
-                #     "Content-Type": "application/x-sqlite3",
-                #     "Server": "AmazonS3",
-                #     "Content-Length": "267147"
-                # }
-                #
-                # >>> print(r.status_code)
-                # 200
-
-                r.raise_for_status()
-
-                with open(self._db_path, 'wb') as fd:
-                    for chunk in r.iter_content(chunk_size=128):
-                        fd.write(chunk)
-
-                self.CACHE.set_value('downloaded', r.headers['Date'], section=CacheSection.METADATA)
-                self.CACHE.set_value('last-modified', r.headers['Last-Modified'], section=CacheSection.METADATA)
-                self.CACHE.set_value('best-before', r.headers['x-amz-meta-best-before'], section=CacheSection.METADATA)
-            # except (requests.ConnectionError, requests.ConnectTimeout):
-            except requests.exceptions.RequestException as e:
-                self._signal_send('warning.providers.local-data.database-download-failed', self._db_path, r.status_code, r.headers, e)
-                return
-            except Exception as e:
-                self._signal_send('warning.providers.local-data.database-download-failed', self._db_path, e)
-                return
-
-            self._signal_send('info.providers.local-data.database-download-finished', self._db_path)
-
-        if self._db_path.exists() and not self._db_path.is_file():
-            self._signal_send('warning.providers.local-data.database-broken', self._db_path)
-            return
-        elif not self._db_path.exists():
-            self._signal_send('warning.providers.local-data.database-download-failed', self._db_path)
-            return
-        else:
-            self._signal_send('info.providers.local-data.database-ready', self._db_path)
+        pass
 
     def _upgrade_schema(self, from_version):
         if from_version in self.SUPPORTED_DATA_DB_VERSIONS:
@@ -446,8 +385,9 @@ class Provider(ProviderBase):
         return loaded
 
     def _get_remote_weather_data(self, command: ProviderBase.Command) -> [None, dict]:
-        response = self._fetch(command, "https://app-prod-ws.meteoswiss-app.ch/v2/plzDetail",
-                               params={'plz': command.data['key']}, headers=HEADERS)
+        response = self._fetch("https://app-prod-ws.meteoswiss-app.ch/v2/plzDetail",
+                               params={'plz': command.data['key']}, headers=HEADERS,
+                               logger=command.log)
 
         if not response.ok:
             command.log(f"failed to fetch data for {command.data['key']}, status {response.status}, error:", response.error)
@@ -508,10 +448,101 @@ class Provider(ProviderBase):
     #     self._signal_send_global('meteo.store-cache', ident, new_data)
     #     self._signal_send_global('info.refresh.finished', ident, new_data)
 
+    def _fetch_metadata_database(self) -> bool:
+        db_path: Path = self._cache_db.make_db_path(_MetadataDb.HANDLE)
+
+        if not db_path.exists():
+            # download locations database if it does not exists
+            self._signal_send_global('info.providers.local-data.database-download-started', db_path)
+
+            response = self._fetch('https://app-prod-static.meteoswiss-app.ch/v1/db.sqlite',
+                                   headers=HEADERS, logger=partial(self._log, scope='metadata-download'))
+
+            """
+            Expected headers: status 200
+
+            {
+                "x-amz-id-2": "HOG3FIlYQVk1yInMV9HvvZzJcGgvkaK3PPGitN4faV1EsrP9zwZreO1Xmq7l/MCubTkdz5Nw2C4=",
+                "x-amz-request-id": "4E4H2KWBGQ9B2W75",
+                "Date": "Tue, 13 Feb 2024 14:28:21 GMT",
+                "Last-Modified": "Fri, 15 Dec 2023 15:27:26 GMT",
+                "ETag": "\"bd86233b3f95e7e2d121ff56fe2fb847\"",
+                "x-amz-server-side-encryption": "AES256",
+                "x-amz-meta-minimum-api-version": "32",
+                "x-amz-meta-best-before": "Sat, 14 Dec 2024 15:27:25 GMT",
+                "Content-Encoding": "gzip",
+                "x-amz-meta-backoff": "21600",
+                "Expires": "Fri, 15 Dec 2023 21:27:25 GMT",
+                "x-amz-version-id": "hMKD0xgZ1mxqnu09GbLXrz5NsaqKGikZ",
+                "x-amz-meta-next-refresh": "Fri, 15 Dec 2023 21:27:25 GMT",
+                "Accept-Ranges": "bytes",
+                "Content-Type": "application/x-sqlite3",
+                "Server": "AmazonS3",
+                "Content-Length": "267147"
+            }
+
+            Or:
+
+            {
+                "Date": "Wed, 14 Feb 2024 23:35:50 GMT",
+                "Content-Type": "application/x-sqlite3",
+                "Content-Length": "267147",
+                "Connection": "keep-alive",
+                "last-modified": "Fri, 15 Dec 2023 15:27:26 GMT",
+                "etag": "\"bd86233b3f95e7e2d121ff56fe2fb847\"",
+                "x-amz-server-side-encryption": "AES256",
+                "x-amz-meta-minimum-api-version": "32",
+                "x-amz-meta-best-before": "Sat, 14 Dec 2024 15:27:25 GMT",
+                "Content-Encoding": "gzip",
+                "x-amz-meta-backoff": "21600",
+                "expires": "Fri, 15 Dec 2023 21:27:25 GMT",
+                "x-amz-version-id": "hMKD0xgZ1mxqnu09GbLXrz5NsaqKGikZ",
+                "x-amz-meta-next-refresh": "Fri, 15 Dec 2023 21:27:25 GMT",
+                "x-cache": "Miss from cloudfront",
+                "via": "1.1 a2cac9c5f0e90f8b7fede4ac9aca75ca.cloudfront.net (CloudFront)",
+                "x-amz-cf-pop": "FRA56-P4",
+                "x-amz-cf-id": "Lp9u42cFwmapfEU33AKoxYNuoRy_edznwOukA9QapzqWvO7g3jlTuA==",
+                "CF-Cache-Status": "REVALIDATED",
+                "Accept-Ranges": "bytes",
+                "Report-To": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=Ip5eDw6DAhc5djeo0q31R4LhSZmvA12OrXLB6DjrELI009UVdTipuSJRxvKxxrWKu%2BNZvvcWswXeeV0DPQ7a%2B8%2B5HraYBxTECPVcv2Ag%2BV2bkkCiwx9654mRGodWUgl3DPdAJOHRbpT91QGUePz4H3W6MQ%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}",
+                "NEL": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}",
+                "Vary": "Accept-Encoding",
+                "Server": "cloudflare",
+                "CF-RAY": "8559213b8aee1c22-FRA"
+            }
+            """
+
+            if not response.ok:
+                self._signal_send('warning.providers.local-data.database-download-failed', db_path, response.status, response.headers, response.error)
+                return False
+
+            with open(db_path, 'wb') as fd:
+                for chunk in response.r.iter_content(chunk_size=128):
+                    fd.write(chunk)
+
+            set_cache = partial(self._cache_db.set_value, section=CacheSection.METADATA)
+            set_cache('downloaded', response.headers['Date'])
+            set_cache('last-modified', response.headers['Last-Modified'])
+            set_cache('best-before', response.headers['x-amz-meta-best-before'])
+
+            self._signal_send('info.providers.local-data.database-download-finished', db_path)
+
+        if db_path.exists() and not db_path.is_file():
+            self._signal_send('warning.providers.local-data.database-broken', db_path)
+            return False
+        else:
+            self._signal_send('info.providers.local-data.database-ready', db_path)
+
+        return True
+
     def _setup(self):
         try:
+            # cache must be initialized before preparing the metadata database
             self._cache_db = self.make_cache_database(_CacheDb)
-            _MetadataDb.CACHE = self._cache_db
+
+            if not self._fetch_metadata_database():
+                raise ValueError()
+
             self._meteo_db = self.make_cache_database(_MetadataDb)
         except ValueError:
             return
