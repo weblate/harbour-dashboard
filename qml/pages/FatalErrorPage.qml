@@ -1,5 +1,5 @@
 /*
- * This file has been adapted from Whisperfish for use in Forecasts for SailfishOS.
+ * This file has been adapted from Whisperfish for use in harbour-dashboard.
  * SPDX-License-Identifier: AGPL-3.0-or-later
  * SPDX-FileCopyrightText: 2021, 2022  Mirian Margiani
  */

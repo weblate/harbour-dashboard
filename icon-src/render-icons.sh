@@ -2,14 +2,14 @@
 #
 # This file is part of Opal and has been released into the public domain.
 # SPDX-License-Identifier: CC0-1.0
-# SPDX-FileCopyrightText: 2021 Mirian Margiani
+# SPDX-FileCopyrightText: 2021-2023 Mirian Margiani
 #
 # See https://github.com/Pretty-SFOS/opal/blob/main/snippets/opal-render-icons.md
 # for documentation.
 #
-# @@@ keep this line: based on template v0.3.0
+# @@@ keep this line: based on template v1.0.0
 #
-c__FOR_RENDER_LIB__="0.3.0"
+c__FOR_RENDER_LIB__="1.0.0"
 
 # Run this script from the same directory where your icon sources are located,
 # e.g. <app>/icon-src.
@@ -22,22 +22,33 @@ for i in raw/*.svg; do
     fi
 done
 
+cMY_APP=harbour-dashboard
+
 cNAME="app: app icon"
-cITEMS=(harbour-forecasts)
+cITEMS=("$cMY_APP")
 cRESOLUTIONS=(86 108 128 172)
 cTARGETS=(../icons/RESXxRESY)
 render_batch
 
 cNAME="app: details icon"
-cITEMS=(harbour-forecasts)
+cITEMS=("$cMY_APP")
 cRESOLUTIONS=(256)
 cTARGETS=(../qml/images)
 render_batch
 
-cNAME="cover: background"
-cITEMS=(cover-bg)
-cRESOLUTIONS=(460x736)
-cTARGETS=(../qml/images)
+cNAME="app: store icon"
+cITEMS=("$cMY_APP")
+cRESOLUTIONS=(172)
+cTARGETS=(../dist)
+render_batch
+
+cNAME="app: banner image"
+cITEMS=(../dist/banner)
+cRESOLUTIONS=(
+    1080x540++-large
+    540x270++-small
+)
+cTARGETS=(../dist)
 render_batch
 
 cNAME="tiles: clock faces"

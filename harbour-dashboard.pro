@@ -1,9 +1,7 @@
-# This file is part of Forecasts for SailfishOS.
+# This file is part of harbour-dashboard
 # SPDX-License-Identifier: GPL-3.0-or-later
-# SPDX-FileCopyrightText: 2019-2022 Mirian Margiani
+# SPDX-FileCopyrightText: 2019-2024 Mirian Margiani
 
-# NOTICE:
-#
 # Application name defined in TARGET has a corresponding QML filename.
 # If name defined in TARGET is changed, the following needs to be done
 # to match new name:
@@ -14,14 +12,13 @@
 #   - translation filenames have to be changed
 
 # The name of your application
-TARGET = harbour-forecasts
-
+TARGET = harbour-dashboard
 CONFIG += sailfishapp
 
-SOURCES += src/harbour-forecasts.cpp
+SOURCES += src/harbour-dashboard.cpp
 
 DISTFILES += \
-    qml/harbour-forecasts.qml \
+    qml/harbour-dashboard.qml \
     qml/pages/MainPage.qml \
     qml/pages/FatalErrorPage.qml \
     qml/pages/MaintenancePage.qml \
@@ -68,13 +65,13 @@ DISTFILES += \
     qml/py/meteopy/providers/meteoswiss.py \
     qml/py/meteopy/providers/yrno.py \
     \
-    images/harbour-forecasts.png \
+    images/harbour-dashboard.png \
     \
-    harbour-forecasts.desktop \
-    rpm/harbour-forecasts.changes.in \
-    rpm/harbour-forecasts.changes.run.in \
-    rpm/harbour-forecasts.spec \
-    rpm/harbour-forecasts.yaml \
+    harbour-dashboard.desktop \
+    rpm/harbour-dashboard.changes.in \
+    rpm/harbour-dashboard.changes.run.in \
+    rpm/harbour-dashboard.spec \
+    rpm/harbour-dashboard.yaml \
     translations/*.ts \
     \
     qml/modules/qchart/LICENSE.md \
@@ -95,13 +92,7 @@ DISTFILES += \
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
 
 CONFIG += sailfishapp_i18n
-
-TRANSLATIONS += \
-    translations/harbour-forecasts-en.ts \
-    translations/harbour-forecasts-de.ts \
-    translations/harbour-forecasts-fr.ts \
-    translations/harbour-forecasts-it.ts \
-    translations/harbour-forecasts-zh_CN.ts
+TRANSLATIONS += translations/harbour-dashboard-*.ts
 
 QML_IMPORT_PATH += qml/modules
 

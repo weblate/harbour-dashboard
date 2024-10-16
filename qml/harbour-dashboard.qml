@@ -1,7 +1,7 @@
 /*
- * This file is part of Forecasts for SailfishOS.
+ * This file is part of harbour-dashboard
  * SPDX-License-Identifier: GPL-3.0-or-later
- * SPDX-FileCopyrightText: 2018-2020, 2022  Mirian Margiani
+ * SPDX-FileCopyrightText: 2018-2020, 2022-2024  Mirian Margiani
  */
 
 import QtQuick 2.6
@@ -296,7 +296,7 @@ ApplicationWindow {
 
     ConfigurationGroup {
         id: config
-        path: "/apps/harbour-forecasts"
+        path: "/apps/harbour-dashboard"
         property string lastMaintenance: "2000-01-01"
         property int currentCoverIndex: 0
     }

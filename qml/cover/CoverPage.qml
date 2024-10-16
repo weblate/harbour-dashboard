@@ -1,5 +1,5 @@
 /*
- * This file is part of Forecasts for SailfishOS.
+ * This file is part of harbour-dashboard
  * SPDX-FileCopyrightText: 2018-2022  Mirian Margiani
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -13,7 +13,7 @@ CoverBackground {
 
     ConfigurationGroup {
         id: config
-        path: "/apps/harbour-forecasts"
+        path: "/apps/harbour-dashboard"
         property int currentCoverIndex: 0
     }
 
@@ -21,7 +21,7 @@ CoverBackground {
         id: label
         visible: app._coverTilesModel.count === 0
         anchors.centerIn: parent
-        text: qsTr("Forecasts")
+        text: qsTr("Dashboard")
     }
 
     SlideshowView {

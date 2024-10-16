@@ -1,5 +1,5 @@
 /*
- * This file is part of Forecasts for SailfishOS.
+ * This file is part of harbour-dashboard
  * SPDX-License-Identifier: GPL-3.0-or-later
  * SPDX-FileCopyrightText: 2018-2020, 2022  Mirian Margiani
  */
@@ -61,7 +61,7 @@ Page {
         ListModel { id: locationsModel }
         model: locationsModel
 
-        header: PageHeader { title: qsTr("Forecasts") }
+        header: PageHeader { title: qsTr("Dashboard") }
         VerticalScrollDecorator { flickable: locationsListView }
 
         footer: VerticalSpacing { }

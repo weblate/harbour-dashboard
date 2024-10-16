@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# This file is part of Forecasts for SailfishOS.
+# This file is part of harbour-dashboard
 # SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-FileCopyrightText: 2019-2022 Mirian Margiani
 #
@@ -54,7 +54,7 @@ script="$(basename "$0")"
     echo "\
 ** fetch-strings **
 
-Fetch weather description strings for harbour-forecasts.
+Fetch weather description strings for harbour-dashboard.
 
 Note: this is backported from the current development branch.
 
@@ -247,4 +247,4 @@ shopt -u nullglob
 echo "finishing translation base..."
 echo "}" >> "$translations"
 
-lupdate-qt5 harbour-forecasts.pro
+lupdate-qt5 harbour-dashboard.pro

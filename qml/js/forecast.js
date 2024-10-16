@@ -1,5 +1,5 @@
 /*
- * This file is part of Forecasts for SailfishOS.
+ * This file is part of harbour-dashboard
  * SPDX-FileCopyrightText: 2018-2020, 2022  Mirian Margiani
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -489,7 +489,7 @@ WorkerScript.onMessage = function(message) {
 
     function getJSON(sourcePath) {
         var json = httpGet('https://app-prod-ws.meteoswiss-app.ch/v1/plzDetail?plz=' + locationId, true);
-        // var json = httpGet('/home/<user>/Devel/forecasts/forecast_plzDetail.json', true); -- use for debugging
+        // var json = httpGet('/home/<user>/Devel/dashboard/forecast_plzDetail.json', true); -- use for debugging
 
         if (json.status !== 200) {
             return 'FAILED';

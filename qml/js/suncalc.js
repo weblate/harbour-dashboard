@@ -1,10 +1,10 @@
 .pragma library
 
 /*
- * This file is part of SunCalc, adapted for Forecasts.
+ * This file is part of SunCalc, adapted for harbour-dashboard.
  * SPDX-License-Identifier: BSD-2-Clause
  * SPDX-FileCopyrightText: 2011-2015  Vladimir Agafonkin
- * SPDX-FileCopyrightText: 2019, 2022  Mirian Margiani
+ * SPDX-FileCopyrightText: 2019, 2022-2024  Mirian Margiani
  */
 
 /*

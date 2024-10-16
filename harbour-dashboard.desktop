@@ -1,0 +1,18 @@
+# This file is part of harbour-dashboard
+# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-FileCopyrightText: 2019-2022 Mirian Margiani
+[Desktop Entry]
+Type=Application
+X-Nemo-Application-Type=silica-qt5
+Icon=harbour-dashboard
+Exec=harbour-dashboard
+Name=Dashboard
+
+[X-Sailjail]
+Permissions=Internet
+OrganizationName=harbour-dashboard
+ApplicationName=harbour-dashboard
+
+[X-HarbourBackup]
+BackupPathList=.local/share/harbour-dashboard/:.cache/harbour-dashboard:.config/harbour-dashboard
+BackupConfigList=/apps/harbour-dashboard/

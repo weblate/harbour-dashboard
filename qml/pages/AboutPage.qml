@@ -1,48 +1,62 @@
 /*
- * This file is part of Forecasts for SailfishOS.
- * SPDX-FileCopyrightText: 2022 Mirian Margiani
+ * This file is part of harbour-dashboard.
+ * SPDX-FileCopyrightText: 2018-2024 Mirian Margiani
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
 /*
  * Translators:
- * Please add yourself to the list of contributors below. If your language is already
- * in the list, add your name to the 'entries' field. If you added a new translation,
- * create a new section at the top of the list.
+ * Please add yourself to the list of translators in TRANSLATORS.json.
+ * If your language is already in the list, add your name to the 'entries'
+ * field. If you added a new translation, create a new section in the 'extra' list.
  *
  * Other contributors:
- * Please add yourself to the relevant list of contributors.
+ * Please add yourself to the relevant list of contributors below.
  *
- * <...>
- *  ContributionGroup {
- *      title: qsTr("Your language")
- *      entries: ["Existing contributor", "YOUR NAME HERE"]
- *  },
- * <...>
- *
- */
+*/
 
 import QtQuick 2.0
 import Opal.About 1.0
+import Sailfish.Silica 1.0 as S
+import Opal.About 1.0 as A
 
-AboutPageBase {
+A.AboutPageBase {
     id: page
-    appName: qsTr("Forecasts", "as in 'weather forecasts'; this is the app's name")
-    appIcon: Qt.resolvedUrl("../images/harbour-forecasts.png")
+
+    appName: Qt.application.name
+    appIcon: Qt.resolvedUrl("../images/%1.png".arg(Qt.application.name))
     appVersion: APP_VERSION
     appRelease: APP_RELEASE
-    description: qsTr("Various meteorological forecasts from different providers.")
-    mainAttributions: ["2018-2022 Mirian Margiani"]
-    sourcesUrl: "https://github.com/ichthyosaurus/harbour-forecasts"
-    homepageUrl: "https://openrepos.net/content/ichthyosaurus/forecasts"
-    allowDownloadingLicenses: true
 
-    licenses: License { spdxId: "GPL-3.0-or-later" }
+    allowDownloadingLicenses: true  // this app requires an internet connection anyway
+    sourcesUrl: "https://github.com/ichthyosaurus/%1".arg(Qt.application.name)
+    homepageUrl: "https://forum.sailfishos.org/t/apps-by-ichthyosaurus/15753"
+    translationsUrl: "https://hosted.weblate.org/projects/%1".arg(Qt.application.name)
+    changelogList: Qt.resolvedUrl("../Changelog.qml")
+    licenses: A.License { spdxId: "GPL-3.0-or-later" }
+
+    donations.text: donations.defaultTextCoffee
+    donations.services: [
+        A.DonationService {
+            name: "Liberapay"
+            url: "https://liberapay.com/ichthyosaurus"
+        }
+    ]
+
+    description: qsTr("Everything at a glance.", "this app's motto")
+    mainAttributions: ["2018-%1 Mirian Margiani".arg((new Date()).getFullYear())]
+    autoAddOpalAttributions: true
+
     attributions: [
         Attribution {
-            name: qsTr("Meteorological data")
+            name: qsTr("Swiss meteorological data")
             entries: qsTr("MeteoSwiss")
             homepage: qsTr('https://www.meteoswiss.admin.ch/')
+        },
+        Attribution {
+            name: qsTr("Norwegian meteorological data")
+            entries: qsTr("MeteoSwiss")
+            homepage: qsTr('https://yr.no/')
         },
         Attribution {
             name: qsTr("Weather icons")
@@ -86,33 +100,59 @@ AboutPageBase {
     ]
 
     contributionSections: [
-        ContributionSection {
+        A.ContributionSection {
             title: qsTr("Development")
             groups: [
-                ContributionGroup {
+                A.ContributionGroup {
                     title: qsTr("Programming")
                     entries: ["Mirian Margiani"]
+                },
+                A.ContributionGroup {
+                    title: qsTr("Weather icons")
+                    entries: ["Zeix"]
+                },
+                A.ContributionGroup {
+                    title: qsTr("Weather descriptions")
+                    entries: ["MeteoSwiss"]
                 }
             ]
         },
-        ContributionSection {
+        //>>> GENERATED LIST OF TRANSLATION CREDITS
+        A.ContributionSection {
             title: qsTr("Translations")
             groups: [
-                ContributionGroup { title: qsTr("German"); entries: ["Mirian Margiani"]},
-                ContributionGroup { title: qsTr("Chinese"); entries: ["dashinfantry"]}
+                A.ContributionGroup {
+                    title: qsTr("Spanish")
+                    entries: [
+                        "gallegonovato"
+                    ]
+                },
+                A.ContributionGroup {
+                    title: qsTr("German")
+                    entries: [
+                        "Mirian Margiani"
+                    ]
+                },
+                A.ContributionGroup {
+                    title: qsTr("French")
+                    entries: [
+                        "Robin Grenet"
+                    ]
+                },
+                A.ContributionGroup {
+                    title: qsTr("English")
+                    entries: [
+                        "Mirian Margiani"
+                    ]
+                },
+                A.ContributionGroup {
+                    title: qsTr("Chinese")
+                    entries: [
+                        "dashinfantry"
+                    ]
+                }
             ]
         }
-    ]
-
-    extraSections: [
-        InfoSection {
-            title: qsTr("Data")
-            text: qsTr("Copyright, Federal Office of Meteorology and Climatology MeteoSwiss.") + "\n" +
-                  qsTr("Weather icons by Zeix.")
-            buttons: InfoButton {
-                text: qsTr("Website")
-                onClicked: openOrCopyUrl(qsTr('https://www.meteoswiss.admin.ch/'))
-            }
-        }
+        //<<< GENERATED LIST OF TRANSLATION CREDITS
     ]
 }
