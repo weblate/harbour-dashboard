@@ -112,21 +112,21 @@ Item {
         id: tempTitle
         place: tempTitlePlace
         text: qsTr("Temperature")
-        unit: meteoApp.tempUnit
+        unit: app.tempUnit
     }
 
     ForecastGraphTitle {
         id: rainTitle
         place: rainTitlePlace
         text: qsTr("Precipitation")
-        unit: meteoApp.rainUnit
+        unit: app.rainUnit
     }
 
     ForecastGraphTitle {
         id: windTitle
         place: windTitlePlace
         text: qsTr("Wind")
-        unit: meteoApp.windUnit
+        unit: app.windUnit
     }
 
     Loader {
@@ -169,14 +169,14 @@ Item {
             return
         }
 
-        if (meteoApp.dataIsReady[locationId]) {
+        if (app.dataIsReady[locationId]) {
             console.log("loading charts for day " + day + "...")
 
-            temp = meteoApp.forecastData[day].temperature
-            rain = meteoApp.forecastData[day].rainfall
-            wind = meteoApp.forecastData[day].wind
+            temp = app.forecastData[day].temperature
+            rain = app.forecastData[day].rainfall
+            wind = app.forecastData[day].wind
 
-            var isToday = (new Date(meteoApp.forecastData[day].date).toDateString() == new Date().toDateString());
+            var isToday = (new Date(app.forecastData[day].date).toDateString() == new Date().toDateString());
 
             tempLoader.setSource("TemperatureChart.qml",      { height: chart.tempHeight, width: chart.width,  scaleOnly: false, isToday: isToday })
             tempScaleLoader.setSource("TemperatureChart.qml", { height: chart.tempHeight, width: Screen.width, scaleOnly: true,  isToday: isToday })
@@ -192,8 +192,8 @@ Item {
     }
 
     Component.onCompleted: {
-        meteoApp.dataLoaded.connect(loadCharts)
-        meteoApp.dataIsLoading.connect(function(){ if (forecast) forecast.loaded = false })
+        app.dataLoaded.connect(loadCharts)
+        app.dataIsLoading.connect(function(){ if (forecast) forecast.loaded = false })
     }
 
     onVisibleChanged: {

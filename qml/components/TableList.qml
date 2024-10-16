@@ -82,19 +82,19 @@ SilicaListView {
             TableListValueElement {
                 base: tempTitle
                 text: temp
-                unit: meteoApp.tempUnit
+                unit: app.tempUnit
             }
 
             TableListValueElement {
                 base: rainTitle
                 text: (rain > 0.0) ? rain : ''
-                unit: meteoApp.rainUnit
+                unit: app.rainUnit
             }
 
             TableListValueElement {
                 base: windTitle
                 text: wind
-                unit: meteoApp.windUnit
+                unit: app.windUnit
             }
 
             TableListValueElement {

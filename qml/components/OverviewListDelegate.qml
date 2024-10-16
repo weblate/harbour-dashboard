@@ -210,7 +210,7 @@ ListItem {
     }
 
     function showForecast(activeDay) {
-        meteoApp.refreshData(locationId, false)
+        app.refreshData(locationId, false)
 
         // there seems to be a bug in the page stack implementation
         // that breaks animatorPush in landscape mode (as of 2020-04-25)
@@ -252,7 +252,7 @@ ListItem {
         repeat: false
         running: false
         onTriggered: {
-            if (meteoApp.dataIsReady[locationId]) {
+            if (app.dataIsReady[locationId]) {
                 isLoading = false;
             } else {
                 restart();
@@ -268,14 +268,14 @@ ListItem {
         isLoading = true;
         initialLoadingTimer.restart();
 
-        meteoApp.dataIsLoading.connect(function(loc) {
+        app.dataIsLoading.connect(function(loc) {
             if (locationId === loc) {
                 isLoading = true;
                 loadingMinWait.restart();
             }
         });
 
-        meteoApp.dataLoaded.connect(function(unused, newLocation) {
+        app.dataLoaded.connect(function(unused, newLocation) {
             if (newLocation !== undefined && newLocation !== locationId) return
             else refreshWeekSummary(); // force refresh summaries
         })

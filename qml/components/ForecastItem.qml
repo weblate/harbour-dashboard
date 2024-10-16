@@ -14,7 +14,7 @@ import "../js/storage.js" as Storage
 
 Column {
     id: forecast
-    property string title: meteoApp.dataIsReady[locationId] ? formatTitleDate() : qsTr('Loading...')
+    property string title: app.dataIsReady[locationId] ? formatTitleDate() : qsTr('Loading...')
     property bool active
     property int dayId
 
@@ -28,7 +28,7 @@ Column {
             height: Theme.itemSizeSmall
 
             onClicked: active ? (
-                meteoApp.dataIsReady[locationId] ? pageStack.push(
+                app.dataIsReady[locationId] ? pageStack.push(
                     Qt.resolvedUrl("../pages/TablePage.qml"), { name: title, day: dayId }
                 ) : console.log("table locked")
             ) : mainPage.activateGraph(dayId)
@@ -87,11 +87,11 @@ Column {
             width: parent.width
 
             Repeater {
-                model: meteoApp.symbolHours.length
+                model: app.symbolHours.length
 
                 ForecastSummaryItem {
                     visible: graph.loaded
-                    hour: meteoApp.symbolHours[index]
+                    hour: app.symbolHours[index]
                     day: dayId
                     clickedCallback: function(hour, symbol) {
                             descriptionLabel.text = String(
@@ -204,11 +204,11 @@ Column {
 
         Component.onCompleted: {
             var locData = Storage.getLocationData(locationId);
-            var date = new Date(meteoApp.forecastData[dayId].date);
+            var date = new Date(app.forecastData[dayId].date);
             var times = SunCalc.SunCalc.getTimes(date, locData[0].latitude, locData[0].longitude);
 
             function set(target, value) {
-                target.value = value.toLocaleString(Qt.locale(), meteoApp.timeFormat);
+                target.value = value.toLocaleString(Qt.locale(), app.timeFormat);
             }
 
             set(sunrise, times.sunrise);
@@ -246,7 +246,7 @@ Column {
     Row {
         id: statusRow
         x: titleLabel.x
-        visible: active ? (meteoApp.dataIsReady[locationId] ? true : false) : false
+        visible: active ? (app.dataIsReady[locationId] ? true : false) : false
 
         property var textColor: Theme.secondaryColor
         property var textSize: Theme.fontSizeTiny
@@ -259,7 +259,7 @@ Column {
 
         Label {
             id: statusLabel
-            text: meteoApp.dataTimestamp ? meteoApp.dataTimestamp.toLocaleString(Qt.locale(), meteoApp.dateTimeFormat) : qsTr("unknown")
+            text: app.dataTimestamp ? app.dataTimestamp.toLocaleString(Qt.locale(), app.dateTimeFormat) : qsTr("unknown")
             color: parent.textColor
             font.pixelSize: parent.textSize
         }
@@ -272,7 +272,7 @@ Column {
 
         Label {
             id: clockLabel
-            text: new Date().toLocaleString(Qt.locale(), meteoApp.dateTimeFormat)
+            text: new Date().toLocaleString(Qt.locale(), app.dateTimeFormat)
             color: parent.textColor
             font.pixelSize: parent.textSize
         }
@@ -283,22 +283,22 @@ Column {
     }
 
     function formatTitleDate() {
-        return new Date(meteoApp.forecastData[dayId].date).toLocaleString(Qt.locale(), meteoApp.fullDateFormat);
+        return new Date(app.forecastData[dayId].date).toLocaleString(Qt.locale(), app.fullDateFormat);
     }
 
     function refreshTitle(data) {
-        title = meteoApp ? (meteoApp.forecastData[dayId].date ? formatTitleDate() : qsTr('Failed...')) : qsTr('Failed...')
+        title = meteoApp ? (app.forecastData[dayId].date ? formatTitleDate() : qsTr('Failed...')) : qsTr('Failed...')
 
         if (statusRow) {
             statusLabel.text = (meteoApp ?
-                (meteoApp.forecastData[dayId].date ?
-                    meteoApp.dataTimestamp.toLocaleString(Qt.locale(), meteoApp.dateTimeFormat) : qsTr('unknown')) : qsTr('unknown'))
+                (app.forecastData[dayId].date ?
+                    app.dataTimestamp.toLocaleString(Qt.locale(), app.dateTimeFormat) : qsTr('unknown')) : qsTr('unknown'))
         }
     }
 
     Component.onCompleted: {
-        meteoApp.dataLoaded.connect(refreshTitle)
-        meteoApp.dataIsLoading.connect(function(){
+        app.dataLoaded.connect(refreshTitle)
+        app.dataIsLoading.connect(function(){
             title = qsTr("Loading...");
 
             if (statusRow) {
@@ -313,7 +313,7 @@ Column {
         repeat: true
         running: true
         onTriggered: {
-            clockLabel.text = new Date().toLocaleString(Qt.locale(), meteoApp.dateTimeFormat)
+            clockLabel.text = new Date().toLocaleString(Qt.locale(), app.dateTimeFormat)
         }
     }
 }

@@ -62,21 +62,21 @@ Page {
                     id: tempTitle
                     width: 200
                     text: qsTr("Temp.")
-                    unit: meteoApp.tempUnit
+                    unit: app.tempUnit
                 }
 
                 TablePageColumnTitle {
                     id: rainTitle
                     width: 250
                     text: qsTr("Precip.")
-                    unit: meteoApp.rainUnit
+                    unit: app.rainUnit
                 }
 
                 TablePageColumnTitle {
                     id: windTitle
                     width: 230
                     text: qsTr("Wind")
-                    unit: meteoApp.windUnit
+                    unit: app.windUnit
                 }
 
                 TablePageColumnTitle {
@@ -125,15 +125,15 @@ Page {
         console.log("loading table for day " + day + "...")
         tableLoader.setSource("../components/TableList.qml", {
             width: parent.width,
-            forecastData: msgData ? msgData : meteoApp.forecastData
+            forecastData: msgData ? msgData : app.forecastData
         })
     }
 
     Component.onCompleted: {
-        meteoApp.dataLoaded.connect(loadTable)
-        meteoApp.dataIsLoading.connect(function(){ if (tablePage) tablePage.loaded = false })
+        app.dataLoaded.connect(loadTable)
+        app.dataIsLoading.connect(function(){ if (tablePage) tablePage.loaded = false })
 
-        if (meteoApp.dataIsReady) {
+        if (app.dataIsReady) {
             loadTable()
         }
     }

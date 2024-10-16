@@ -15,7 +15,7 @@ Page {
 
     function addLocation(token) {
         var details = Locations.getDetails(token)
-        meteoApp.locationAdded(details)
+        app.locationAdded(details)
     }
 
     SilicaFlickable {
@@ -26,7 +26,7 @@ Page {
 
         PullDownMenu {
             busy: false
-            visible: meteoApp.debug
+            visible: app.debug
 
             MenuItem {
                 text: qsTr("Bootstrap debug locations")

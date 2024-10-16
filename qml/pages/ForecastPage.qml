@@ -34,7 +34,7 @@ Page {
             MenuItem {
                 text: qsTr("Reload Data")
                 onClicked: {
-                    meteoApp.refreshData(locationId, true)
+                    app.refreshData(locationId, true)
                 }
             }
         }
@@ -42,14 +42,14 @@ Page {
         Column {
             id: column
             width: parent.width
-            visible: (meteoApp.dataIsReady[locationId] && !meteoApp.forecastData[0].isSane) ? false : true
+            visible: (app.dataIsReady[locationId] && !app.forecastData[0].isSane) ? false : true
 
             PageHeader {
                 id: pageTitle
             }
 
             Repeater {
-                model: meteoApp.forecastData.length
+                model: app.forecastData.length
 
                 ForecastItem {
                     dayId: index
@@ -73,7 +73,7 @@ Page {
             visible: !column.visible
 
             PageHeader {
-                title: qsTr("Dashboard")
+                title: app.appName
             }
 
             Label {
@@ -96,13 +96,13 @@ Page {
         visible: isPortrait
 
         Repeater {
-            model: meteoApp.forecastData.length
+            model: app.forecastData.length
 
             DaySummaryItem {
                 location: locationId
                 day: index
-                timestamp: new Date(meteoApp.forecastData[index].date)
-                dayCount: meteoApp.forecastData.length
+                timestamp: new Date(app.forecastData[index].date)
+                dayCount: app.forecastData.length
                 selected: (index == activeDay)
 
                 Component.onCompleted: {

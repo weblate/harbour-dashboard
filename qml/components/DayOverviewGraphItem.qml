@@ -84,7 +84,7 @@ Column {
     }
 
     Component.onCompleted: {
-        meteoApp.dataLoaded.connect(function(newData, newLocation) {
+        app.dataLoaded.connect(function(newData, newLocation) {
             if (newLocation !== undefined && newLocation !== location) return
             else loadChart()
         })

@@ -21,7 +21,7 @@ CoverBackground {
         id: label
         visible: app._coverTilesModel.count === 0
         anchors.centerIn: parent
-        text: qsTr("Dashboard")
+        text: app.appName
     }
 
     SlideshowView {

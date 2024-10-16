@@ -48,7 +48,7 @@ Page {
             addLocationToModel(locationData, undefined, undefined)
         }
 
-        meteoApp.refreshData(locationData.locationId, true)
+        app.refreshData(locationData.locationId, true)
     }
 
     SilicaListView {
@@ -61,7 +61,7 @@ Page {
         ListModel { id: locationsModel }
         model: locationsModel
 
-        header: PageHeader { title: qsTr("Dashboard") }
+        header: PageHeader { title: app.appName }
         VerticalScrollDecorator { flickable: locationsListView }
 
         footer: VerticalSpacing { }
@@ -69,12 +69,12 @@ Page {
         PullDownMenu {
             Component.onCompleted: {
                 overviewPage.dataUpdated.connect(function(newData, locationId) {
-                    var readyList = Object.keys(meteoApp.dataIsReady).map(function(k) { return meteoApp.dataIsReady[k]; });
+                    var readyList = Object.keys(app.dataIsReady).map(function(k) { return app.dataIsReady[k]; });
                     if (readyList.every(function(k) { return k ? true : false; })) {
                         busy = false
                     }
                 });
-                meteoApp.dataIsLoading.connect(function() { busy = true; });
+                app.dataIsLoading.connect(function() { busy = true; });
             }
 
             MenuItem {
@@ -91,13 +91,13 @@ Page {
                 text: qsTr("Refresh")
                 visible: locationsModel.count > 0
                 onClicked: {
-                    meteoApp.refreshData(undefined, false);
+                    app.refreshData(undefined, false);
                 }
             }
 
             Label {
                 id: clockLabel
-                text: new Date().toLocaleString(Qt.locale(), meteoApp.dateTimeFormat)
+                text: new Date().toLocaleString(Qt.locale(), app.dateTimeFormat)
                 color: Theme.highlightColor
                 anchors.horizontalCenter: parent.horizontalCenter
             }
@@ -139,7 +139,7 @@ Page {
         repeat: true
         running: true
         onTriggered: {
-            clockLabel.text = new Date().toLocaleString(Qt.locale(), meteoApp.dateTimeFormat)
+            clockLabel.text = new Date().toLocaleString(Qt.locale(), app.dateTimeFormat)
         }
     }
 
@@ -150,7 +150,7 @@ Page {
         running: true
         onTriggered: {
             if (overviewPage.status === PageStatus.Active) {
-                meteoApp.refreshData(undefined, false);
+                app.refreshData(undefined, false);
             }
         }
     }
@@ -163,8 +163,8 @@ Page {
     }
 
     onDataUpdated: {
-        if (locationId && !meteoApp.dataIsReady[locationId]) {
-            console.log("summary not updated: data is not ready yet", meteoApp.dataIsReady[locationId], locationId);
+        if (locationId && !app.dataIsReady[locationId]) {
+            console.log("summary not updated: data is not ready yet", app.dataIsReady[locationId], locationId);
             return;
         }
 
@@ -181,7 +181,7 @@ Page {
     }
 
     Component.onCompleted: {
-        meteoApp.dataLoaded.connect(dataUpdated)
-        meteoApp.locationAdded.connect(addLocation)
+        app.dataLoaded.connect(dataUpdated)
+        app.locationAdded.connect(addLocation)
     }
 }

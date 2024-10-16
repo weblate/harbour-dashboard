@@ -11,6 +11,8 @@ import Nemo.Configuration 1.0
 // import Nemo.Notifications 1.0
 import io.thp.pyotherside 1.5
 
+import Opal.About 1.0 as A
+import Opal.SupportMe 1.0 as M
 import "pages"
 
 ApplicationWindow {
@@ -32,6 +34,7 @@ ApplicationWindow {
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
     property ObjectModel _coverTilesModel: ObjectModel {}
 
+    property string appName: app.appName
     property string dateTimeFormat: qsTr("d MMM yyyy '('hh':'mm')'")
     property string timeFormat: qsTr("hh':'mm")
     property string fullDateFormat: qsTr("ddd d MMM yyyy")
@@ -48,6 +51,17 @@ ApplicationWindow {
     // Track init status of the Python backend and the main page.
     // When both components are ready, we should start loading data.
     property int initReady: 0
+
+
+    A.ChangelogNews {
+        changelogList: Qt.resolvedUrl("Changelog.qml")
+    }
+
+    M.AskForSupport {
+        contents: Component {
+            MySupportDialog {}
+        }
+    }
 
 
     // -------------------------------------------------------------------------

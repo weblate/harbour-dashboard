@@ -60,14 +60,14 @@ BackgroundItem {
             id: tempElem
             value: ""
             valueMax: ""
-            unit: meteoApp.tempUnit
+            unit: app.tempUnit
         }
 
         ForecastSummaryItemLabel {
             id: rainElem
             value: ""
             valueMax: ""
-            unit: meteoApp.rainUnitShort
+            unit: app.rainUnitShort
         }
     }
 
@@ -109,6 +109,6 @@ BackgroundItem {
 
     Component.onCompleted: {
         refreshData();
-        meteoApp.weekSummaryUpdated.connect(refreshData);
+        app.weekSummaryUpdated.connect(refreshData);
     }
 }

@@ -47,7 +47,7 @@ Page {
                 visible: tilesModel.count > 1 && !flow.editing
                 text: qsTr("Refresh")
                 onClicked: {
-                    // meteoApp.refreshData(undefined, false);
+                    // app.refreshData(undefined, false);
                 }
             }
 
@@ -88,7 +88,7 @@ Page {
             spacing: Theme.paddingMedium
 
             PageHeader {
-                title: qsTr("Dashboard")
+                title: app.appName
                 description: app.haveWallClock ? app.wallClock.time.toLocaleString(Qt.locale(), app.dateTimeFormat) : ''
             }
 

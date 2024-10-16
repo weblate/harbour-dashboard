@@ -16,14 +16,13 @@
 */
 
 import QtQuick 2.0
-import Opal.About 1.0
 import Sailfish.Silica 1.0 as S
 import Opal.About 1.0 as A
 
 A.AboutPageBase {
     id: page
 
-    appName: Qt.application.name
+    appName: app.appName
     appIcon: Qt.resolvedUrl("../images/%1.png".arg(Qt.application.name))
     appVersion: APP_VERSION
     appRelease: APP_RELEASE

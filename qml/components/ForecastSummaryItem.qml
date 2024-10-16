@@ -24,10 +24,10 @@ BackgroundItem {
         summaryClicked.connect(clickedCallback);
 
         if (   (   day == 0
-                && meteoApp.dataTimestamp != undefined
-                && meteoApp.dataTimestamp.toDateString() == new Date().toDateString()
+                && app.dataTimestamp != undefined
+                && app.dataTimestamp.toDateString() == new Date().toDateString()
                 && hour == Storage.getCurrentSymbolHour())
-            || hour == meteoApp.noonHour
+            || hour == app.noonHour
         ) {
             summaryClicked(hour, forecastData[day].temperature.datasets[0].symbols[hour]);
         }
@@ -37,7 +37,7 @@ BackgroundItem {
         id: column
         width: parent.width
 
-        property var textColor: ((meteoApp.dataTimestamp && meteoApp.dataTimestamp.toDateString() == new Date().toDateString() && day == 0) ?
+        property var textColor: ((app.dataTimestamp && app.dataTimestamp.toDateString() == new Date().toDateString() && day == 0) ?
             (hour >= Storage.getCurrentSymbolHour() ? Theme.secondaryColor : Theme.secondaryHighlightColor) : Theme.secondaryColor)
 
         ForecastSummaryItemLabel {
@@ -59,13 +59,13 @@ BackgroundItem {
 
         ForecastSummaryItemLabel {
             value: forecastData[day].temperature.datasets[0].data[hour]
-            unit: meteoApp.tempUnit
+            unit: app.tempUnit
         }
 
         ForecastSummaryItemLabel {
             property var rain: forecastData[day].rainfall.haveData ? forecastData[day].rainfall.datasets[0].data[hour] : 0
             value: rain > 0 ? rain : ""
-            unit: meteoApp.rainUnitShort
+            unit: app.rainUnitShort
         }
     }
 }
