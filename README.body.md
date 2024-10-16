@@ -13,8 +13,13 @@ stock exchange watchers, and system monitors.
 ### Project status
 
 This is at best beta quality software. It is far from finished, and not even
-core features are stable. Still, you can use it to check sun times, and it is
-quite convenient as a world clock app.
+core features are stable. Do expect lots of bugs.
+
+Still, you can use it to check sun times, and it is quite convenient as a world
+clock app.
+
+I'm not actively developing this app at the moment, and I mainly published it so
+it is at least out there and doesn't just rot on my hard drive.
 
 ### Current features
 
