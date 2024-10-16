@@ -10,7 +10,11 @@ from pathlib import Path
 
 def log(*args, scope=''):
     scope = f'[py:{scope}]' if scope else '[py]'
-    print(scope, *args)
+
+    try:
+        print(scope, *args)
+    except UnicodeEncodeError:
+        print(scope, 'cannot print arguments: try setting PYTHONIOENCODING=utf-8')
 
 
 def signal_send(event, *args):

@@ -249,10 +249,10 @@ def get_tiles() -> List[Tuple[str, Dict[str, Any]]]:
 
         model.append(entry)
 
-    signal_send('info.main.load-tiles.finished')
+    signal_send('info.main.load-tiles.finished', len(model))
 
     # return model
-    return []
+    return model
 
 
 def remove_tile(tile_id: int) -> None:

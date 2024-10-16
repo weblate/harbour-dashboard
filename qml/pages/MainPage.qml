@@ -207,14 +207,16 @@ Page {
         }
 
         onTilesLoaded: {
-            for (var i in tiles) {
-                console.log("- tile:", tiles[i].tile_id, tiles[i].tile_type, JSON.stringify(tiles[i].settings))
-                tilesModel.loadTile(tilesModel, tiles[i].tile_type, tiles[i].size, tiles[i].settings)
-                tilesModel.loadTile(_coverTilesModel, tiles[i].tile_type, 'small', tiles[i].settings, true)
-            }
+            // tiles are loaded asynchronously
 
-            console.log("all tiles loaded")
-            initReady += 1
+//            for (var i in tiles) {
+//                console.log("- tile:", tiles[i].tile_id, tiles[i].tile_type, JSON.stringify(tiles[i].settings))
+//                tilesModel.loadTile(tilesModel, tiles[i].tile_type, tiles[i].size, tiles[i].settings)
+//                tilesModel.loadTile(_coverTilesModel, tiles[i].tile_type, 'small', tiles[i].settings, true)
+//            }
+
+//            console.log("all tiles loaded")
+//            initReady += 1
 
             // DEBUG
             // tilesModel.get(0).item.requestConfig()

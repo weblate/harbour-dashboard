@@ -52,6 +52,8 @@ ApplicationWindow {
     // When both components are ready, we should start loading data.
     property int initReady: 0
 
+    onInitReadyChanged: console.log("[INIT READY]", initReady)
+
 
     A.ChangelogNews {
         changelogList: Qt.resolvedUrl("Changelog.qml")
@@ -256,6 +258,8 @@ ApplicationWindow {
 
     function loadTiles() {
         py.call("main.get_tiles", [], function(tiles) {
+            initReady += 1
+
             // TODO DEBUG tiles are loaded asynchronously now,
             // using the info.main.add-tile.finished signal
 //            if (tiles.constructor === Array) {
