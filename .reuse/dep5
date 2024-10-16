@@ -12,7 +12,7 @@ Copyright: Mirian Margiani
 License: GPL-3.0-or-later
 Comment: This file is generated from [this file's name].yaml and shares copyright with it.
 
-Files: icons/* qml/images/* dist/harbour-*.png
+Files: icons/* qml/images/* dist/harbour-*.png qml/tiles/*/private/*.png
 Copyright: Mirian Margiani
 License: CC-BY-SA-4.0
 Comment: These files are generated from the sources at icon-src/*.
@@ -57,7 +57,7 @@ Copyright: Copyright, Federal Office of Meteorology and Climatology MeteoSwiss.
 License: LicenseRef-MeteoSwiss
 Comment: These files are directly taken from the website or converted from data from the website. They should only contain non-copyrightable facts.
 
-Files: qml/js/strings.js qml/weather-icons/descriptions raw/strings/strings-*.js
+Files: qml/js/strings.js qml/weather-icons/descriptions raw/strings/strings-*.js qml/tiles/weather_mch/private/strings/symbols_*.json
 Copyright: Copyright, Federal Office of Meteorology and Climatology MeteoSwiss.
 License: LicenseRef-MeteoSwiss
 Comment: These files contain weather descriptions, directly taken from the official website, and converted from data from the website.
@@ -66,3 +66,19 @@ Files: raw/dummy.js raw/forecast.json raw/plzDetail.json raw/forecast_plzDetail.
 Copyright: Copyright, Federal Office of Meteorology and Climatology MeteoSwiss.
 License: LicenseRef-MeteoSwiss
 Comment: These files contain weather forecast data as provided through the website. They are used to document the data format.
+
+Files: qml/py/libs/dateutil/* qml/py/libs/dateutil.METADATA
+Copyright: Gustavo Niemeyer, Paul Ganssle
+License: BSD-3-Clause AND Apache-2.0
+
+Files: qml/py/libs/geopy/* qml/py/libs/geopy.METADATA
+Copyright: Kostya Esmukov
+License: MIT
+
+Files: qml/tiles/day_times/private/astral.py qml/tiles/day_times/private/astral.METADATA
+Copyright: 2009-2016 Simon Kennedy
+License: Apache-2.0
+
+Files: qml/tiles/tiles.json qml/tiles/weather_mch/NOTES setup.cfg
+Copyright: 2024 Mirian Margiani
+License: GPL-3.0-or-later

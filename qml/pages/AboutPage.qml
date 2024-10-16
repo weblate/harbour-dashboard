@@ -48,55 +48,83 @@ A.AboutPageBase {
     autoAddOpalAttributions: true
 
     attributions: [
-        Attribution {
+        A.Attribution {
+            name: "python-dateutil (2.8.1)"
+            entries: ["Gustavo Niemeyer", "Paul Ganssle"]
+            homepage: "https://github.com/dateutil/dateutil"
+            licenses: [
+                A.License { spdxId: "Apache-2.0" },
+                A.License { spdxId: "BSD-3-Clause" }
+            ]
+        },
+        A.Attribution {
+            name: "geopy (2.4.1)"
+            entries: "Kostya Esmukov"
+            homepage: "https://github.com/geopy/geopy"
+            licenses: A.License { spdxId: "MIT" }
+        },
+        A.Attribution {
+            name: "astral (1.2)"
+            entries: "2009-2016 Simon Kennedy"
+            homepage: "https://launchpad.net/astral"
+            licenses: A.License { spdxId: "Apache-2.0" }
+        },
+        A.Attribution {
+            name: "python-dateutil 2.8.1"
+            entries: ["Gustavo Niemeyer", "Paul Ganssle"]
+            homepage: "https://github.com/dateutil/dateutil"
+
+            // TODO verify licenses
+            licenses: [A.License { spdxId: "BSD" }, A.License { spdxId: "Apache" }]
+        },
+        A.Attribution {
             name: qsTr("Swiss meteorological data")
             entries: qsTr("MeteoSwiss")
             homepage: qsTr('https://www.meteoswiss.admin.ch/')
         },
-        Attribution {
+        A.Attribution {
             name: qsTr("Norwegian meteorological data")
             entries: qsTr("MeteoSwiss")
             homepage: qsTr('https://yr.no/')
         },
-        Attribution {
+        A.Attribution {
             name: qsTr("Weather icons")
             entries: "Zeix"
             homepage: "https://zeix.com/referenzen/meteoschweiz-redesign-wetterportal/"
         },
-        Attribution {
+        A.Attribution {
             name: "QChart"
             entries: ["2014 Julien Wintz", qsTr("adapted by Mirian Margiani")]
-            licenses: License { spdxId: "MIT" }
+            licenses: A.License { spdxId: "MIT" }
             // the original source code repository is no longer available
             homepage: "https://web.archive.org/web/20180611014447/https://github.com/jwintz/qchart.js"
         },
-        Attribution {
+        A.Attribution {
             name: "SunCalc"
             entries: ["2011-2015  Vladimir Agafonkin", qsTr("adapted by Mirian Margiani")]
-            licenses: License { spdxId: "BSD-2-Clause" }
+            licenses: A.License { spdxId: "BSD-2-Clause" }
             sources: "https://github.com/mourner/suncalc"
         },
-        Attribution {
+        A.Attribution {
             name: qsTr("Coordinates calculator", "MeteoSwiss uses the Swiss local coordinate system that must be converted to global coordinates")
             entries: ["2013  Reto Hasler (ascii_ch)", qsTr("adapted by Mirian Margiani")]
             homepage: "https://asciich.ch/wordpress/koordinatenumrechner-schweiz-international/"
         },
-        Attribution {
+        A.Attribution {
             name: "Whisperfish"
             entries: ["2016-2022 Ruben De Smet and contributors"]
             description: qsTr("Some modules have been adapted for use in this app.")
-            licenses: License { spdxId: "AGPL-3.0-or-later" }
+            licenses: A.License { spdxId: "AGPL-3.0-or-later" }
             sources: "https://gitlab.com/whisperfish/whisperfish"
             homepage: "https://forum.sailfishos.org/t/whisperfish-the-unofficial-sailfishos-signal-client/3337"
         },
-        Attribution {
+        A.Attribution {
             name: "PyOtherSide"
             entries: ["2011, 2013-2020 Thomas Perl"]
-            licenses: License { spdxId: "ISC" }
+            licenses: A.License { spdxId: "ISC" }
             sources: "https://github.com/thp/pyotherside"
             homepage: "https://thp.io/2011/pyotherside/"
-        },
-        OpalAboutAttribution { }
+        }
     ]
 
     contributionSections: [

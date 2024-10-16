@@ -1,3 +1,9 @@
+<!--
+This file is part of harbour-dashboard
+SPDX-License-Identifier: GPL-3.0-or-later
+SPDX-FileCopyrightText: 2020-2024  Mirian Margiani
+-->
+
 # Signals and Events
 
 ## Events

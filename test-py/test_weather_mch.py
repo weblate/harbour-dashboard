@@ -1,4 +1,8 @@
 # ~~ this file has no shebang because it must be run through run-py.sh ~~
+#
+# This file is part of harbour-dashboard.
+# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-FileCopyrightText: 2024 Mirian Margiani
 
 import main as dash_main
 from dashboard.util import log
