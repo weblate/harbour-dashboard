@@ -835,6 +835,18 @@
         <source>Lookup timezone</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>%1 m</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The full name or other details about the location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zip code</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SettingsDialogBase</name>
