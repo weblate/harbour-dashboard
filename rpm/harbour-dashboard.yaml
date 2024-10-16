@@ -18,6 +18,7 @@ Description: |
 
   Add tiles for your favorite weather forecast, pollen forecast, world clocks,
   stock exchange watchers, and system monitors.
+
 Configure: none
 Builder: qmake5
 QMakeOptions:
