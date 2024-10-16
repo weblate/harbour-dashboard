@@ -1,6 +1,6 @@
-//@ This file is part of opal-about.
-//@ https://github.com/Pretty-SFOS/opal-about
-//@ SPDX-FileCopyrightText: 2021 Mirian Margiani
+//@ This file is part of opal-linkhandler.
+//@ https://github.com/Pretty-SFOS/opal-linkhandler
+//@ SPDX-FileCopyrightText: 2021-2023 Mirian Margiani
 //@ SPDX-License-Identifier: GPL-3.0-or-later
 import QtQuick 2.2
 import Sailfish.Silica 1.0
@@ -12,7 +12,7 @@ allowedOrientations:Orientation.All
 Column{width:parent.width
 spacing:(root.orientation&Orientation.LandscapeMask&&Screen.sizeCategory<=Screen.Medium)?Theme.itemSizeExtraSmall:Theme.itemSizeSmall
 y:(root.orientation&Orientation.LandscapeMask&&Screen.sizeCategory<=Screen.Medium)?Theme.paddingLarge:Theme.itemSizeExtraLarge
-Label{text:title?title:qsTranslate("Opal.About","External Link")
+Label{text:title?title:qsTranslate("Opal.LinkHandler","External Link")
 width:parent.width-2*Theme.horizontalPageMargin
 anchors.horizontalCenter:parent.horizontalCenter
 horizontalAlignment:Text.AlignHCenter
@@ -29,16 +29,16 @@ wrapMode:Text.Wrap
 }}ButtonLayout{preferredWidth:Theme.buttonWidthLarge
 anchors{bottom:parent.bottom
 bottomMargin:(root.orientation&Orientation.LandscapeMask&&Screen.sizeCategory<=Screen.Medium)?Theme.itemSizeExtraSmall:Theme.itemSizeMedium
-}Button{text:qsTranslate("Opal.About","Open in browser")
+}Button{text:/^http[s]?:\/\// .test(externalUrl)?qsTranslate("Opal.LinkHandler","Open in browser"):qsTranslate("Opal.LinkHandler","Open externally")
 onClicked:{Qt.openUrlExternally(externalUrl)
 pageStack.pop()
 }}Button{Notification{id:copyNotification
-previewSummary:qsTranslate("Opal.About","Copied to clipboard: %1").arg(externalUrl)
+previewSummary:qsTranslate("Opal.LinkHandler","Copied to clipboard: %1").arg(externalUrl)
 isTransient:true
 appIcon:"icon-lock-information"
 icon:"icon-lock-information"
 }ButtonLayout.newLine:true
-text:qsTranslate("Opal.About","Copy to clipboard")
+text:qsTranslate("Opal.LinkHandler","Copy to clipboard")
 onClicked:{Clipboard.text=externalUrl
 copyNotification.publish()
 pageStack.pop()
