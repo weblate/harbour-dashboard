@@ -1425,17 +1425,17 @@
         <translation>hh&apos;:&apos;mm</translation>
     </message>
     <message>
-        <location filename="../qml/harbour-dashboard.qml" line="400"/>
+        <location filename="../qml/harbour-dashboard.qml" line="404"/>
         <source>A backend database is inaccessible.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/harbour-dashboard.qml" line="422"/>
+        <location filename="../qml/harbour-dashboard.qml" line="426"/>
         <source>Failed to initialize the backend.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/harbour-dashboard.qml" line="354"/>
+        <location filename="../qml/harbour-dashboard.qml" line="358"/>
         <source>An unrecoverable error occurred.</source>
         <translation type="unfinished"></translation>
     </message>
