@@ -23,4 +23,5 @@ raw/strings/strings
 liverunner*
 
 test-data/
+test-py/data*
 __pycache__
