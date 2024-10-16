@@ -34,7 +34,7 @@ ApplicationWindow {
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
     property ObjectModel _coverTilesModel: ObjectModel {}
 
-    property string appName: app.appName
+    property string appName: "Dashboard"
     property string dateTimeFormat: qsTr("d MMM yyyy '('hh':'mm')'")
     property string timeFormat: qsTr("hh':'mm")
     property string fullDateFormat: qsTr("ddd d MMM yyyy")
