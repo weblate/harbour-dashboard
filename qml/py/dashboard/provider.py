@@ -112,6 +112,9 @@ class ProviderBase:
 
         @property
         def status(self) -> int:
+            if self.r is None:
+                return -1
+
             return self.r.status_code
 
     def _fetch(self, url: str, params: dict = {},
@@ -134,7 +137,10 @@ class ProviderBase:
                 logger('received data:\n', json.dumps(dict(r.json()), indent=2))
             except requests.exceptions.JSONDecodeError:
                 logger('received non-json data')
-        except (requests.ConnectionError, requests.ConnectTimeout) as e:
+        except requests.ConnectionError as e:
+            self._signal_send('error:web-connection-failed', e)
+            return self.RequestResponse(None, e)
+        except requests.ConnectTimeout as e:
             # TODO handle broken API and don't retry endlessly
             self._signal_send('error:web-request-timeout', e)
             return self.RequestResponse(r, e)

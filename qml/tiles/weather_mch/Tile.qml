@@ -21,6 +21,15 @@ ForecastTileBase {
     allowConfig: true
     allowRefresh: false
 
+    // Sizes:
+    // - all: location, current weather symbol,
+    //        current temperature, min/max for the day,
+    // - small: current precipication
+    // - medium: small graph showing temperature and precipitation
+    //           for the next 90 minutes
+    // - large: graph for the whole day, overview of all available days,
+    //          graphs for other days when selected
+
     Item {
         id: layoutStates
         state: root.size

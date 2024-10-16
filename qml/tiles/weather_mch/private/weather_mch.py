@@ -9,7 +9,9 @@ import re
 import json
 import enum
 import datetime
+import math
 
+from copy import deepcopy
 from pathlib import Path
 from functools import partial
 from random import randrange
@@ -19,6 +21,12 @@ from dashboard.provider import ProviderBase
 from dashboard.provider import do_execute_command
 from dashboard.util import DatabaseBase
 from dashboard.util import KeyValueBase
+
+
+# TODO
+# - detect broken/changed API and if the app is blocked
+# - if so, stop all requests (-> cache entry) and wait for an update of the app
+# - make sure there are no repeated and/or failing requests to the API
 
 
 """
@@ -311,21 +319,21 @@ class Provider(ProviderBase):
 
             if cached_data := self._get_cached_weather_data(command):
                 command.log(f'using cached data for {command.data["key"]}')
-                command.send_result(cached_data)
+                command.send_result(self._convert_weather_data(cached_data))
                 return
 
             command.log(f'no cache for {command.data["key"]}, fetching new data')
 
             if new_data := self._get_remote_weather_data(command):
                 command.log(f'fetched weather data for {command.data["key"]}')
-                command.send_result(new_data)
+                command.send_result(self._convert_weather_data(new_data))
                 return
             else:
                 command.log('failed to fetch updated data, retrying with outdated cache')
 
             if cached_data := self._get_cached_weather_data(command, allow_outdated=True):
                 command.log(f'falling back to outdated cached data for {command.data["key"]}')
-                command.send_result(cached_data)
+                command.send_result(self._convert_weather_data(cached_data))
                 return
 
             command.log(f"error: failed to load cache or fetch new data for {command.data['key']}")
@@ -335,6 +343,167 @@ class Provider(ProviderBase):
             command.send_result(command.data)
         else:
             self._handle_unknown_command(command)
+
+    def _convert_weather_data(self, raw_data: dict) -> dict:
+        wind_labels = []
+
+        for i in range(0, 24, 3):
+            wind_labels += [f'{i:d}', '', '']
+
+        wind_labels = wind_labels[0:-1] + ['23']
+
+        hourly_labels = [f'{x:d}' for x in range(0, 24)]
+        high_res_labels = [f"{x:d}'" for x in range(0, 90, 10)]
+
+        day_template = {
+            'isValid': False,
+            'date': '',
+            'temperature': {
+                'haveData': False,
+                'labels': hourly_labels,
+                'datasets': [
+                    {  # mean
+                        'data': [],
+                        'symbols': []
+                    },
+                    {  # minimum
+                        'data': [],
+                    },
+                    {  # maximum
+                        'data': [],
+                    },
+                ],
+            },
+            'precipitation': {
+                'haveData': False,
+                'labels': hourly_labels,
+                'datasets': [
+                    {  # mean
+                        'data': [],
+                        'symbols': []
+                    },
+                    {  # minimum
+                        'data': [],
+                    },
+                    {  # maximum
+                        'data': [],
+                    },
+                ],
+            },
+            'precipitationHighRes': {
+                'haveData': False,
+                'labels': high_res_labels,
+                'datasets': [
+                    {  # mean
+                        'data': [],
+                        'symbols': []
+                    },
+                    {  # minimum
+                        'data': [],
+                    },
+                    {  # maximum
+                        'data': [],
+                    },
+                ]
+            },
+            'wind': {
+                'haveData': False,
+                'labels': wind_labels,
+                'datasets': [
+                    {  # speed
+                        'data': [],
+                        'direction': [],
+                    },
+                ],
+            },
+        }
+
+        def convert_ts(ts: int) -> datetime.datetime:
+            ts_str = f'{ts:013d}'[0:10]  # reduce from 13 to 10 digits
+            return datetime.datetime.fromtimestamp(int(ts_str))
+
+        graphs = []
+        day_count = math.floor(len(raw_data['graph']['temperatureMean1h']) / 24)
+        start = convert_ts(raw_data['graph']['start'])
+        now = datetime.datetime.now()
+
+        raw_current_ts = raw_data['currentWeather']['time']
+
+        current_temp = None
+        current_icon = 0
+
+        # It can happen that the 'currentWeather' field contains empty or
+        # greatly outdated data (e.g. data from two years ago).
+        # In that case, we fall back to deducing the current weather from the
+        # forecast dataset.
+        if raw_current_ts:
+            raw_current_time = convert_ts(raw_current_ts)
+
+            if raw_current_time.date() == now.date() and \
+                    round(raw_current_time.hour + raw_current_time.minute / 60) == \
+                    round(now.hour + now.minute / 60):
+                current_temp = raw_data['currentWeather']['temperature']
+                current_icon = raw_data['currentWeather']['icon']
+
+        # build low-resolution forecast from high-resolution data, if available
+        if len(raw_data['graph']['precipitation10m']) > 0:
+            # the startLowResolution key is missing if there is no high-res data
+            low_res_start_ts = raw_data['graph']['startLowResolution']
+            low_res_start = convert_ts(low_res_start_ts)
+
+            self._log('LOW RES START', low_res_start)
+
+        for i in range(0, day_count):
+            day = deepcopy(day_template)
+
+            date = start + datetime.timedelta(days=i)
+            day['date'] = date.strftime('%Y-%m-%d')
+
+            # -------- current weather
+            if current_temp is None and date.date() == now.date():
+                current_hour = now.hour + (now.minute / 60)
+                current_temp = raw_data['graph']['temperatureMean1h'][i * 24 + round(current_hour)]
+                current_icon = raw_data['graph']['weatherIcon3h'][i * 8 + round(current_hour / 3)]
+
+            # -------- temperature
+            # note: we assume data starts at 00:00 and is available for 24 hours
+            # TODO: handle changes to/from daylight saving time
+            day['temperature']['datasets'][0]['data'] = raw_data['graph']['temperatureMean1h'][i * 24:i * 24 + 24]
+            day['temperature']['datasets'][1]['data'] = raw_data['graph']['temperatureMin1h'][i * 24:i * 24 + 24]
+            day['temperature']['datasets'][2]['data'] = raw_data['graph']['temperatureMax1h'][i * 24:i * 24 + 24]
+
+            raw_symbols = raw_data['graph']['weatherIcon3h'][i * 8:i * 8 + 8]
+
+            for i in raw_symbols:
+                day['temperature']['datasets'][0]['symbols'] += [i, 0, 0]
+
+            # -------- precipitation
+            pass
+
+            # -------- wind
+            raw_speed = raw_data['graph']['windSpeed3h'][i * 8:i * 8 + 8]
+
+            for i in raw_speed:
+                day['wind']['datasets'][0]['data'] += [i, i, i]
+
+            raw_direction = raw_data['graph']['windDirection3h'][i * 8:i * 8 + 8]
+
+            for i in raw_direction:
+                day['wind']['datasets'][0]['direction'] += [i, i, i]
+
+            # -------- save
+            graphs.append(day)
+
+        converted = {
+            'currentWeather': {
+                'temperature': current_temp,
+                'icon': current_icon,
+            },
+            'overview': raw_data['forecast'],
+            'graphs': graphs,
+        }
+
+        return converted
 
     def _get_cached_weather_data(self, command: ProviderBase.Command, allow_outdated: bool = False) -> [None, dict]:
         if command.tile_id < 0:
