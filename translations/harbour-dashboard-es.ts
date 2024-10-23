@@ -118,7 +118,7 @@
     <message>
         <location filename="../qml/tiles/common/BrokenTile.qml" line="49"/>
         <source>Invalid tile: %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mosaico no válido: %1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -248,7 +248,7 @@
         <location filename="../qml/pages/FatalErrorPage.qml" line="18"/>
         <source>Please restart the app. If the problem persists and appears to be a flaw in this app, please report the issue.</source>
         <comment>generic hint on what to do after a fatal error occurred(error message will be shown separately)</comment>
-        <translation type="unfinished"></translation>
+        <translation>Por favor, reinicia la aplicación. Si el problema persiste y parece ser un fallo de la aplicación, por favor notifícalo.</translation>
     </message>
 </context>
 <context>
@@ -427,7 +427,7 @@
     <message>
         <location filename="../qml/tiles/base/ForecastTileBase.qml" line="132"/>
         <source>Manage tiles</source>
-        <translation type="unfinished"></translation>
+        <translation>Gestionar mosaicos</translation>
     </message>
 </context>
 <context>
@@ -453,7 +453,7 @@
     <message>
         <location filename="../qml/pages/LocationSearchPage.qml" line="32"/>
         <source>Bootstrap debug locations</source>
-        <translation type="unfinished"></translation>
+        <translation>Ubicaciones de depuración de Bootstrap</translation>
     </message>
 </context>
 <context>
