@@ -12,52 +12,52 @@
         <location filename="../qml/pages/AboutPage.qml" line="45"/>
         <source>Everything at a glance.</source>
         <comment>this app&apos;s motto</comment>
-        <translation type="unfinished"></translation>
+        <translation>Kõik ühes vaates.</translation>
     </message>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="80"/>
         <source>Swiss meteorological data</source>
-        <translation type="unfinished"></translation>
+        <translation>Šveitsi ilmaennustus</translation>
     </message>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="81"/>
         <location filename="../qml/pages/AboutPage.qml" line="86"/>
         <source>MeteoSwiss</source>
-        <translation type="unfinished"></translation>
+        <translation>MeteoSwiss</translation>
     </message>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="82"/>
         <source>https://www.meteoswiss.admin.ch/</source>
-        <translation type="unfinished"></translation>
+        <translation>https://www.meteoswiss.admin.ch/</translation>
     </message>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="85"/>
         <source>Norwegian meteorological data</source>
-        <translation type="unfinished"></translation>
+        <translation>Norra ilmaennustus</translation>
     </message>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="87"/>
         <source>https://yr.no/</source>
-        <translation type="unfinished"></translation>
+        <translation>https://yr.no/</translation>
     </message>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="90"/>
         <location filename="../qml/pages/AboutPage.qml" line="138"/>
         <source>Weather icons</source>
-        <translation type="unfinished"></translation>
+        <translation>Ilmaennustuse ikoonid</translation>
     </message>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="96"/>
         <location filename="../qml/pages/AboutPage.qml" line="103"/>
         <location filename="../qml/pages/AboutPage.qml" line="109"/>
         <source>adapted by Mirian Margiani</source>
-        <translation type="unfinished"></translation>
+        <translation>kohandanud Mirian Margiani</translation>
     </message>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="108"/>
         <source>Coordinates calculator</source>
         <comment>MeteoSwiss uses the Swiss local coordinate system that must be converted to global coordinates</comment>
-        <translation type="unfinished"></translation>
+        <translation>Koordinaatide konverteerija</translation>
     </message>
     <message>
         <location filename="../qml/pages/AboutPage.qml" line="134"/>
